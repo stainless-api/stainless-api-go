@@ -24,10 +24,17 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	openAPI, err := client.OpenAPI.Get(context.TODO())
+	configCommit, err := client.Projects.Config.NewBranch(
+		context.TODO(),
+		"projectName",
+		stainlessv0.ProjectConfigNewBranchParams{
+			Branch:     stainlessv0.F("branch"),
+			BranchFrom: stainlessv0.F("branch_from"),
+		},
+	)
 	if err != nil {
 		t.Error(err)
 		return
 	}
-	t.Logf("%+v\n", openAPI)
+	t.Logf("%+v\n", configCommit.ID)
 }

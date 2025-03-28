@@ -44,11 +44,18 @@ func main() {
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_V0_API_KEY")
 	)
-	openAPI, err := client.OpenAPI.Get(context.TODO())
+	configCommit, err := client.Projects.Config.NewBranch(
+		context.TODO(),
+		"projectName",
+		stainlessv0.ProjectConfigNewBranchParams{
+			Branch:     stainlessv0.F("branch"),
+			BranchFrom: stainlessv0.F("branch_from"),
+		},
+	)
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", openAPI)
+	fmt.Printf("%+v\n", configCommit.ID)
 }
 
 ```
@@ -137,7 +144,7 @@ client := stainlessv0.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.OpenAPI.Get(context.TODO(), ...,
+client.Projects.Config.NewBranch(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -166,14 +173,21 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.OpenAPI.Get(context.TODO())
+_, err := client.Projects.Config.NewBranch(
+	context.TODO(),
+	"projectName",
+	stainlessv0.ProjectConfigNewBranchParams{
+		Branch:     stainlessv0.F("branch"),
+		BranchFrom: stainlessv0.F("branch_from"),
+	},
+)
 if err != nil {
 	var apierr *stainlessv0.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/v0/openapi": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/v0/projects/{projectName}/config/branches": 400 Bad Request { ... }
 }
 ```
 
@@ -191,8 +205,13 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.OpenAPI.Get(
+client.Projects.Config.NewBranch(
 	ctx,
+	"projectName",
+	stainlessv0.ProjectConfigNewBranchParams{
+		Branch:     stainlessv0.F("branch"),
+		BranchFrom: stainlessv0.F("branch_from"),
+	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -226,7 +245,15 @@ client := stainlessv0.NewClient(
 )
 
 // Override per-request:
-client.OpenAPI.Get(context.TODO(), option.WithMaxRetries(5))
+client.Projects.Config.NewBranch(
+	context.TODO(),
+	"projectName",
+	stainlessv0.ProjectConfigNewBranchParams{
+		Branch:     stainlessv0.F("branch"),
+		BranchFrom: stainlessv0.F("branch_from"),
+	},
+	option.WithMaxRetries(5),
+)
 ```
 
 ### Accessing raw response data (e.g. response headers)
@@ -237,11 +264,19 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-openAPI, err := client.OpenAPI.Get(context.TODO(), option.WithResponseInto(&response))
+configCommit, err := client.Projects.Config.NewBranch(
+	context.TODO(),
+	"projectName",
+	stainlessv0.ProjectConfigNewBranchParams{
+		Branch:     stainlessv0.F("branch"),
+		BranchFrom: stainlessv0.F("branch_from"),
+	},
+	option.WithResponseInto(&response),
+)
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", openAPI)
+fmt.Printf("%+v\n", configCommit)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)

@@ -1,13 +1,3 @@
-# OpenAPI
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#OpenAPIGetResponse">OpenAPIGetResponse</a>
-
-Methods:
-
-- <code title="get /v0/openapi">client.OpenAPI.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#OpenAPIService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#OpenAPIGetResponse">OpenAPIGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # Projects
 
 ## Config
