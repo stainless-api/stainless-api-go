@@ -44,12 +44,14 @@ func main() {
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_V0_API_KEY")
 	)
-	configCommit, err := client.Projects.Config.NewBranch(
+	configCommit, err := client.Projects.Config.NewCommit(
 		context.TODO(),
 		"projectName",
-		stainlessv0.ProjectConfigNewBranchParams{
-			Branch:     stainlessv0.F("branch"),
-			BranchFrom: stainlessv0.F("branch_from"),
+		stainlessv0.ProjectConfigNewCommitParams{
+			Branch:          stainlessv0.F("branch"),
+			CommitMessage:   stainlessv0.F("commit_message"),
+			OpenAPISpec:     stainlessv0.F("openapi_spec"),
+			StainlessConfig: stainlessv0.F("stainless_config"),
 		},
 	)
 	if err != nil {
@@ -144,7 +146,7 @@ client := stainlessv0.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.Projects.Config.NewBranch(context.TODO(), ...,
+client.Projects.Config.NewCommit(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -173,12 +175,14 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Projects.Config.NewBranch(
+_, err := client.Projects.Config.NewCommit(
 	context.TODO(),
 	"projectName",
-	stainlessv0.ProjectConfigNewBranchParams{
-		Branch:     stainlessv0.F("branch"),
-		BranchFrom: stainlessv0.F("branch_from"),
+	stainlessv0.ProjectConfigNewCommitParams{
+		Branch:          stainlessv0.F("branch"),
+		CommitMessage:   stainlessv0.F("commit_message"),
+		OpenAPISpec:     stainlessv0.F("openapi_spec"),
+		StainlessConfig: stainlessv0.F("stainless_config"),
 	},
 )
 if err != nil {
@@ -187,7 +191,7 @@ if err != nil {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/v0/projects/{projectName}/config/branches": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/v0/projects/{projectName}/config/commits": 400 Bad Request { ... }
 }
 ```
 
@@ -205,12 +209,14 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.Projects.Config.NewBranch(
+client.Projects.Config.NewCommit(
 	ctx,
 	"projectName",
-	stainlessv0.ProjectConfigNewBranchParams{
-		Branch:     stainlessv0.F("branch"),
-		BranchFrom: stainlessv0.F("branch_from"),
+	stainlessv0.ProjectConfigNewCommitParams{
+		Branch:          stainlessv0.F("branch"),
+		CommitMessage:   stainlessv0.F("commit_message"),
+		OpenAPISpec:     stainlessv0.F("openapi_spec"),
+		StainlessConfig: stainlessv0.F("stainless_config"),
 	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
@@ -245,12 +251,14 @@ client := stainlessv0.NewClient(
 )
 
 // Override per-request:
-client.Projects.Config.NewBranch(
+client.Projects.Config.NewCommit(
 	context.TODO(),
 	"projectName",
-	stainlessv0.ProjectConfigNewBranchParams{
-		Branch:     stainlessv0.F("branch"),
-		BranchFrom: stainlessv0.F("branch_from"),
+	stainlessv0.ProjectConfigNewCommitParams{
+		Branch:          stainlessv0.F("branch"),
+		CommitMessage:   stainlessv0.F("commit_message"),
+		OpenAPISpec:     stainlessv0.F("openapi_spec"),
+		StainlessConfig: stainlessv0.F("stainless_config"),
 	},
 	option.WithMaxRetries(5),
 )
@@ -264,12 +272,14 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-configCommit, err := client.Projects.Config.NewBranch(
+configCommit, err := client.Projects.Config.NewCommit(
 	context.TODO(),
 	"projectName",
-	stainlessv0.ProjectConfigNewBranchParams{
-		Branch:     stainlessv0.F("branch"),
-		BranchFrom: stainlessv0.F("branch_from"),
+	stainlessv0.ProjectConfigNewCommitParams{
+		Branch:          stainlessv0.F("branch"),
+		CommitMessage:   stainlessv0.F("commit_message"),
+		OpenAPISpec:     stainlessv0.F("openapi_spec"),
+		StainlessConfig: stainlessv0.F("stainless_config"),
 	},
 	option.WithResponseInto(&response),
 )
