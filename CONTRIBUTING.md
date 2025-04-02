@@ -41,7 +41,7 @@ To use a local version of this library from source in another project, edit the 
 directive. This can be done through the CLI with the following:
 
 ```sh
-$ go mod edit -replace github.com/stainless-sdks/stainless-v0-go=/path/to/stainless-v0-go
+$ go mod edit -replace github.com/stainless-api/stainless-api-go=/path/to/stainless-api-go
 ```
 
 ## Running tests
