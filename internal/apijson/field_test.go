@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stainless-sdks/stainless-v0-go/internal/param"
+	"github.com/stainless-api/stainless-api-go/internal/param"
 )
 
 type Struct struct {
