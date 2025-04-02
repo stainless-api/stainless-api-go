@@ -3,7 +3,7 @@
 package stainlessv0
 
 import (
-	"github.com/stainless-sdks/stainless-v0-go/internal/apierror"
+	"github.com/stainless-api/stainless-api-go/internal/apierror"
 )
 
 type Error = apierror.Error

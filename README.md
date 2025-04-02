@@ -1,6 +1,6 @@
 # Stainless V0 Go API Library
 
-<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/stainless-v0-go.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go"><img src="https://pkg.go.dev/badge/github.com/stainless-api/stainless-api-go.svg" alt="Go Reference"></a>
 
 The Stainless V0 Go library provides convenient access to [the Stainless V0 REST
 API](https://docs.stainless-v0.com) from applications written in Go. The full API of this library can be found in [api.md](api.md).
@@ -9,17 +9,25 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
+<!-- x-release-please-start-version -->
+
 ```go
 import (
-	"github.com/stainless-sdks/stainless-v0-go" // imported as stainlessv0
+	"github.com/stainless-api/stainless-api-go" // imported as stainlessv0
 )
 ```
 
+<!-- x-release-please-end -->
+
 Or to pin the version:
 
+<!-- x-release-please-start-version -->
+
 ```sh
-go get -u 'github.com/stainless-sdks/stainless-v0-go@v0.0.1-alpha.0'
+go get -u 'github.com/stainless-api/stainless-api-go@v0.0.1-alpha.0'
 ```
+
+<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -36,8 +44,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stainless-sdks/stainless-v0-go"
-	"github.com/stainless-sdks/stainless-v0-go/option"
+	"github.com/stainless-api/stainless-api-go"
+	"github.com/stainless-api/stainless-api-go/option"
 )
 
 func main() {
@@ -154,7 +162,7 @@ client.Projects.Config.NewCommit(context.TODO(), ...,
 )
 ```
 
-See the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go/option).
+See the [full list of request options](https://pkg.go.dev/github.com/stainless-api/stainless-api-go/option).
 
 ### Pagination
 
@@ -387,7 +395,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/stainless-v0-go/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-api/stainless-api-go/issues) with questions, bugs, or suggestions.
 
 ## Contributing
 
