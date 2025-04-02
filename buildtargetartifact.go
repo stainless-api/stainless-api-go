@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/stainless-sdks/stainless-v0-go/internal/apijson"
-	"github.com/stainless-sdks/stainless-v0-go/internal/requestconfig"
-	"github.com/stainless-sdks/stainless-v0-go/option"
+	"github.com/stainless-api/stainless-api-go/internal/apijson"
+	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
+	"github.com/stainless-api/stainless-api-go/option"
 )
 
 // BuildTargetArtifactService contains methods and other services that help with
