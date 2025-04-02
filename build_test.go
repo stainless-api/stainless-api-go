@@ -13,6 +13,34 @@ import (
 	"github.com/stainless-api/stainless-api-go/option"
 )
 
+func TestBuildNewWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := stainlessv0.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	_, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
+		Branch:       stainlessv0.F("branch"),
+		ConfigCommit: stainlessv0.F("config_commit"),
+		Project:      stainlessv0.F("project"),
+		Targets:      stainlessv0.F([]stainlessv0.BuildNewParamsTarget{stainlessv0.BuildNewParamsTargetNode}),
+	})
+	if err != nil {
+		var apierr *stainlessv0.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestBuildGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"

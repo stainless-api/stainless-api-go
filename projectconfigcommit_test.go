@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/option"
 )
 
-func TestBuildTargetArtifactGetSource(t *testing.T) {
+func TestProjectConfigCommitNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,10 +26,16 @@ func TestBuildTargetArtifactGetSource(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Builds.Target.Artifacts.GetSource(
+	_, err := client.Projects.Config.Commits.New(
 		context.TODO(),
-		"buildId",
-		stainlessv0.BuildTargetArtifactGetSourceParamsTargetNameNode,
+		"projectName",
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:          stainlessv0.F("branch"),
+			CommitMessage:   stainlessv0.F("commit_message"),
+			AllowEmpty:      stainlessv0.F(true),
+			OpenAPISpec:     stainlessv0.F("openapi_spec"),
+			StainlessConfig: stainlessv0.F("stainless_config"),
+		},
 	)
 	if err != nil {
 		var apierr *stainlessv0.Error

@@ -38,14 +38,12 @@ func TestUserAgentHeader(t *testing.T) {
 			},
 		}),
 	)
-	client.Projects.Config.NewCommit(
+	client.Projects.Config.Commits.New(
 		context.Background(),
 		"projectName",
-		stainlessv0.ProjectConfigNewCommitParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:        stainlessv0.F("branch"),
+			CommitMessage: stainlessv0.F("commit_message"),
 		},
 	)
 	if userAgent != fmt.Sprintf("StainlessV0/Go %s", internal.PackageVersion) {
@@ -71,14 +69,12 @@ func TestRetryAfter(t *testing.T) {
 			},
 		}),
 	)
-	_, err := client.Projects.Config.NewCommit(
+	_, err := client.Projects.Config.Commits.New(
 		context.Background(),
 		"projectName",
-		stainlessv0.ProjectConfigNewCommitParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:        stainlessv0.F("branch"),
+			CommitMessage: stainlessv0.F("commit_message"),
 		},
 	)
 	if err == nil {
@@ -115,14 +111,12 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 		}),
 		option.WithHeaderDel("X-Stainless-Retry-Count"),
 	)
-	_, err := client.Projects.Config.NewCommit(
+	_, err := client.Projects.Config.Commits.New(
 		context.Background(),
 		"projectName",
-		stainlessv0.ProjectConfigNewCommitParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:        stainlessv0.F("branch"),
+			CommitMessage: stainlessv0.F("commit_message"),
 		},
 	)
 	if err == nil {
@@ -154,14 +148,12 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 		}),
 		option.WithHeader("X-Stainless-Retry-Count", "42"),
 	)
-	_, err := client.Projects.Config.NewCommit(
+	_, err := client.Projects.Config.Commits.New(
 		context.Background(),
 		"projectName",
-		stainlessv0.ProjectConfigNewCommitParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:        stainlessv0.F("branch"),
+			CommitMessage: stainlessv0.F("commit_message"),
 		},
 	)
 	if err == nil {
@@ -192,14 +184,12 @@ func TestRetryAfterMs(t *testing.T) {
 			},
 		}),
 	)
-	_, err := client.Projects.Config.NewCommit(
+	_, err := client.Projects.Config.Commits.New(
 		context.Background(),
 		"projectName",
-		stainlessv0.ProjectConfigNewCommitParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:        stainlessv0.F("branch"),
+			CommitMessage: stainlessv0.F("commit_message"),
 		},
 	)
 	if err == nil {
@@ -224,14 +214,12 @@ func TestContextCancel(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithCancel(context.Background())
 	cancel()
-	_, err := client.Projects.Config.NewCommit(
+	_, err := client.Projects.Config.Commits.New(
 		cancelCtx,
 		"projectName",
-		stainlessv0.ProjectConfigNewCommitParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:        stainlessv0.F("branch"),
+			CommitMessage: stainlessv0.F("commit_message"),
 		},
 	)
 	if err == nil {
@@ -253,14 +241,12 @@ func TestContextCancelDelay(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithTimeout(context.Background(), 2*time.Millisecond)
 	defer cancel()
-	_, err := client.Projects.Config.NewCommit(
+	_, err := client.Projects.Config.Commits.New(
 		cancelCtx,
 		"projectName",
-		stainlessv0.ProjectConfigNewCommitParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:        stainlessv0.F("branch"),
+			CommitMessage: stainlessv0.F("commit_message"),
 		},
 	)
 	if err == nil {
@@ -288,14 +274,12 @@ func TestContextDeadline(t *testing.T) {
 				},
 			}),
 		)
-		_, err := client.Projects.Config.NewCommit(
+		_, err := client.Projects.Config.Commits.New(
 			deadlineCtx,
 			"projectName",
-			stainlessv0.ProjectConfigNewCommitParams{
-				Branch:          stainlessv0.F("branch"),
-				CommitMessage:   stainlessv0.F("commit_message"),
-				OpenAPISpec:     stainlessv0.F("openapi_spec"),
-				StainlessConfig: stainlessv0.F("stainless_config"),
+			stainlessv0.ProjectConfigCommitNewParams{
+				Branch:        stainlessv0.F("branch"),
+				CommitMessage: stainlessv0.F("commit_message"),
 			},
 		)
 		if err == nil {
