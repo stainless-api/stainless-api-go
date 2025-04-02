@@ -24,19 +24,17 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	configCommit, err := client.Projects.Config.NewCommit(
+	commit, err := client.Projects.Config.Commits.New(
 		context.TODO(),
 		"projectName",
-		stainlessv0.ProjectConfigNewCommitParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:        stainlessv0.F("branch"),
+			CommitMessage: stainlessv0.F("commit_message"),
 		},
 	)
 	if err != nil {
 		t.Error(err)
 		return
 	}
-	t.Logf("%+v\n", configCommit.ID)
+	t.Logf("%+v\n", commit.ID)
 }

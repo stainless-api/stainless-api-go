@@ -52,20 +52,18 @@ func main() {
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_V0_API_KEY")
 	)
-	configCommit, err := client.Projects.Config.NewCommit(
+	commit, err := client.Projects.Config.Commits.New(
 		context.TODO(),
 		"projectName",
-		stainlessv0.ProjectConfigNewCommitParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+		stainlessv0.ProjectConfigCommitNewParams{
+			Branch:        stainlessv0.F("branch"),
+			CommitMessage: stainlessv0.F("commit_message"),
 		},
 	)
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", configCommit.ID)
+	fmt.Printf("%+v\n", commit.ID)
 }
 
 ```
@@ -154,7 +152,7 @@ client := stainlessv0.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.Projects.Config.NewCommit(context.TODO(), ...,
+client.Projects.Config.Commits.New(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -183,14 +181,12 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Projects.Config.NewCommit(
+_, err := client.Projects.Config.Commits.New(
 	context.TODO(),
 	"projectName",
-	stainlessv0.ProjectConfigNewCommitParams{
-		Branch:          stainlessv0.F("branch"),
-		CommitMessage:   stainlessv0.F("commit_message"),
-		OpenAPISpec:     stainlessv0.F("openapi_spec"),
-		StainlessConfig: stainlessv0.F("stainless_config"),
+	stainlessv0.ProjectConfigCommitNewParams{
+		Branch:        stainlessv0.F("branch"),
+		CommitMessage: stainlessv0.F("commit_message"),
 	},
 )
 if err != nil {
@@ -217,14 +213,12 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.Projects.Config.NewCommit(
+client.Projects.Config.Commits.New(
 	ctx,
 	"projectName",
-	stainlessv0.ProjectConfigNewCommitParams{
-		Branch:          stainlessv0.F("branch"),
-		CommitMessage:   stainlessv0.F("commit_message"),
-		OpenAPISpec:     stainlessv0.F("openapi_spec"),
-		StainlessConfig: stainlessv0.F("stainless_config"),
+	stainlessv0.ProjectConfigCommitNewParams{
+		Branch:        stainlessv0.F("branch"),
+		CommitMessage: stainlessv0.F("commit_message"),
 	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
@@ -259,14 +253,12 @@ client := stainlessv0.NewClient(
 )
 
 // Override per-request:
-client.Projects.Config.NewCommit(
+client.Projects.Config.Commits.New(
 	context.TODO(),
 	"projectName",
-	stainlessv0.ProjectConfigNewCommitParams{
-		Branch:          stainlessv0.F("branch"),
-		CommitMessage:   stainlessv0.F("commit_message"),
-		OpenAPISpec:     stainlessv0.F("openapi_spec"),
-		StainlessConfig: stainlessv0.F("stainless_config"),
+	stainlessv0.ProjectConfigCommitNewParams{
+		Branch:        stainlessv0.F("branch"),
+		CommitMessage: stainlessv0.F("commit_message"),
 	},
 	option.WithMaxRetries(5),
 )
@@ -280,21 +272,19 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-configCommit, err := client.Projects.Config.NewCommit(
+commit, err := client.Projects.Config.Commits.New(
 	context.TODO(),
 	"projectName",
-	stainlessv0.ProjectConfigNewCommitParams{
-		Branch:          stainlessv0.F("branch"),
-		CommitMessage:   stainlessv0.F("commit_message"),
-		OpenAPISpec:     stainlessv0.F("openapi_spec"),
-		StainlessConfig: stainlessv0.F("stainless_config"),
+	stainlessv0.ProjectConfigCommitNewParams{
+		Branch:        stainlessv0.F("branch"),
+		CommitMessage: stainlessv0.F("commit_message"),
 	},
 	option.WithResponseInto(&response),
 )
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", configCommit)
+fmt.Printf("%+v\n", commit)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)
