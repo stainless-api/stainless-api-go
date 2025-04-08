@@ -161,7 +161,7 @@ func (r buildTargetJSON) RawJSON() string {
 
 type BuildTargetCommit struct {
 	Status BuildTargetCommitStatus `json:"status,required"`
-	// This field can have the runtime type of [BuildTargetCommitObjectCompleted].
+	// This field can have the runtime type of [BuildTargetCommitCompletedCompleted].
 	Completed interface{}           `json:"completed"`
 	JSON      buildTargetCommitJSON `json:"-"`
 	union     BuildTargetCommitUnion
@@ -192,14 +192,15 @@ func (r *BuildTargetCommit) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [BuildTargetCommitUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [BuildTargetCommitStatus],
-// [BuildTargetCommitStatus], [BuildTargetCommitStatus], [BuildTargetCommitObject].
+// Possible runtime types of the union are [BuildTargetCommitNotStarted],
+// [BuildTargetCommitQueued], [BuildTargetCommitInProgress],
+// [BuildTargetCommitCompleted].
 func (r BuildTargetCommit) AsUnion() BuildTargetCommitUnion {
 	return r.union
 }
 
-// Union satisfied by [BuildTargetCommitStatus], [BuildTargetCommitStatus],
-// [BuildTargetCommitStatus] or [BuildTargetCommitObject].
+// Union satisfied by [BuildTargetCommitNotStarted], [BuildTargetCommitQueued],
+// [BuildTargetCommitInProgress] or [BuildTargetCommitCompleted].
 type BuildTargetCommitUnion interface {
 	implementsBuildTargetCommit()
 }
@@ -207,103 +208,181 @@ type BuildTargetCommitUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*BuildTargetCommitUnion)(nil)).Elem(),
-		"",
+		"status",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetCommitStatus{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetCommitNotStarted{}),
+			DiscriminatorValue: "not_started",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetCommitStatus{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetCommitQueued{}),
+			DiscriminatorValue: "queued",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetCommitStatus{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetCommitInProgress{}),
+			DiscriminatorValue: "in_progress",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetCommitObject{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetCommitCompleted{}),
+			DiscriminatorValue: "completed",
 		},
 	)
 }
 
-type BuildTargetCommitStatus struct {
-	Status BuildTargetCommitStatusStatus `json:"status,required"`
-	JSON   buildTargetCommitStatusJSON   `json:"-"`
+type BuildTargetCommitNotStarted struct {
+	Status BuildTargetCommitNotStartedStatus `json:"status,required"`
+	JSON   buildTargetCommitNotStartedJSON   `json:"-"`
 }
 
-// buildTargetCommitStatusJSON contains the JSON metadata for the struct
-// [BuildTargetCommitStatus]
-type buildTargetCommitStatusJSON struct {
+// buildTargetCommitNotStartedJSON contains the JSON metadata for the struct
+// [BuildTargetCommitNotStarted]
+type buildTargetCommitNotStartedJSON struct {
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetCommitStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetCommitNotStarted) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetCommitStatusJSON) RawJSON() string {
+func (r buildTargetCommitNotStartedJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BuildTargetCommitStatus) implementsBuildTargetCommit() {}
+func (r BuildTargetCommitNotStarted) implementsBuildTargetCommit() {}
 
-type BuildTargetCommitStatusStatus string
+type BuildTargetCommitNotStartedStatus string
 
 const (
-	BuildTargetCommitStatusStatusNotStarted BuildTargetCommitStatusStatus = "not_started"
+	BuildTargetCommitNotStartedStatusNotStarted BuildTargetCommitNotStartedStatus = "not_started"
 )
 
-func (r BuildTargetCommitStatusStatus) IsKnown() bool {
+func (r BuildTargetCommitNotStartedStatus) IsKnown() bool {
 	switch r {
-	case BuildTargetCommitStatusStatusNotStarted:
+	case BuildTargetCommitNotStartedStatusNotStarted:
 		return true
 	}
 	return false
 }
 
-type BuildTargetCommitObject struct {
-	Completed BuildTargetCommitObjectCompleted `json:"completed,required"`
-	Status    BuildTargetCommitObjectStatus    `json:"status,required"`
-	JSON      buildTargetCommitObjectJSON      `json:"-"`
+type BuildTargetCommitQueued struct {
+	Status BuildTargetCommitQueuedStatus `json:"status,required"`
+	JSON   buildTargetCommitQueuedJSON   `json:"-"`
 }
 
-// buildTargetCommitObjectJSON contains the JSON metadata for the struct
-// [BuildTargetCommitObject]
-type buildTargetCommitObjectJSON struct {
+// buildTargetCommitQueuedJSON contains the JSON metadata for the struct
+// [BuildTargetCommitQueued]
+type buildTargetCommitQueuedJSON struct {
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BuildTargetCommitQueued) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r buildTargetCommitQueuedJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BuildTargetCommitQueued) implementsBuildTargetCommit() {}
+
+type BuildTargetCommitQueuedStatus string
+
+const (
+	BuildTargetCommitQueuedStatusQueued BuildTargetCommitQueuedStatus = "queued"
+)
+
+func (r BuildTargetCommitQueuedStatus) IsKnown() bool {
+	switch r {
+	case BuildTargetCommitQueuedStatusQueued:
+		return true
+	}
+	return false
+}
+
+type BuildTargetCommitInProgress struct {
+	Status BuildTargetCommitInProgressStatus `json:"status,required"`
+	JSON   buildTargetCommitInProgressJSON   `json:"-"`
+}
+
+// buildTargetCommitInProgressJSON contains the JSON metadata for the struct
+// [BuildTargetCommitInProgress]
+type buildTargetCommitInProgressJSON struct {
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BuildTargetCommitInProgress) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r buildTargetCommitInProgressJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BuildTargetCommitInProgress) implementsBuildTargetCommit() {}
+
+type BuildTargetCommitInProgressStatus string
+
+const (
+	BuildTargetCommitInProgressStatusInProgress BuildTargetCommitInProgressStatus = "in_progress"
+)
+
+func (r BuildTargetCommitInProgressStatus) IsKnown() bool {
+	switch r {
+	case BuildTargetCommitInProgressStatusInProgress:
+		return true
+	}
+	return false
+}
+
+type BuildTargetCommitCompleted struct {
+	Completed BuildTargetCommitCompletedCompleted `json:"completed,required"`
+	Status    BuildTargetCommitCompletedStatus    `json:"status,required"`
+	JSON      buildTargetCommitCompletedJSON      `json:"-"`
+}
+
+// buildTargetCommitCompletedJSON contains the JSON metadata for the struct
+// [BuildTargetCommitCompleted]
+type buildTargetCommitCompletedJSON struct {
 	Completed   apijson.Field
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetCommitObject) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetCommitCompleted) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetCommitObjectJSON) RawJSON() string {
+func (r buildTargetCommitCompletedJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BuildTargetCommitObject) implementsBuildTargetCommit() {}
+func (r BuildTargetCommitCompleted) implementsBuildTargetCommit() {}
 
-type BuildTargetCommitObjectCompleted struct {
-	Conclusion BuildTargetCommitObjectCompletedConclusion `json:"conclusion,required"`
+type BuildTargetCommitCompletedCompleted struct {
+	Conclusion BuildTargetCommitCompletedCompletedConclusion `json:"conclusion,required"`
 	// This field can have the runtime type of
-	// [BuildTargetCommitObjectCompletedObjectCommit].
+	// [BuildTargetCommitCompletedCompletedObjectCommit].
 	Commit interface{} `json:"commit"`
 	// This field can have the runtime type of
-	// [BuildTargetCommitObjectCompletedObjectMergeConflictPr].
-	MergeConflictPr interface{}                          `json:"merge_conflict_pr"`
-	JSON            buildTargetCommitObjectCompletedJSON `json:"-"`
-	union           BuildTargetCommitObjectCompletedUnion
+	// [BuildTargetCommitCompletedCompletedObjectMergeConflictPr].
+	MergeConflictPr interface{}                             `json:"merge_conflict_pr"`
+	JSON            buildTargetCommitCompletedCompletedJSON `json:"-"`
+	union           BuildTargetCommitCompletedCompletedUnion
 }
 
-// buildTargetCommitObjectCompletedJSON contains the JSON metadata for the struct
-// [BuildTargetCommitObjectCompleted]
-type buildTargetCommitObjectCompletedJSON struct {
+// buildTargetCommitCompletedCompletedJSON contains the JSON metadata for the
+// struct [BuildTargetCommitCompletedCompleted]
+type buildTargetCommitCompletedCompletedJSON struct {
 	Conclusion      apijson.Field
 	Commit          apijson.Field
 	MergeConflictPr apijson.Field
@@ -311,12 +390,12 @@ type buildTargetCommitObjectCompletedJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r buildTargetCommitObjectCompletedJSON) RawJSON() string {
+func (r buildTargetCommitCompletedCompletedJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *BuildTargetCommitObjectCompleted) UnmarshalJSON(data []byte) (err error) {
-	*r = BuildTargetCommitObjectCompleted{}
+func (r *BuildTargetCommitCompletedCompleted) UnmarshalJSON(data []byte) (err error) {
+	*r = BuildTargetCommitCompletedCompleted{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -324,101 +403,101 @@ func (r *BuildTargetCommitObjectCompleted) UnmarshalJSON(data []byte) (err error
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [BuildTargetCommitObjectCompletedUnion] interface which you
+// AsUnion returns a [BuildTargetCommitCompletedCompletedUnion] interface which you
 // can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [BuildTargetCommitObjectCompletedObject],
-// [BuildTargetCommitObjectCompletedObject],
-// [BuildTargetCommitObjectCompletedConclusion].
-func (r BuildTargetCommitObjectCompleted) AsUnion() BuildTargetCommitObjectCompletedUnion {
+// [BuildTargetCommitCompletedCompletedObject],
+// [BuildTargetCommitCompletedCompletedObject],
+// [BuildTargetCommitCompletedCompletedConclusion].
+func (r BuildTargetCommitCompletedCompleted) AsUnion() BuildTargetCommitCompletedCompletedUnion {
 	return r.union
 }
 
-// Union satisfied by [BuildTargetCommitObjectCompletedObject],
-// [BuildTargetCommitObjectCompletedObject] or
-// [BuildTargetCommitObjectCompletedConclusion].
-type BuildTargetCommitObjectCompletedUnion interface {
-	implementsBuildTargetCommitObjectCompleted()
+// Union satisfied by [BuildTargetCommitCompletedCompletedObject],
+// [BuildTargetCommitCompletedCompletedObject] or
+// [BuildTargetCommitCompletedCompletedConclusion].
+type BuildTargetCommitCompletedCompletedUnion interface {
+	implementsBuildTargetCommitCompletedCompleted()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*BuildTargetCommitObjectCompletedUnion)(nil)).Elem(),
+		reflect.TypeOf((*BuildTargetCommitCompletedCompletedUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetCommitObjectCompletedObject{}),
+			Type:       reflect.TypeOf(BuildTargetCommitCompletedCompletedObject{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetCommitObjectCompletedObject{}),
+			Type:       reflect.TypeOf(BuildTargetCommitCompletedCompletedObject{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetCommitObjectCompletedConclusion{}),
+			Type:       reflect.TypeOf(BuildTargetCommitCompletedCompletedConclusion{}),
 		},
 	)
 }
 
-type BuildTargetCommitObjectCompletedObject struct {
-	Commit     BuildTargetCommitObjectCompletedObjectCommit     `json:"commit,required"`
-	Conclusion BuildTargetCommitObjectCompletedObjectConclusion `json:"conclusion,required"`
-	JSON       buildTargetCommitObjectCompletedObjectJSON       `json:"-"`
+type BuildTargetCommitCompletedCompletedObject struct {
+	Commit     BuildTargetCommitCompletedCompletedObjectCommit     `json:"commit,required"`
+	Conclusion BuildTargetCommitCompletedCompletedObjectConclusion `json:"conclusion,required"`
+	JSON       buildTargetCommitCompletedCompletedObjectJSON       `json:"-"`
 }
 
-// buildTargetCommitObjectCompletedObjectJSON contains the JSON metadata for the
-// struct [BuildTargetCommitObjectCompletedObject]
-type buildTargetCommitObjectCompletedObjectJSON struct {
+// buildTargetCommitCompletedCompletedObjectJSON contains the JSON metadata for the
+// struct [BuildTargetCommitCompletedCompletedObject]
+type buildTargetCommitCompletedCompletedObjectJSON struct {
 	Commit      apijson.Field
 	Conclusion  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetCommitObjectCompletedObject) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetCommitCompletedCompletedObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetCommitObjectCompletedObjectJSON) RawJSON() string {
+func (r buildTargetCommitCompletedCompletedObjectJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BuildTargetCommitObjectCompletedObject) implementsBuildTargetCommitObjectCompleted() {}
+func (r BuildTargetCommitCompletedCompletedObject) implementsBuildTargetCommitCompletedCompleted() {}
 
-type BuildTargetCommitObjectCompletedObjectCommit struct {
-	Repo BuildTargetCommitObjectCompletedObjectCommitRepo `json:"repo,required"`
-	Sha  string                                           `json:"sha,required"`
-	JSON buildTargetCommitObjectCompletedObjectCommitJSON `json:"-"`
+type BuildTargetCommitCompletedCompletedObjectCommit struct {
+	Repo BuildTargetCommitCompletedCompletedObjectCommitRepo `json:"repo,required"`
+	Sha  string                                              `json:"sha,required"`
+	JSON buildTargetCommitCompletedCompletedObjectCommitJSON `json:"-"`
 }
 
-// buildTargetCommitObjectCompletedObjectCommitJSON contains the JSON metadata for
-// the struct [BuildTargetCommitObjectCompletedObjectCommit]
-type buildTargetCommitObjectCompletedObjectCommitJSON struct {
+// buildTargetCommitCompletedCompletedObjectCommitJSON contains the JSON metadata
+// for the struct [BuildTargetCommitCompletedCompletedObjectCommit]
+type buildTargetCommitCompletedCompletedObjectCommitJSON struct {
 	Repo        apijson.Field
 	Sha         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetCommitObjectCompletedObjectCommit) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetCommitCompletedCompletedObjectCommit) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetCommitObjectCompletedObjectCommitJSON) RawJSON() string {
+func (r buildTargetCommitCompletedCompletedObjectCommitJSON) RawJSON() string {
 	return r.raw
 }
 
-type BuildTargetCommitObjectCompletedObjectCommitRepo struct {
-	Branch string                                               `json:"branch,required"`
-	Name   string                                               `json:"name,required"`
-	Owner  string                                               `json:"owner,required"`
-	JSON   buildTargetCommitObjectCompletedObjectCommitRepoJSON `json:"-"`
+type BuildTargetCommitCompletedCompletedObjectCommitRepo struct {
+	Branch string                                                  `json:"branch,required"`
+	Name   string                                                  `json:"name,required"`
+	Owner  string                                                  `json:"owner,required"`
+	JSON   buildTargetCommitCompletedCompletedObjectCommitRepoJSON `json:"-"`
 }
 
-// buildTargetCommitObjectCompletedObjectCommitRepoJSON contains the JSON metadata
-// for the struct [BuildTargetCommitObjectCompletedObjectCommitRepo]
-type buildTargetCommitObjectCompletedObjectCommitRepoJSON struct {
+// buildTargetCommitCompletedCompletedObjectCommitRepoJSON contains the JSON
+// metadata for the struct [BuildTargetCommitCompletedCompletedObjectCommitRepo]
+type buildTargetCommitCompletedCompletedObjectCommitRepoJSON struct {
 	Branch      apijson.Field
 	Name        apijson.Field
 	Owner       apijson.Field
@@ -426,82 +505,100 @@ type buildTargetCommitObjectCompletedObjectCommitRepoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetCommitObjectCompletedObjectCommitRepo) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetCommitCompletedCompletedObjectCommitRepo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetCommitObjectCompletedObjectCommitRepoJSON) RawJSON() string {
+func (r buildTargetCommitCompletedCompletedObjectCommitRepoJSON) RawJSON() string {
 	return r.raw
 }
 
-type BuildTargetCommitObjectCompletedObjectConclusion string
+type BuildTargetCommitCompletedCompletedObjectConclusion string
 
 const (
-	BuildTargetCommitObjectCompletedObjectConclusionError   BuildTargetCommitObjectCompletedObjectConclusion = "error"
-	BuildTargetCommitObjectCompletedObjectConclusionWarning BuildTargetCommitObjectCompletedObjectConclusion = "warning"
-	BuildTargetCommitObjectCompletedObjectConclusionNote    BuildTargetCommitObjectCompletedObjectConclusion = "note"
-	BuildTargetCommitObjectCompletedObjectConclusionSuccess BuildTargetCommitObjectCompletedObjectConclusion = "success"
+	BuildTargetCommitCompletedCompletedObjectConclusionError   BuildTargetCommitCompletedCompletedObjectConclusion = "error"
+	BuildTargetCommitCompletedCompletedObjectConclusionWarning BuildTargetCommitCompletedCompletedObjectConclusion = "warning"
+	BuildTargetCommitCompletedCompletedObjectConclusionNote    BuildTargetCommitCompletedCompletedObjectConclusion = "note"
+	BuildTargetCommitCompletedCompletedObjectConclusionSuccess BuildTargetCommitCompletedCompletedObjectConclusion = "success"
 )
 
-func (r BuildTargetCommitObjectCompletedObjectConclusion) IsKnown() bool {
+func (r BuildTargetCommitCompletedCompletedObjectConclusion) IsKnown() bool {
 	switch r {
-	case BuildTargetCommitObjectCompletedObjectConclusionError, BuildTargetCommitObjectCompletedObjectConclusionWarning, BuildTargetCommitObjectCompletedObjectConclusionNote, BuildTargetCommitObjectCompletedObjectConclusionSuccess:
+	case BuildTargetCommitCompletedCompletedObjectConclusionError, BuildTargetCommitCompletedCompletedObjectConclusionWarning, BuildTargetCommitCompletedCompletedObjectConclusionNote, BuildTargetCommitCompletedCompletedObjectConclusionSuccess:
 		return true
 	}
 	return false
 }
 
-type BuildTargetCommitObjectCompletedConclusion struct {
-	Conclusion BuildTargetCommitObjectCompletedConclusionConclusion `json:"conclusion,required"`
-	JSON       buildTargetCommitObjectCompletedConclusionJSON       `json:"-"`
+type BuildTargetCommitCompletedCompletedConclusion struct {
+	Conclusion BuildTargetCommitCompletedCompletedConclusionConclusion `json:"conclusion,required"`
+	JSON       buildTargetCommitCompletedCompletedConclusionJSON       `json:"-"`
 }
 
-// buildTargetCommitObjectCompletedConclusionJSON contains the JSON metadata for
-// the struct [BuildTargetCommitObjectCompletedConclusion]
-type buildTargetCommitObjectCompletedConclusionJSON struct {
+// buildTargetCommitCompletedCompletedConclusionJSON contains the JSON metadata for
+// the struct [BuildTargetCommitCompletedCompletedConclusion]
+type buildTargetCommitCompletedCompletedConclusionJSON struct {
 	Conclusion  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetCommitObjectCompletedConclusion) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetCommitCompletedCompletedConclusion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetCommitObjectCompletedConclusionJSON) RawJSON() string {
+func (r buildTargetCommitCompletedCompletedConclusionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BuildTargetCommitObjectCompletedConclusion) implementsBuildTargetCommitObjectCompleted() {}
+func (r BuildTargetCommitCompletedCompletedConclusion) implementsBuildTargetCommitCompletedCompleted() {
+}
 
-type BuildTargetCommitObjectCompletedConclusionConclusion string
+type BuildTargetCommitCompletedCompletedConclusionConclusion string
 
 const (
-	BuildTargetCommitObjectCompletedConclusionConclusionFatal           BuildTargetCommitObjectCompletedConclusionConclusion = "fatal"
-	BuildTargetCommitObjectCompletedConclusionConclusionPaymentRequired BuildTargetCommitObjectCompletedConclusionConclusion = "payment_required"
-	BuildTargetCommitObjectCompletedConclusionConclusionCancelled       BuildTargetCommitObjectCompletedConclusionConclusion = "cancelled"
-	BuildTargetCommitObjectCompletedConclusionConclusionTimedOut        BuildTargetCommitObjectCompletedConclusionConclusion = "timed_out"
-	BuildTargetCommitObjectCompletedConclusionConclusionNoop            BuildTargetCommitObjectCompletedConclusionConclusion = "noop"
-	BuildTargetCommitObjectCompletedConclusionConclusionVersionBump     BuildTargetCommitObjectCompletedConclusionConclusion = "version_bump"
+	BuildTargetCommitCompletedCompletedConclusionConclusionFatal           BuildTargetCommitCompletedCompletedConclusionConclusion = "fatal"
+	BuildTargetCommitCompletedCompletedConclusionConclusionPaymentRequired BuildTargetCommitCompletedCompletedConclusionConclusion = "payment_required"
+	BuildTargetCommitCompletedCompletedConclusionConclusionCancelled       BuildTargetCommitCompletedCompletedConclusionConclusion = "cancelled"
+	BuildTargetCommitCompletedCompletedConclusionConclusionTimedOut        BuildTargetCommitCompletedCompletedConclusionConclusion = "timed_out"
+	BuildTargetCommitCompletedCompletedConclusionConclusionNoop            BuildTargetCommitCompletedCompletedConclusionConclusion = "noop"
+	BuildTargetCommitCompletedCompletedConclusionConclusionVersionBump     BuildTargetCommitCompletedCompletedConclusionConclusion = "version_bump"
 )
 
-func (r BuildTargetCommitObjectCompletedConclusionConclusion) IsKnown() bool {
+func (r BuildTargetCommitCompletedCompletedConclusionConclusion) IsKnown() bool {
 	switch r {
-	case BuildTargetCommitObjectCompletedConclusionConclusionFatal, BuildTargetCommitObjectCompletedConclusionConclusionPaymentRequired, BuildTargetCommitObjectCompletedConclusionConclusionCancelled, BuildTargetCommitObjectCompletedConclusionConclusionTimedOut, BuildTargetCommitObjectCompletedConclusionConclusionNoop, BuildTargetCommitObjectCompletedConclusionConclusionVersionBump:
+	case BuildTargetCommitCompletedCompletedConclusionConclusionFatal, BuildTargetCommitCompletedCompletedConclusionConclusionPaymentRequired, BuildTargetCommitCompletedCompletedConclusionConclusionCancelled, BuildTargetCommitCompletedCompletedConclusionConclusionTimedOut, BuildTargetCommitCompletedCompletedConclusionConclusionNoop, BuildTargetCommitCompletedCompletedConclusionConclusionVersionBump:
 		return true
 	}
 	return false
 }
 
-type BuildTargetCommitObjectStatus string
+type BuildTargetCommitCompletedStatus string
 
 const (
-	BuildTargetCommitObjectStatusCompleted BuildTargetCommitObjectStatus = "completed"
+	BuildTargetCommitCompletedStatusCompleted BuildTargetCommitCompletedStatus = "completed"
 )
 
-func (r BuildTargetCommitObjectStatus) IsKnown() bool {
+func (r BuildTargetCommitCompletedStatus) IsKnown() bool {
 	switch r {
-	case BuildTargetCommitObjectStatusCompleted:
+	case BuildTargetCommitCompletedStatusCompleted:
+		return true
+	}
+	return false
+}
+
+type BuildTargetCommitStatus string
+
+const (
+	BuildTargetCommitStatusNotStarted BuildTargetCommitStatus = "not_started"
+	BuildTargetCommitStatusQueued     BuildTargetCommitStatus = "queued"
+	BuildTargetCommitStatusInProgress BuildTargetCommitStatus = "in_progress"
+	BuildTargetCommitStatusCompleted  BuildTargetCommitStatus = "completed"
+)
+
+func (r BuildTargetCommitStatus) IsKnown() bool {
+	switch r {
+	case BuildTargetCommitStatusNotStarted, BuildTargetCommitStatusQueued, BuildTargetCommitStatusInProgress, BuildTargetCommitStatusCompleted:
 		return true
 	}
 	return false
@@ -509,7 +606,7 @@ func (r BuildTargetCommitObjectStatus) IsKnown() bool {
 
 type BuildTargetLint struct {
 	Status BuildTargetLintStatus `json:"status,required"`
-	// This field can have the runtime type of [BuildTargetLintObjectCompleted].
+	// This field can have the runtime type of [BuildTargetLintCompletedCompleted].
 	Completed interface{}         `json:"completed"`
 	JSON      buildTargetLintJSON `json:"-"`
 	union     BuildTargetLintUnion
@@ -539,14 +636,15 @@ func (r *BuildTargetLint) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [BuildTargetLintUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [BuildTargetLintStatus],
-// [BuildTargetLintStatus], [BuildTargetLintStatus], [BuildTargetLintObject].
+// Possible runtime types of the union are [BuildTargetLintNotStarted],
+// [BuildTargetLintQueued], [BuildTargetLintInProgress],
+// [BuildTargetLintCompleted].
 func (r BuildTargetLint) AsUnion() BuildTargetLintUnion {
 	return r.union
 }
 
-// Union satisfied by [BuildTargetLintStatus], [BuildTargetLintStatus],
-// [BuildTargetLintStatus] or [BuildTargetLintObject].
+// Union satisfied by [BuildTargetLintNotStarted], [BuildTargetLintQueued],
+// [BuildTargetLintInProgress] or [BuildTargetLintCompleted].
 type BuildTargetLintUnion interface {
 	implementsBuildTargetLint()
 }
@@ -554,138 +652,233 @@ type BuildTargetLintUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*BuildTargetLintUnion)(nil)).Elem(),
-		"",
+		"status",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetLintStatus{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetLintNotStarted{}),
+			DiscriminatorValue: "not_started",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetLintStatus{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetLintQueued{}),
+			DiscriminatorValue: "queued",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetLintStatus{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetLintInProgress{}),
+			DiscriminatorValue: "in_progress",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetLintObject{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetLintCompleted{}),
+			DiscriminatorValue: "completed",
 		},
 	)
 }
 
-type BuildTargetLintStatus struct {
-	Status BuildTargetLintStatusStatus `json:"status,required"`
-	JSON   buildTargetLintStatusJSON   `json:"-"`
+type BuildTargetLintNotStarted struct {
+	Status BuildTargetLintNotStartedStatus `json:"status,required"`
+	JSON   buildTargetLintNotStartedJSON   `json:"-"`
 }
 
-// buildTargetLintStatusJSON contains the JSON metadata for the struct
-// [BuildTargetLintStatus]
-type buildTargetLintStatusJSON struct {
+// buildTargetLintNotStartedJSON contains the JSON metadata for the struct
+// [BuildTargetLintNotStarted]
+type buildTargetLintNotStartedJSON struct {
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetLintStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetLintNotStarted) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetLintStatusJSON) RawJSON() string {
+func (r buildTargetLintNotStartedJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BuildTargetLintStatus) implementsBuildTargetLint() {}
+func (r BuildTargetLintNotStarted) implementsBuildTargetLint() {}
 
-type BuildTargetLintStatusStatus string
+type BuildTargetLintNotStartedStatus string
 
 const (
-	BuildTargetLintStatusStatusNotStarted BuildTargetLintStatusStatus = "not_started"
+	BuildTargetLintNotStartedStatusNotStarted BuildTargetLintNotStartedStatus = "not_started"
 )
 
-func (r BuildTargetLintStatusStatus) IsKnown() bool {
+func (r BuildTargetLintNotStartedStatus) IsKnown() bool {
 	switch r {
-	case BuildTargetLintStatusStatusNotStarted:
+	case BuildTargetLintNotStartedStatusNotStarted:
 		return true
 	}
 	return false
 }
 
-type BuildTargetLintObject struct {
-	Completed BuildTargetLintObjectCompleted `json:"completed,required"`
-	Status    BuildTargetLintObjectStatus    `json:"status,required"`
-	JSON      buildTargetLintObjectJSON      `json:"-"`
+type BuildTargetLintQueued struct {
+	Status BuildTargetLintQueuedStatus `json:"status,required"`
+	JSON   buildTargetLintQueuedJSON   `json:"-"`
 }
 
-// buildTargetLintObjectJSON contains the JSON metadata for the struct
-// [BuildTargetLintObject]
-type buildTargetLintObjectJSON struct {
+// buildTargetLintQueuedJSON contains the JSON metadata for the struct
+// [BuildTargetLintQueued]
+type buildTargetLintQueuedJSON struct {
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BuildTargetLintQueued) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r buildTargetLintQueuedJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BuildTargetLintQueued) implementsBuildTargetLint() {}
+
+type BuildTargetLintQueuedStatus string
+
+const (
+	BuildTargetLintQueuedStatusQueued BuildTargetLintQueuedStatus = "queued"
+)
+
+func (r BuildTargetLintQueuedStatus) IsKnown() bool {
+	switch r {
+	case BuildTargetLintQueuedStatusQueued:
+		return true
+	}
+	return false
+}
+
+type BuildTargetLintInProgress struct {
+	Status BuildTargetLintInProgressStatus `json:"status,required"`
+	JSON   buildTargetLintInProgressJSON   `json:"-"`
+}
+
+// buildTargetLintInProgressJSON contains the JSON metadata for the struct
+// [BuildTargetLintInProgress]
+type buildTargetLintInProgressJSON struct {
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BuildTargetLintInProgress) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r buildTargetLintInProgressJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BuildTargetLintInProgress) implementsBuildTargetLint() {}
+
+type BuildTargetLintInProgressStatus string
+
+const (
+	BuildTargetLintInProgressStatusInProgress BuildTargetLintInProgressStatus = "in_progress"
+)
+
+func (r BuildTargetLintInProgressStatus) IsKnown() bool {
+	switch r {
+	case BuildTargetLintInProgressStatusInProgress:
+		return true
+	}
+	return false
+}
+
+type BuildTargetLintCompleted struct {
+	Completed BuildTargetLintCompletedCompleted `json:"completed,required"`
+	Status    BuildTargetLintCompletedStatus    `json:"status,required"`
+	JSON      buildTargetLintCompletedJSON      `json:"-"`
+}
+
+// buildTargetLintCompletedJSON contains the JSON metadata for the struct
+// [BuildTargetLintCompleted]
+type buildTargetLintCompletedJSON struct {
 	Completed   apijson.Field
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetLintObject) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetLintCompleted) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetLintObjectJSON) RawJSON() string {
+func (r buildTargetLintCompletedJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BuildTargetLintObject) implementsBuildTargetLint() {}
+func (r BuildTargetLintCompleted) implementsBuildTargetLint() {}
 
-type BuildTargetLintObjectCompleted struct {
-	Conclusion BuildTargetLintObjectCompletedConclusion `json:"conclusion,required"`
-	JSON       buildTargetLintObjectCompletedJSON       `json:"-"`
+type BuildTargetLintCompletedCompleted struct {
+	Conclusion BuildTargetLintCompletedCompletedConclusion `json:"conclusion,required"`
+	JSON       buildTargetLintCompletedCompletedJSON       `json:"-"`
 }
 
-// buildTargetLintObjectCompletedJSON contains the JSON metadata for the struct
-// [BuildTargetLintObjectCompleted]
-type buildTargetLintObjectCompletedJSON struct {
+// buildTargetLintCompletedCompletedJSON contains the JSON metadata for the struct
+// [BuildTargetLintCompletedCompleted]
+type buildTargetLintCompletedCompletedJSON struct {
 	Conclusion  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetLintObjectCompleted) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetLintCompletedCompleted) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetLintObjectCompletedJSON) RawJSON() string {
+func (r buildTargetLintCompletedCompletedJSON) RawJSON() string {
 	return r.raw
 }
 
-type BuildTargetLintObjectCompletedConclusion string
+type BuildTargetLintCompletedCompletedConclusion string
 
 const (
-	BuildTargetLintObjectCompletedConclusionSuccess        BuildTargetLintObjectCompletedConclusion = "success"
-	BuildTargetLintObjectCompletedConclusionFailure        BuildTargetLintObjectCompletedConclusion = "failure"
-	BuildTargetLintObjectCompletedConclusionSkipped        BuildTargetLintObjectCompletedConclusion = "skipped"
-	BuildTargetLintObjectCompletedConclusionCancelled      BuildTargetLintObjectCompletedConclusion = "cancelled"
-	BuildTargetLintObjectCompletedConclusionActionRequired BuildTargetLintObjectCompletedConclusion = "action_required"
-	BuildTargetLintObjectCompletedConclusionNeutral        BuildTargetLintObjectCompletedConclusion = "neutral"
-	BuildTargetLintObjectCompletedConclusionTimedOut       BuildTargetLintObjectCompletedConclusion = "timed_out"
+	BuildTargetLintCompletedCompletedConclusionSuccess        BuildTargetLintCompletedCompletedConclusion = "success"
+	BuildTargetLintCompletedCompletedConclusionFailure        BuildTargetLintCompletedCompletedConclusion = "failure"
+	BuildTargetLintCompletedCompletedConclusionSkipped        BuildTargetLintCompletedCompletedConclusion = "skipped"
+	BuildTargetLintCompletedCompletedConclusionCancelled      BuildTargetLintCompletedCompletedConclusion = "cancelled"
+	BuildTargetLintCompletedCompletedConclusionActionRequired BuildTargetLintCompletedCompletedConclusion = "action_required"
+	BuildTargetLintCompletedCompletedConclusionNeutral        BuildTargetLintCompletedCompletedConclusion = "neutral"
+	BuildTargetLintCompletedCompletedConclusionTimedOut       BuildTargetLintCompletedCompletedConclusion = "timed_out"
 )
 
-func (r BuildTargetLintObjectCompletedConclusion) IsKnown() bool {
+func (r BuildTargetLintCompletedCompletedConclusion) IsKnown() bool {
 	switch r {
-	case BuildTargetLintObjectCompletedConclusionSuccess, BuildTargetLintObjectCompletedConclusionFailure, BuildTargetLintObjectCompletedConclusionSkipped, BuildTargetLintObjectCompletedConclusionCancelled, BuildTargetLintObjectCompletedConclusionActionRequired, BuildTargetLintObjectCompletedConclusionNeutral, BuildTargetLintObjectCompletedConclusionTimedOut:
+	case BuildTargetLintCompletedCompletedConclusionSuccess, BuildTargetLintCompletedCompletedConclusionFailure, BuildTargetLintCompletedCompletedConclusionSkipped, BuildTargetLintCompletedCompletedConclusionCancelled, BuildTargetLintCompletedCompletedConclusionActionRequired, BuildTargetLintCompletedCompletedConclusionNeutral, BuildTargetLintCompletedCompletedConclusionTimedOut:
 		return true
 	}
 	return false
 }
 
-type BuildTargetLintObjectStatus string
+type BuildTargetLintCompletedStatus string
 
 const (
-	BuildTargetLintObjectStatusCompleted BuildTargetLintObjectStatus = "completed"
+	BuildTargetLintCompletedStatusCompleted BuildTargetLintCompletedStatus = "completed"
 )
 
-func (r BuildTargetLintObjectStatus) IsKnown() bool {
+func (r BuildTargetLintCompletedStatus) IsKnown() bool {
 	switch r {
-	case BuildTargetLintObjectStatusCompleted:
+	case BuildTargetLintCompletedStatusCompleted:
+		return true
+	}
+	return false
+}
+
+type BuildTargetLintStatus string
+
+const (
+	BuildTargetLintStatusNotStarted BuildTargetLintStatus = "not_started"
+	BuildTargetLintStatusQueued     BuildTargetLintStatus = "queued"
+	BuildTargetLintStatusInProgress BuildTargetLintStatus = "in_progress"
+	BuildTargetLintStatusCompleted  BuildTargetLintStatus = "completed"
+)
+
+func (r BuildTargetLintStatus) IsKnown() bool {
+	switch r {
+	case BuildTargetLintStatusNotStarted, BuildTargetLintStatusQueued, BuildTargetLintStatusInProgress, BuildTargetLintStatusCompleted:
 		return true
 	}
 	return false
@@ -724,7 +917,7 @@ func (r BuildTargetStatus) IsKnown() bool {
 
 type BuildTargetTest struct {
 	Status BuildTargetTestStatus `json:"status,required"`
-	// This field can have the runtime type of [BuildTargetTestObjectCompleted].
+	// This field can have the runtime type of [BuildTargetTestCompletedCompleted].
 	Completed interface{}         `json:"completed"`
 	JSON      buildTargetTestJSON `json:"-"`
 	union     BuildTargetTestUnion
@@ -754,14 +947,15 @@ func (r *BuildTargetTest) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [BuildTargetTestUnion] interface which you can cast to the
 // specific types for more type safety.
 //
-// Possible runtime types of the union are [BuildTargetTestStatus],
-// [BuildTargetTestStatus], [BuildTargetTestStatus], [BuildTargetTestObject].
+// Possible runtime types of the union are [BuildTargetTestNotStarted],
+// [BuildTargetTestQueued], [BuildTargetTestInProgress],
+// [BuildTargetTestCompleted].
 func (r BuildTargetTest) AsUnion() BuildTargetTestUnion {
 	return r.union
 }
 
-// Union satisfied by [BuildTargetTestStatus], [BuildTargetTestStatus],
-// [BuildTargetTestStatus] or [BuildTargetTestObject].
+// Union satisfied by [BuildTargetTestNotStarted], [BuildTargetTestQueued],
+// [BuildTargetTestInProgress] or [BuildTargetTestCompleted].
 type BuildTargetTestUnion interface {
 	implementsBuildTargetTest()
 }
@@ -769,138 +963,233 @@ type BuildTargetTestUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*BuildTargetTestUnion)(nil)).Elem(),
-		"",
+		"status",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetTestStatus{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetTestNotStarted{}),
+			DiscriminatorValue: "not_started",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetTestStatus{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetTestQueued{}),
+			DiscriminatorValue: "queued",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetTestStatus{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetTestInProgress{}),
+			DiscriminatorValue: "in_progress",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(BuildTargetTestObject{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(BuildTargetTestCompleted{}),
+			DiscriminatorValue: "completed",
 		},
 	)
 }
 
-type BuildTargetTestStatus struct {
-	Status BuildTargetTestStatusStatus `json:"status,required"`
-	JSON   buildTargetTestStatusJSON   `json:"-"`
+type BuildTargetTestNotStarted struct {
+	Status BuildTargetTestNotStartedStatus `json:"status,required"`
+	JSON   buildTargetTestNotStartedJSON   `json:"-"`
 }
 
-// buildTargetTestStatusJSON contains the JSON metadata for the struct
-// [BuildTargetTestStatus]
-type buildTargetTestStatusJSON struct {
+// buildTargetTestNotStartedJSON contains the JSON metadata for the struct
+// [BuildTargetTestNotStarted]
+type buildTargetTestNotStartedJSON struct {
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetTestStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetTestNotStarted) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetTestStatusJSON) RawJSON() string {
+func (r buildTargetTestNotStartedJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BuildTargetTestStatus) implementsBuildTargetTest() {}
+func (r BuildTargetTestNotStarted) implementsBuildTargetTest() {}
 
-type BuildTargetTestStatusStatus string
+type BuildTargetTestNotStartedStatus string
 
 const (
-	BuildTargetTestStatusStatusNotStarted BuildTargetTestStatusStatus = "not_started"
+	BuildTargetTestNotStartedStatusNotStarted BuildTargetTestNotStartedStatus = "not_started"
 )
 
-func (r BuildTargetTestStatusStatus) IsKnown() bool {
+func (r BuildTargetTestNotStartedStatus) IsKnown() bool {
 	switch r {
-	case BuildTargetTestStatusStatusNotStarted:
+	case BuildTargetTestNotStartedStatusNotStarted:
 		return true
 	}
 	return false
 }
 
-type BuildTargetTestObject struct {
-	Completed BuildTargetTestObjectCompleted `json:"completed,required"`
-	Status    BuildTargetTestObjectStatus    `json:"status,required"`
-	JSON      buildTargetTestObjectJSON      `json:"-"`
+type BuildTargetTestQueued struct {
+	Status BuildTargetTestQueuedStatus `json:"status,required"`
+	JSON   buildTargetTestQueuedJSON   `json:"-"`
 }
 
-// buildTargetTestObjectJSON contains the JSON metadata for the struct
-// [BuildTargetTestObject]
-type buildTargetTestObjectJSON struct {
+// buildTargetTestQueuedJSON contains the JSON metadata for the struct
+// [BuildTargetTestQueued]
+type buildTargetTestQueuedJSON struct {
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BuildTargetTestQueued) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r buildTargetTestQueuedJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BuildTargetTestQueued) implementsBuildTargetTest() {}
+
+type BuildTargetTestQueuedStatus string
+
+const (
+	BuildTargetTestQueuedStatusQueued BuildTargetTestQueuedStatus = "queued"
+)
+
+func (r BuildTargetTestQueuedStatus) IsKnown() bool {
+	switch r {
+	case BuildTargetTestQueuedStatusQueued:
+		return true
+	}
+	return false
+}
+
+type BuildTargetTestInProgress struct {
+	Status BuildTargetTestInProgressStatus `json:"status,required"`
+	JSON   buildTargetTestInProgressJSON   `json:"-"`
+}
+
+// buildTargetTestInProgressJSON contains the JSON metadata for the struct
+// [BuildTargetTestInProgress]
+type buildTargetTestInProgressJSON struct {
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BuildTargetTestInProgress) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r buildTargetTestInProgressJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BuildTargetTestInProgress) implementsBuildTargetTest() {}
+
+type BuildTargetTestInProgressStatus string
+
+const (
+	BuildTargetTestInProgressStatusInProgress BuildTargetTestInProgressStatus = "in_progress"
+)
+
+func (r BuildTargetTestInProgressStatus) IsKnown() bool {
+	switch r {
+	case BuildTargetTestInProgressStatusInProgress:
+		return true
+	}
+	return false
+}
+
+type BuildTargetTestCompleted struct {
+	Completed BuildTargetTestCompletedCompleted `json:"completed,required"`
+	Status    BuildTargetTestCompletedStatus    `json:"status,required"`
+	JSON      buildTargetTestCompletedJSON      `json:"-"`
+}
+
+// buildTargetTestCompletedJSON contains the JSON metadata for the struct
+// [BuildTargetTestCompleted]
+type buildTargetTestCompletedJSON struct {
 	Completed   apijson.Field
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetTestObject) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetTestCompleted) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetTestObjectJSON) RawJSON() string {
+func (r buildTargetTestCompletedJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BuildTargetTestObject) implementsBuildTargetTest() {}
+func (r BuildTargetTestCompleted) implementsBuildTargetTest() {}
 
-type BuildTargetTestObjectCompleted struct {
-	Conclusion BuildTargetTestObjectCompletedConclusion `json:"conclusion,required"`
-	JSON       buildTargetTestObjectCompletedJSON       `json:"-"`
+type BuildTargetTestCompletedCompleted struct {
+	Conclusion BuildTargetTestCompletedCompletedConclusion `json:"conclusion,required"`
+	JSON       buildTargetTestCompletedCompletedJSON       `json:"-"`
 }
 
-// buildTargetTestObjectCompletedJSON contains the JSON metadata for the struct
-// [BuildTargetTestObjectCompleted]
-type buildTargetTestObjectCompletedJSON struct {
+// buildTargetTestCompletedCompletedJSON contains the JSON metadata for the struct
+// [BuildTargetTestCompletedCompleted]
+type buildTargetTestCompletedCompletedJSON struct {
 	Conclusion  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BuildTargetTestObjectCompleted) UnmarshalJSON(data []byte) (err error) {
+func (r *BuildTargetTestCompletedCompleted) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r buildTargetTestObjectCompletedJSON) RawJSON() string {
+func (r buildTargetTestCompletedCompletedJSON) RawJSON() string {
 	return r.raw
 }
 
-type BuildTargetTestObjectCompletedConclusion string
+type BuildTargetTestCompletedCompletedConclusion string
 
 const (
-	BuildTargetTestObjectCompletedConclusionSuccess        BuildTargetTestObjectCompletedConclusion = "success"
-	BuildTargetTestObjectCompletedConclusionFailure        BuildTargetTestObjectCompletedConclusion = "failure"
-	BuildTargetTestObjectCompletedConclusionSkipped        BuildTargetTestObjectCompletedConclusion = "skipped"
-	BuildTargetTestObjectCompletedConclusionCancelled      BuildTargetTestObjectCompletedConclusion = "cancelled"
-	BuildTargetTestObjectCompletedConclusionActionRequired BuildTargetTestObjectCompletedConclusion = "action_required"
-	BuildTargetTestObjectCompletedConclusionNeutral        BuildTargetTestObjectCompletedConclusion = "neutral"
-	BuildTargetTestObjectCompletedConclusionTimedOut       BuildTargetTestObjectCompletedConclusion = "timed_out"
+	BuildTargetTestCompletedCompletedConclusionSuccess        BuildTargetTestCompletedCompletedConclusion = "success"
+	BuildTargetTestCompletedCompletedConclusionFailure        BuildTargetTestCompletedCompletedConclusion = "failure"
+	BuildTargetTestCompletedCompletedConclusionSkipped        BuildTargetTestCompletedCompletedConclusion = "skipped"
+	BuildTargetTestCompletedCompletedConclusionCancelled      BuildTargetTestCompletedCompletedConclusion = "cancelled"
+	BuildTargetTestCompletedCompletedConclusionActionRequired BuildTargetTestCompletedCompletedConclusion = "action_required"
+	BuildTargetTestCompletedCompletedConclusionNeutral        BuildTargetTestCompletedCompletedConclusion = "neutral"
+	BuildTargetTestCompletedCompletedConclusionTimedOut       BuildTargetTestCompletedCompletedConclusion = "timed_out"
 )
 
-func (r BuildTargetTestObjectCompletedConclusion) IsKnown() bool {
+func (r BuildTargetTestCompletedCompletedConclusion) IsKnown() bool {
 	switch r {
-	case BuildTargetTestObjectCompletedConclusionSuccess, BuildTargetTestObjectCompletedConclusionFailure, BuildTargetTestObjectCompletedConclusionSkipped, BuildTargetTestObjectCompletedConclusionCancelled, BuildTargetTestObjectCompletedConclusionActionRequired, BuildTargetTestObjectCompletedConclusionNeutral, BuildTargetTestObjectCompletedConclusionTimedOut:
+	case BuildTargetTestCompletedCompletedConclusionSuccess, BuildTargetTestCompletedCompletedConclusionFailure, BuildTargetTestCompletedCompletedConclusionSkipped, BuildTargetTestCompletedCompletedConclusionCancelled, BuildTargetTestCompletedCompletedConclusionActionRequired, BuildTargetTestCompletedCompletedConclusionNeutral, BuildTargetTestCompletedCompletedConclusionTimedOut:
 		return true
 	}
 	return false
 }
 
-type BuildTargetTestObjectStatus string
+type BuildTargetTestCompletedStatus string
 
 const (
-	BuildTargetTestObjectStatusCompleted BuildTargetTestObjectStatus = "completed"
+	BuildTargetTestCompletedStatusCompleted BuildTargetTestCompletedStatus = "completed"
 )
 
-func (r BuildTargetTestObjectStatus) IsKnown() bool {
+func (r BuildTargetTestCompletedStatus) IsKnown() bool {
 	switch r {
-	case BuildTargetTestObjectStatusCompleted:
+	case BuildTargetTestCompletedStatusCompleted:
+		return true
+	}
+	return false
+}
+
+type BuildTargetTestStatus string
+
+const (
+	BuildTargetTestStatusNotStarted BuildTargetTestStatus = "not_started"
+	BuildTargetTestStatusQueued     BuildTargetTestStatus = "queued"
+	BuildTargetTestStatusInProgress BuildTargetTestStatus = "in_progress"
+	BuildTargetTestStatusCompleted  BuildTargetTestStatus = "completed"
+)
+
+func (r BuildTargetTestStatus) IsKnown() bool {
+	switch r {
+	case BuildTargetTestStatusNotStarted, BuildTargetTestStatusQueued, BuildTargetTestStatusInProgress, BuildTargetTestStatusCompleted:
 		return true
 	}
 	return false
