@@ -56,8 +56,8 @@ func main() {
 		context.TODO(),
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        stainlessv0.F("branch"),
-			CommitMessage: stainlessv0.F("commit_message"),
+			Branch:        "branch",
+			CommitMessage: "commit_message",
 		},
 	)
 	if err != nil {
@@ -70,31 +70,82 @@ func main() {
 
 ### Request fields
 
-All request parameters are wrapped in a generic `Field` type,
-which we use to distinguish zero values from null or omitted fields.
+The stainlessv0 library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
+semantics from the Go 1.24+ `encoding/json` release for request fields.
 
-This prevents accidentally sending a zero value if you forget a required parameter,
-and enables explicitly sending `null`, `false`, `''`, or `0` on optional parameters.
-Any field not specified is not sent.
+Required primitive fields (`int64`, `string`, etc.) feature the tag <code>\`json:...,required\`</code>. These
+fields are always serialized, even their zero values.
 
-To construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.
-To send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:
+Optional primitive types are wrapped in a `param.Opt[T]`. Use the provided constructors set `param.Opt[T]` fields such as `stainlessv0.String(string)`, `stainlessv0.Int(int64)`, etc.
+
+Optional primitives, maps, slices and structs and string enums (represented as `string`) always feature the
+tag <code>\`json:"...,omitzero"\`</code>. Their zero values are considered omitted.
+
+Any non-nil slice of length zero will serialize as an empty JSON array, `"[]"`. Similarly, any non-nil map with length zero with serialize as an empty JSON object, `"{}"`.
+
+To send `null` instead of an `param.Opt[T]`, use `param.NullOpt[T]()`.
+To send `null` instead of a struct, use `param.NullObj[T]()`, where `T` is a struct.
+To send a custom value instead of a struct, use `param.OverrideObj[T](value)`.
+
+To override request structs contain a `.WithExtraFields(map[string]any)` method which can be used to
+send non-conforming fields in the request body. Extra fields overwrite any struct fields with a matching
+key, so only use with trusted data.
 
 ```go
-params := FooParams{
-	Name: stainlessv0.F("hello"),
+params := stainlessv0.ExampleParams{
+	ID:          "id_xxx",                  // required property
+	Name:        stainlessv0.String("..."), // optional property
+	Description: param.NullOpt[string](),   // explicit null property
 
-	// Explicitly send `"description": null`
-	Description: stainlessv0.Null[string](),
+	Point: stainlessv0.Point{
+		X: 0,                  // required field will serialize as 0
+		Y: stainlessv0.Int(1), // optional field will serialize as 1
+		// ... omitted non-required fields will not be serialized
+	},
 
-	Point: stainlessv0.F(stainlessv0.Point{
-		X: stainlessv0.Int(0),
-		Y: stainlessv0.Int(1),
+	Origin: stainlessv0.Origin{}, // the zero value of [Origin] is considered omitted
+}
 
-		// In cases where the API specifies a given type,
-		// but you want to send something else, use `Raw`:
-		Z: stainlessv0.Raw[int64](0.01), // sends a float
-	}),
+// In cases where the API specifies a given type,
+// but you want to send something else, use [WithExtraFields]:
+params.WithExtraFields(map[string]any{
+	"x": 0.01, // send "x" as a float instead of int
+})
+
+// Send a number instead of an object
+custom := param.OverrideObj[stainlessv0.FooParams](12)
+```
+
+When available, use the `.IsPresent()` method to check if an optional parameter is not omitted or `null`.
+Otherwise, the `param.IsOmitted(any)` function can confirm the presence of any `omitzero` field.
+
+### Request unions
+
+Unions are represented as a struct with fields prefixed by "Of" for each of it's variants,
+only one field can be non-zero. The non-zero field will be serialized.
+
+Sub-properties of the union can be accessed via methods on the union struct.
+These methods return a mutable pointer to the underlying data, if present.
+
+```go
+// Only one field can be non-zero, use param.IsOmitted() to check if a field is set
+type AnimalUnionParam struct {
+	OfCat *Cat `json:",omitzero,inline`
+	OfDog *Dog `json:",omitzero,inline`
+}
+
+animal := AnimalUnionParam{
+	OfCat: &Cat{
+		Name: "Whiskers",
+		Owner: PersonParam{
+			Address: AddressParam{Street: "3333 Coyote Hill Rd", Zip: 0},
+		},
+	},
+}
+
+// Mutating a field
+if address := animal.GetOwner().GetAddress(); address != nil {
+	address.ZipCode = 94304
 }
 ```
 
@@ -103,40 +154,88 @@ params := FooParams{
 All fields in response structs are value types (not pointers or wrappers).
 
 If a given field is `null`, not present, or invalid, the corresponding field
-will simply be its zero value.
+will simply be its zero value. To handle optional fields, see the `IsPresent()` method
+below.
 
 All response structs also include a special `JSON` field, containing more detailed
 information about each property, which you can use like so:
 
 ```go
-if res.Name == "" {
-	// true if `"name"` is either not present or explicitly null
-	res.JSON.Name.IsNull()
-
-	// true if the `"name"` key was not present in the response JSON at all
-	res.JSON.Name.IsMissing()
-
-	// When the API returns data that cannot be coerced to the expected type:
-	if res.JSON.Name.IsInvalid() {
-		raw := res.JSON.Name.Raw()
-
-		legacyName := struct{
-			First string `json:"first"`
-			Last  string `json:"last"`
-		}{}
-		json.Unmarshal([]byte(raw), &legacyName)
-		name = legacyName.First + " " + legacyName.Last
-	}
+type Animal struct {
+	Name   string `json:"name,nullable"`
+	Owners int    `json:"owners"`
+	Age    int    `json:"age"`
+	JSON   struct {
+		Name  resp.Field
+		Owner resp.Field
+		Age   resp.Field
+	} `json:"-"`
 }
+
+var res Animal
+json.Unmarshal([]byte(`{"name": null, "owners": 0}`), &res)
+
+// Use the IsPresent() method to handle optional fields
+res.Owners                  // 0
+res.JSON.Owners.IsPresent() // true
+res.JSON.Owners.Raw()       // "0"
+
+res.Age                  // 0
+res.JSON.Age.IsPresent() // false
+res.JSON.Age.Raw()       // ""
+
+// Use the IsExplicitNull() method to differentiate null and omitted
+res.Name                       // ""
+res.JSON.Name.IsPresent()      // false
+res.JSON.Name.Raw()            // "null"
+res.JSON.Name.IsExplicitNull() // true
 ```
 
-These `.JSON` structs also include an `Extras` map containing
+These `.JSON` structs also include an `ExtraFields` map containing
 any properties in the json response that were not specified
 in the struct. This can be useful for API features not yet
 present in the SDK.
 
 ```go
 body := res.JSON.ExtraFields["my_unexpected_field"].Raw()
+```
+
+### Response Unions
+
+In responses, unions are represented by a flattened struct containing all possible fields from each of the
+object variants.
+To convert it to a variant use the `.AsFooVariant()` method or the `.AsAny()` method if present.
+
+If a response value union contains primitive values, primitive fields will be alongside
+the properties but prefixed with `Of` and feature the tag `json:"...,inline"`.
+
+```go
+type AnimalUnion struct {
+	// From variants [Dog], [Cat]
+	Owner Person `json:"owner"`
+	// From variant [Dog]
+	DogBreed string `json:"dog_breed"`
+	// From variant [Cat]
+	CatBreed string `json:"cat_breed"`
+	// ...
+	JSON struct {
+		Owner resp.Field
+		// ...
+	} `json:"-"`
+}
+
+// If animal variant
+if animal.Owner.Address.ZipCode == "" {
+	panic("missing zip code")
+}
+
+// Switch on the variant
+switch variant := animal.AsAny().(type) {
+case Dog:
+case Cat:
+default:
+	panic("unexpected type")
+}
 ```
 
 ### RequestOptions
@@ -185,8 +284,8 @@ _, err := client.Projects.Config.Commits.New(
 	context.TODO(),
 	"projectName",
 	stainlessv0.ProjectConfigCommitNewParams{
-		Branch:        stainlessv0.F("branch"),
-		CommitMessage: stainlessv0.F("commit_message"),
+		Branch:        "branch",
+		CommitMessage: "commit_message",
 	},
 )
 if err != nil {
@@ -217,8 +316,8 @@ client.Projects.Config.Commits.New(
 	ctx,
 	"projectName",
 	stainlessv0.ProjectConfigCommitNewParams{
-		Branch:        stainlessv0.F("branch"),
-		CommitMessage: stainlessv0.F("commit_message"),
+		Branch:        "branch",
+		CommitMessage: "commit_message",
 	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
@@ -228,14 +327,14 @@ client.Projects.Config.Commits.New(
 ### File uploads
 
 Request parameters that correspond to file uploads in multipart requests are typed as
-`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form
+`io.Reader`. The contents of the `io.Reader` will by default be sent as a multipart form
 part with the file name of "anonymous_file" and content-type of "application/octet-stream".
 
 The file name and content-type can be customized by implementing `Name() string` or `ContentType()
 string` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a
 file returned by `os.Open` will be sent with the file name on disk.
 
-We also provide a helper `stainlessv0.FileParam(reader io.Reader, filename string, contentType string)`
+We also provide a helper `stainlessv0.File(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
 
 ### Retries
@@ -257,8 +356,8 @@ client.Projects.Config.Commits.New(
 	context.TODO(),
 	"projectName",
 	stainlessv0.ProjectConfigCommitNewParams{
-		Branch:        stainlessv0.F("branch"),
-		CommitMessage: stainlessv0.F("commit_message"),
+		Branch:        "branch",
+		CommitMessage: "commit_message",
 	},
 	option.WithMaxRetries(5),
 )
@@ -276,8 +375,8 @@ commit, err := client.Projects.Config.Commits.New(
 	context.TODO(),
 	"projectName",
 	stainlessv0.ProjectConfigCommitNewParams{
-		Branch:        stainlessv0.F("branch"),
-		CommitMessage: stainlessv0.F("commit_message"),
+		Branch:        "branch",
+		CommitMessage: "commit_message",
 	},
 	option.WithResponseInto(&response),
 )
@@ -323,10 +422,10 @@ or the `option.WithJSONSet()` methods.
 
 ```go
 params := FooNewParams{
-    ID:   stainlessv0.F("id_xxxx"),
-    Data: stainlessv0.F(FooNewParamsData{
-        FirstName: stainlessv0.F("John"),
-    }),
+    ID:   "id_xxxx",
+    Data: FooNewParamsData{
+        FirstName: stainlessv0.String("John"),
+    },
 }
 client.Foo.New(context.Background(), params, option.WithJSONSet("data.last_name", "Doe"))
 ```

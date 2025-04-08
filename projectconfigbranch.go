@@ -8,10 +8,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/stainless-api/stainless-api-go/internal/apijson"
-	"github.com/stainless-api/stainless-api-go/internal/param"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-api/stainless-api-go/packages/param"
 )
 
 // ProjectConfigBranchService contains methods and other services that help with
@@ -27,8 +26,8 @@ type ProjectConfigBranchService struct {
 // NewProjectConfigBranchService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewProjectConfigBranchService(opts ...option.RequestOption) (r *ProjectConfigBranchService) {
-	r = &ProjectConfigBranchService{}
+func NewProjectConfigBranchService(opts ...option.RequestOption) (r ProjectConfigBranchService) {
+	r = ProjectConfigBranchService{}
 	r.Options = opts
 	return
 }
@@ -58,19 +57,31 @@ func (r *ProjectConfigBranchService) Merge(ctx context.Context, projectName stri
 }
 
 type ProjectConfigBranchNewParams struct {
-	Branch     param.Field[string] `json:"branch,required"`
-	BranchFrom param.Field[string] `json:"branch_from,required"`
+	Branch     string `json:"branch,required"`
+	BranchFrom string `json:"branch_from,required"`
+	paramObj
 }
 
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (f ProjectConfigBranchNewParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
+
 func (r ProjectConfigBranchNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	type shadow ProjectConfigBranchNewParams
+	return param.MarshalObject(r, (*shadow)(&r))
 }
 
 type ProjectConfigBranchMergeParams struct {
-	From param.Field[string] `json:"from,required"`
-	Into param.Field[string] `json:"into,required"`
+	From string `json:"from,required"`
+	Into string `json:"into,required"`
+	paramObj
 }
 
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (f ProjectConfigBranchMergeParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
+
 func (r ProjectConfigBranchMergeParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	type shadow ProjectConfigBranchMergeParams
+	return param.MarshalObject(r, (*shadow)(&r))
 }

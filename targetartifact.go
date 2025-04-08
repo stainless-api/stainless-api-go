@@ -11,6 +11,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-api/stainless-api-go/packages/resp"
 )
 
 // TargetArtifactService contains methods and other services that help with
@@ -26,8 +27,8 @@ type TargetArtifactService struct {
 // NewTargetArtifactService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewTargetArtifactService(opts ...option.RequestOption) (r *TargetArtifactService) {
-	r = &TargetArtifactService{}
+func NewTargetArtifactService(opts ...option.RequestOption) (r TargetArtifactService) {
+	r = TargetArtifactService{}
 	r.Options = opts
 	return
 }
@@ -45,24 +46,20 @@ func (r *TargetArtifactService) Get(ctx context.Context, buildID string, targetN
 }
 
 type TargetArtifactGetResponse struct {
-	URL  string                        `json:"url,required"`
-	JSON targetArtifactGetResponseJSON `json:"-"`
+	URL string `json:"url,required"`
+	// Metadata for the response, check the presence of optional fields with the
+	// [resp.Field.IsPresent] method.
+	JSON struct {
+		URL         resp.Field
+		ExtraFields map[string]resp.Field
+		raw         string
+	} `json:"-"`
 }
 
-// targetArtifactGetResponseJSON contains the JSON metadata for the struct
-// [TargetArtifactGetResponse]
-type targetArtifactGetResponseJSON struct {
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TargetArtifactGetResponse) UnmarshalJSON(data []byte) (err error) {
+// Returns the unmodified JSON received from the API
+func (r TargetArtifactGetResponse) RawJSON() string { return r.JSON.raw }
+func (r *TargetArtifactGetResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r targetArtifactGetResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type TargetArtifactGetParamsTargetName string
@@ -78,11 +75,3 @@ const (
 	TargetArtifactGetParamsTargetNameTerraform  TargetArtifactGetParamsTargetName = "terraform"
 	TargetArtifactGetParamsTargetNameCli        TargetArtifactGetParamsTargetName = "cli"
 )
-
-func (r TargetArtifactGetParamsTargetName) IsKnown() bool {
-	switch r {
-	case TargetArtifactGetParamsTargetNameNode, TargetArtifactGetParamsTargetNameTypescript, TargetArtifactGetParamsTargetNamePython, TargetArtifactGetParamsTargetNameGo, TargetArtifactGetParamsTargetNameJava, TargetArtifactGetParamsTargetNameKotlin, TargetArtifactGetParamsTargetNameRuby, TargetArtifactGetParamsTargetNameTerraform, TargetArtifactGetParamsTargetNameCli:
-		return true
-	}
-	return false
-}
