@@ -27,10 +27,10 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
-		Branch:       stainlessv0.F("branch"),
-		ConfigCommit: stainlessv0.F("config_commit"),
-		Project:      stainlessv0.F("project"),
-		Targets:      stainlessv0.F([]stainlessv0.BuildNewParamsTarget{stainlessv0.BuildNewParamsTargetNode}),
+		Branch:       "branch",
+		ConfigCommit: "config_commit",
+		Project:      "project",
+		Targets:      []string{"node"},
 	})
 	if err != nil {
 		var apierr *stainlessv0.Error

@@ -28,13 +28,12 @@ func TestUsage(t *testing.T) {
 		context.TODO(),
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        stainlessv0.F("branch"),
-			CommitMessage: stainlessv0.F("commit_message"),
+			Branch:        "branch",
+			CommitMessage: "commit_message",
 		},
 	)
 	if err != nil {
-		t.Error(err)
-		return
+		t.Fatalf("err should be nil: %s", err.Error())
 	}
 	t.Logf("%+v\n", commit.ID)
 }
