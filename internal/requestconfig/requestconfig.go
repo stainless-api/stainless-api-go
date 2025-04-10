@@ -22,7 +22,6 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apierror"
 	"github.com/stainless-api/stainless-api-go/internal/apiform"
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
-	"github.com/stainless-api/stainless-api-go/internal/param"
 )
 
 func getDefaultHeaders() map[string]string {
@@ -116,7 +115,11 @@ func NewRequestConfig(ctx context.Context, method string, u string, body interfa
 	}
 	if body, ok := body.(apiquery.Queryer); ok {
 		hasSerializationFunc = true
-		params := body.URLQuery().Encode()
+		q, err := body.URLQuery()
+		if err != nil {
+			return nil, err
+		}
+		params := q.Encode()
 		if params != "" {
 			u = u + "?" + params
 		}
@@ -183,13 +186,6 @@ func NewRequestConfig(ctx context.Context, method string, u string, body interfa
 	}
 
 	return &cfg, nil
-}
-
-func UseDefaultParam[T any](dst *param.Field[T], src *T) {
-	if !dst.Present && src != nil {
-		dst.Value = *src
-		dst.Present = true
-	}
 }
 
 // This interface is primarily used to describe an [*http.Client], but also

@@ -14,14 +14,14 @@ import (
 // the [NewTargetService] method instead.
 type TargetService struct {
 	Options   []option.RequestOption
-	Artifacts *TargetArtifactService
+	Artifacts TargetArtifactService
 }
 
 // NewTargetService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewTargetService(opts ...option.RequestOption) (r *TargetService) {
-	r = &TargetService{}
+func NewTargetService(opts ...option.RequestOption) (r TargetService) {
+	r = TargetService{}
 	r.Options = opts
 	r.Artifacts = NewTargetArtifactService(opts...)
 	return

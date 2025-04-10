@@ -42,8 +42,8 @@ func TestUserAgentHeader(t *testing.T) {
 		context.Background(),
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        stainlessv0.F("branch"),
-			CommitMessage: stainlessv0.F("commit_message"),
+			Branch:        "branch",
+			CommitMessage: "commit_message",
 		},
 	)
 	if userAgent != fmt.Sprintf("StainlessV0/Go %s", internal.PackageVersion) {
@@ -73,8 +73,8 @@ func TestRetryAfter(t *testing.T) {
 		context.Background(),
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        stainlessv0.F("branch"),
-			CommitMessage: stainlessv0.F("commit_message"),
+			Branch:        "branch",
+			CommitMessage: "commit_message",
 		},
 	)
 	if err == nil {
@@ -115,8 +115,8 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 		context.Background(),
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        stainlessv0.F("branch"),
-			CommitMessage: stainlessv0.F("commit_message"),
+			Branch:        "branch",
+			CommitMessage: "commit_message",
 		},
 	)
 	if err == nil {
@@ -152,8 +152,8 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 		context.Background(),
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        stainlessv0.F("branch"),
-			CommitMessage: stainlessv0.F("commit_message"),
+			Branch:        "branch",
+			CommitMessage: "commit_message",
 		},
 	)
 	if err == nil {
@@ -188,8 +188,8 @@ func TestRetryAfterMs(t *testing.T) {
 		context.Background(),
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        stainlessv0.F("branch"),
-			CommitMessage: stainlessv0.F("commit_message"),
+			Branch:        "branch",
+			CommitMessage: "commit_message",
 		},
 	)
 	if err == nil {
@@ -218,8 +218,8 @@ func TestContextCancel(t *testing.T) {
 		cancelCtx,
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        stainlessv0.F("branch"),
-			CommitMessage: stainlessv0.F("commit_message"),
+			Branch:        "branch",
+			CommitMessage: "commit_message",
 		},
 	)
 	if err == nil {
@@ -245,8 +245,8 @@ func TestContextCancelDelay(t *testing.T) {
 		cancelCtx,
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        stainlessv0.F("branch"),
-			CommitMessage: stainlessv0.F("commit_message"),
+			Branch:        "branch",
+			CommitMessage: "commit_message",
 		},
 	)
 	if err == nil {
@@ -278,8 +278,8 @@ func TestContextDeadline(t *testing.T) {
 			deadlineCtx,
 			"projectName",
 			stainlessv0.ProjectConfigCommitNewParams{
-				Branch:        stainlessv0.F("branch"),
-				CommitMessage: stainlessv0.F("commit_message"),
+				Branch:        "branch",
+				CommitMessage: "commit_message",
 			},
 		)
 		if err == nil {

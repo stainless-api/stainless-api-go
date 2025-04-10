@@ -30,11 +30,11 @@ func TestProjectConfigCommitNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"projectName",
 		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:          stainlessv0.F("branch"),
-			CommitMessage:   stainlessv0.F("commit_message"),
-			AllowEmpty:      stainlessv0.F(true),
-			OpenAPISpec:     stainlessv0.F("openapi_spec"),
-			StainlessConfig: stainlessv0.F("stainless_config"),
+			Branch:          "branch",
+			CommitMessage:   "commit_message",
+			AllowEmpty:      stainlessv0.Bool(true),
+			OpenAPISpec:     stainlessv0.String("openapi_spec"),
+			StainlessConfig: stainlessv0.String("stainless_config"),
 		},
 	)
 	if err != nil {

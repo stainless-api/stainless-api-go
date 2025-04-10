@@ -14,14 +14,14 @@ import (
 // the [NewProjectService] method instead.
 type ProjectService struct {
 	Options []option.RequestOption
-	Config  *ProjectConfigService
+	Config  ProjectConfigService
 }
 
 // NewProjectService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewProjectService(opts ...option.RequestOption) (r *ProjectService) {
-	r = &ProjectService{}
+func NewProjectService(opts ...option.RequestOption) (r ProjectService) {
+	r = ProjectService{}
 	r.Options = opts
 	r.Config = NewProjectConfigService(opts...)
 	return

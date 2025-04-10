@@ -16,9 +16,9 @@ import (
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
 	Options  []option.RequestOption
-	Projects *ProjectService
-	Builds   *BuildService
-	Targets  *TargetService
+	Projects ProjectService
+	Builds   BuildService
+	Targets  TargetService
 }
 
 // DefaultClientOptions read from the environment (STAINLESS_V0_API_KEY). This
@@ -35,10 +35,10 @@ func DefaultClientOptions() []option.RequestOption {
 // environment (STAINLESS_V0_API_KEY). The option passed in as arguments are
 // applied after these default arguments, and all option will be passed down to the
 // services and requests that this client makes.
-func NewClient(opts ...option.RequestOption) (r *Client) {
+func NewClient(opts ...option.RequestOption) (r Client) {
 	opts = append(DefaultClientOptions(), opts...)
 
-	r = &Client{Options: opts}
+	r = Client{Options: opts}
 
 	r.Projects = NewProjectService(opts...)
 	r.Builds = NewBuildService(opts...)

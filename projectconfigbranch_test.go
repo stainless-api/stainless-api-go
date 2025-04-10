@@ -30,8 +30,8 @@ func TestProjectConfigBranchNew(t *testing.T) {
 		context.TODO(),
 		"projectName",
 		stainlessv0.ProjectConfigBranchNewParams{
-			Branch:     stainlessv0.F("branch"),
-			BranchFrom: stainlessv0.F("branch_from"),
+			Branch:     "branch",
+			BranchFrom: "branch_from",
 		},
 	)
 	if err != nil {
@@ -60,8 +60,8 @@ func TestProjectConfigBranchMerge(t *testing.T) {
 		context.TODO(),
 		"projectName",
 		stainlessv0.ProjectConfigBranchMergeParams{
-			From: stainlessv0.F("from"),
-			Into: stainlessv0.F("into"),
+			From: "from",
+			Into: "into",
 		},
 	)
 	if err != nil {
