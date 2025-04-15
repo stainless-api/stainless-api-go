@@ -2,8 +2,8 @@
 
 <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go"><img src="https://pkg.go.dev/badge/github.com/stainless-api/stainless-api-go.svg" alt="Go Reference"></a>
 
-The Stainless V0 Go library provides convenient access to [the Stainless V0 REST
-API](https://docs.stainless-v0.com) from applications written in Go. The full API of this library can be found in [api.md](api.md).
+The Stainless V0 Go library provides convenient access to the [Stainless V0 REST API](https://docs.stainless-v0.com)
+from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
