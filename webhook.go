@@ -3,7 +3,7 @@
 package stainlessv0
 
 import (
-	"github.com/stainless-sdks/stainless-v0-go/option"
+	"github.com/stainless-api/stainless-api-go/option"
 )
 
 // WebhookService contains methods and other services that help with interacting

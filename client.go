@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/stainless-sdks/stainless-v0-go/internal/requestconfig"
-	"github.com/stainless-sdks/stainless-v0-go/option"
+	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
+	"github.com/stainless-api/stainless-api-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with

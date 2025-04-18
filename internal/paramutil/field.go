@@ -1,6 +1,6 @@
 package paramutil
 
-import "github.com/stainless-sdks/stainless-v0-go/packages/param"
+import "github.com/stainless-api/stainless-api-go/packages/param"
 
 func AddrIfPresent[T comparable](v param.Opt[T]) *T {
 	if v.IsPresent() {
