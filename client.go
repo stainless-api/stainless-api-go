@@ -7,18 +7,20 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
-	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-sdks/stainless-v0-go/internal/requestconfig"
+	"github.com/stainless-sdks/stainless-v0-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with
 // interacting with the stainless-v0 API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
-	Options  []option.RequestOption
-	Projects ProjectService
-	Builds   BuildService
-	Targets  TargetService
+	Options            []option.RequestOption
+	OpenAPI            OpenAPIService
+	Projects           ProjectService
+	Builds             BuildService
+	BuildTargetOutputs BuildTargetOutputService
+	Webhooks           WebhookService
 }
 
 // DefaultClientOptions read from the environment (STAINLESS_V0_API_KEY,
@@ -43,9 +45,11 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 
 	r = Client{Options: opts}
 
+	r.OpenAPI = NewOpenAPIService(opts...)
 	r.Projects = NewProjectService(opts...)
 	r.Builds = NewBuildService(opts...)
-	r.Targets = NewTargetService(opts...)
+	r.BuildTargetOutputs = NewBuildTargetOutputService(opts...)
+	r.Webhooks = NewWebhookService(opts...)
 
 	return
 }

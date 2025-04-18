@@ -8,12 +8,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-api/stainless-api-go"
-	"github.com/stainless-api/stainless-api-go/internal/testutil"
-	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-sdks/stainless-v0-go"
+	"github.com/stainless-sdks/stainless-v0-go/internal/testutil"
+	"github.com/stainless-sdks/stainless-v0-go/option"
 )
 
-func TestTargetArtifactGet(t *testing.T) {
+func TestOpenAPIGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,11 +26,7 @@ func TestTargetArtifactGet(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Targets.Artifacts.Get(
-		context.TODO(),
-		"buildId",
-		stainlessv0.TargetArtifactGetParamsTargetNameNode,
-	)
+	_, err := client.OpenAPI.Get(context.TODO())
 	if err != nil {
 		var apierr *stainlessv0.Error
 		if errors.As(err, &apierr) {

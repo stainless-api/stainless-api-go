@@ -8,12 +8,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-api/stainless-api-go"
-	"github.com/stainless-api/stainless-api-go/internal/testutil"
-	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-sdks/stainless-v0-go"
+	"github.com/stainless-sdks/stainless-v0-go/internal/testutil"
+	"github.com/stainless-sdks/stainless-v0-go/option"
 )
 
-func TestProjectConfigBranchNew(t *testing.T) {
+func TestProjectGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,14 +26,7 @@ func TestProjectConfigBranchNew(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Config.Branches.New(
-		context.TODO(),
-		"projectName",
-		stainlessv0.ProjectConfigBranchNewParams{
-			Branch:     "branch",
-			BranchFrom: "branch_from",
-		},
-	)
+	_, err := client.Projects.Get(context.TODO(), "projectName")
 	if err != nil {
 		var apierr *stainlessv0.Error
 		if errors.As(err, &apierr) {
@@ -43,7 +36,7 @@ func TestProjectConfigBranchNew(t *testing.T) {
 	}
 }
 
-func TestProjectConfigBranchMerge(t *testing.T) {
+func TestProjectUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -56,12 +49,11 @@ func TestProjectConfigBranchMerge(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Config.Branches.Merge(
+	_, err := client.Projects.Update(
 		context.TODO(),
 		"projectName",
-		stainlessv0.ProjectConfigBranchMergeParams{
-			From: "from",
-			Into: "into",
+		stainlessv0.ProjectUpdateParams{
+			DisplayName: stainlessv0.String("display_name"),
 		},
 	)
 	if err != nil {

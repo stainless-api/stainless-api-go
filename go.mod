@@ -1,4 +1,4 @@
-module github.com/stainless-api/stainless-api-go
+module github.com/stainless-sdks/stainless-v0-go
 
 go 1.21
 

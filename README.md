@@ -1,33 +1,25 @@
 # Stainless V0 Go API Library
 
-<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go"><img src="https://pkg.go.dev/badge/github.com/stainless-api/stainless-api-go.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/stainless-v0-go.svg" alt="Go Reference"></a>
 
-The Stainless V0 Go library provides convenient access to the [Stainless V0 REST API](https://docs.stainless-v0.com)
+The Stainless V0 Go library provides convenient access to the Stainless V0 REST API
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
-<!-- x-release-please-start-version -->
-
 ```go
 import (
-	"github.com/stainless-api/stainless-api-go" // imported as stainlessv0
+	"github.com/stainless-sdks/stainless-v0-go" // imported as stainlessv0
 )
 ```
 
-<!-- x-release-please-end -->
-
 Or to pin the version:
 
-<!-- x-release-please-start-version -->
-
 ```sh
-go get -u 'github.com/stainless-api/stainless-api-go@v0.1.0-alpha.2'
+go get -u 'github.com/stainless-sdks/stainless-v0-go@v0.1.0-alpha.2'
 ```
-
-<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -44,26 +36,19 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stainless-api/stainless-api-go"
-	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-sdks/stainless-v0-go"
+	"github.com/stainless-sdks/stainless-v0-go/option"
 )
 
 func main() {
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_V0_API_KEY")
 	)
-	commit, err := client.Projects.Config.Commits.New(
-		context.TODO(),
-		"projectName",
-		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:        "branch",
-			CommitMessage: "commit_message",
-		},
-	)
+	openAPI, err := client.OpenAPI.Get(context.TODO())
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", commit.ID)
+	fmt.Printf("%+v\n", openAPI)
 }
 
 ```
@@ -251,7 +236,7 @@ client := stainlessv0.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.Projects.Config.Commits.New(context.TODO(), ...,
+client.OpenAPI.Get(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -259,7 +244,7 @@ client.Projects.Config.Commits.New(context.TODO(), ...,
 )
 ```
 
-See the [full list of request options](https://pkg.go.dev/github.com/stainless-api/stainless-api-go/option).
+See the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go/option).
 
 ### Pagination
 
@@ -280,21 +265,14 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Projects.Config.Commits.New(
-	context.TODO(),
-	"projectName",
-	stainlessv0.ProjectConfigCommitNewParams{
-		Branch:        "branch",
-		CommitMessage: "commit_message",
-	},
-)
+_, err := client.OpenAPI.Get(context.TODO())
 if err != nil {
 	var apierr *stainlessv0.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/v0/projects/{projectName}/config/commits": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/v0/openapi": 400 Bad Request { ... }
 }
 ```
 
@@ -312,13 +290,8 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.Projects.Config.Commits.New(
+client.OpenAPI.Get(
 	ctx,
-	"projectName",
-	stainlessv0.ProjectConfigCommitNewParams{
-		Branch:        "branch",
-		CommitMessage: "commit_message",
-	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -352,15 +325,7 @@ client := stainlessv0.NewClient(
 )
 
 // Override per-request:
-client.Projects.Config.Commits.New(
-	context.TODO(),
-	"projectName",
-	stainlessv0.ProjectConfigCommitNewParams{
-		Branch:        "branch",
-		CommitMessage: "commit_message",
-	},
-	option.WithMaxRetries(5),
-)
+client.OpenAPI.Get(context.TODO(), option.WithMaxRetries(5))
 ```
 
 ### Accessing raw response data (e.g. response headers)
@@ -371,19 +336,11 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-commit, err := client.Projects.Config.Commits.New(
-	context.TODO(),
-	"projectName",
-	stainlessv0.ProjectConfigCommitNewParams{
-		Branch:        "branch",
-		CommitMessage: "commit_message",
-	},
-	option.WithResponseInto(&response),
-)
+openAPI, err := client.OpenAPI.Get(context.TODO(), option.WithResponseInto(&response))
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", commit)
+fmt.Printf("%+v\n", openAPI)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)
@@ -484,7 +441,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-api/stainless-api-go/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/stainless-v0-go/issues) with questions, bugs, or suggestions.
 
 ## Contributing
 

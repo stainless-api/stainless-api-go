@@ -4,6 +4,7 @@ package stainlessv0_test
 
 import (
 	"context"
+	"errors"
 	"os"
 	"testing"
 
@@ -12,7 +13,8 @@ import (
 	"github.com/stainless-sdks/stainless-v0-go/option"
 )
 
-func TestUsage(t *testing.T) {
+func TestWebhookPostmanNewNotification(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -24,9 +26,14 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	openAPI, err := client.OpenAPI.Get(context.TODO())
+	_, err := client.Webhooks.Postman.NewNotification(context.TODO(), stainlessv0.WebhookPostmanNewNotificationParams{
+		CollectionID: "collectionId",
+	})
 	if err != nil {
+		var apierr *stainlessv0.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", openAPI)
 }
