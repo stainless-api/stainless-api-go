@@ -52,11 +52,16 @@ func main() {
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_V0_API_KEY")
 	)
-	project, err := client.Projects.Get(context.TODO(), "projectName")
+	buildObject, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
+		Project: "project",
+		Revision: stainlessv0.BuildNewParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
+	})
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", project.ConfigRepo)
+	fmt.Printf("%+v\n", buildObject.ID)
 }
 
 ```
@@ -244,7 +249,7 @@ client := stainlessv0.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.Projects.Get(context.TODO(), ...,
+client.Builds.New(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -273,14 +278,19 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Projects.Get(context.TODO(), "projectName")
+_, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
+	Project: "project",
+	Revision: stainlessv0.BuildNewParamsRevisionUnion{
+		OfString: stainlessv0.String("string"),
+	},
+})
 if err != nil {
 	var apierr *stainlessv0.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/v0/projects/{projectName}": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/v0/builds": 400 Bad Request { ... }
 }
 ```
 
@@ -298,9 +308,14 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.Projects.Get(
+client.Builds.New(
 	ctx,
-	"projectName",
+	stainlessv0.BuildNewParams{
+		Project: "project",
+		Revision: stainlessv0.BuildNewParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
+	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -334,9 +349,14 @@ client := stainlessv0.NewClient(
 )
 
 // Override per-request:
-client.Projects.Get(
+client.Builds.New(
 	context.TODO(),
-	"projectName",
+	stainlessv0.BuildNewParams{
+		Project: "project",
+		Revision: stainlessv0.BuildNewParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
+	},
 	option.WithMaxRetries(5),
 )
 ```
@@ -349,15 +369,20 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-project, err := client.Projects.Get(
+buildObject, err := client.Builds.New(
 	context.TODO(),
-	"projectName",
+	stainlessv0.BuildNewParams{
+		Project: "project",
+		Revision: stainlessv0.BuildNewParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
+	},
 	option.WithResponseInto(&response),
 )
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", project)
+fmt.Printf("%+v\n", buildObject)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)
