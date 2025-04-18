@@ -46,22 +46,6 @@ func (r *ProjectBranchService) New(ctx context.Context, project string, body Pro
 	return
 }
 
-// TODO
-func (r *ProjectBranchService) Get(ctx context.Context, project string, branch string, opts ...option.RequestOption) (res *ProjectBranch, err error) {
-	opts = append(r.Options[:], opts...)
-	if project == "" {
-		err = errors.New("missing required project parameter")
-		return
-	}
-	if branch == "" {
-		err = errors.New("missing required branch parameter")
-		return
-	}
-	path := fmt.Sprintf("v0/projects/%s/branches/%s", project, branch)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
 type ProjectBranch struct {
 	Branch       string                    `json:"branch,required"`
 	ConfigCommit ProjectBranchConfigCommit `json:"config_commit,required"`
