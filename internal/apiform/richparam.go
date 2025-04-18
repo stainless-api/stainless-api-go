@@ -1,7 +1,7 @@
 package apiform
 
 import (
-	"github.com/stainless-sdks/stainless-v0-go/packages/param"
+	"github.com/stainless-api/stainless-api-go/packages/param"
 	"mime/multipart"
 	"reflect"
 )

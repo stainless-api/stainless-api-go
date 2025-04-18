@@ -1,7 +1,7 @@
 package apijson
 
 import (
-	"github.com/stainless-sdks/stainless-v0-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/resp"
 	"reflect"
 )
 
