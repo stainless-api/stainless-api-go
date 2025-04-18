@@ -167,7 +167,7 @@ type BuildTargetCommitUnion struct {
 	// Any of "not_started", "queued", "in_progress", "completed".
 	Status string `json:"status"`
 	// This field is from variant [BuildTargetCommitCompleted].
-	Completed BuildTargetCommitCompletedCompletedUnion `json:"completed"`
+	Completed BuildTargetCommitCompletedCompleted `json:"completed"`
 	JSON      struct {
 		Status    resp.Field
 		Completed resp.Field
@@ -289,8 +289,8 @@ func (r *BuildTargetCommitInProgress) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetCommitCompleted struct {
-	Completed BuildTargetCommitCompletedCompletedUnion `json:"completed,required"`
-	Status    constant.Completed                       `json:"status,required"`
+	Completed BuildTargetCommitCompletedCompleted `json:"completed,required"`
+	Status    constant.Completed                  `json:"status,required"`
 	// Metadata for the response, check the presence of optional fields with the
 	// [resp.Field.IsPresent] method.
 	JSON struct {
@@ -307,71 +307,33 @@ func (r *BuildTargetCommitCompleted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// BuildTargetCommitCompletedCompletedUnion contains all possible properties and
-// values from [BuildTargetCommitCompletedCompletedObject],
-// [BuildTargetCommitCompletedCompletedObject],
-// [BuildTargetCommitCompletedCompletedConclusion].
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-type BuildTargetCommitCompletedCompletedUnion struct {
-	// This field is from variant [BuildTargetCommitCompletedCompletedObject].
-	Commit     BuildTargetCommitCompletedCompletedObjectCommit `json:"commit"`
-	Conclusion string                                          `json:"conclusion"`
-	// This field is from variant [BuildTargetCommitCompletedCompletedObject].
-	MergeConflictPr BuildTargetCommitCompletedCompletedObjectMergeConflictPr `json:"merge_conflict_pr"`
-	JSON            struct {
+type BuildTargetCommitCompletedCompleted struct {
+	Commit BuildTargetCommitCompletedCompletedCommit `json:"commit,required"`
+	// Any of "error", "warning", "note", "success", "merge_conflict",
+	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
+	// "timed_out", "noop", "version_bump".
+	Conclusion      string                                             `json:"conclusion,required"`
+	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
+	// Metadata for the response, check the presence of optional fields with the
+	// [resp.Field.IsPresent] method.
+	JSON struct {
 		Commit          resp.Field
 		Conclusion      resp.Field
 		MergeConflictPr resp.Field
+		ExtraFields     map[string]resp.Field
 		raw             string
 	} `json:"-"`
 }
 
-func (u BuildTargetCommitCompletedCompletedUnion) AsBuildTargetCommitCompletedCompletedObject() (v BuildTargetCommitCompletedCompletedObject) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetCommitCompletedCompletedUnion) AsunionMember2() (v BuildTargetCommitCompletedCompletedObject) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetCommitCompletedCompletedUnion) AsBuildTargetCommitCompletedCompletedConclusion() (v BuildTargetCommitCompletedCompletedConclusion) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
 // Returns the unmodified JSON received from the API
-func (u BuildTargetCommitCompletedCompletedUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *BuildTargetCommitCompletedCompletedUnion) UnmarshalJSON(data []byte) error {
+func (r BuildTargetCommitCompletedCompleted) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetCommitCompletedCompleted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetCommitCompletedCompletedObject struct {
-	Commit BuildTargetCommitCompletedCompletedObjectCommit `json:"commit,required"`
-	// Any of "error", "warning", "note", "success".
-	Conclusion string `json:"conclusion,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
-	JSON struct {
-		Commit      resp.Field
-		Conclusion  resp.Field
-		ExtraFields map[string]resp.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetCommitCompletedCompletedObject) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetCommitCompletedCompletedObject) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetCommitCompletedCompletedObjectCommit struct {
-	Repo BuildTargetCommitCompletedCompletedObjectCommitRepo `json:"repo,required"`
-	Sha  string                                              `json:"sha,required"`
+type BuildTargetCommitCompletedCompletedCommit struct {
+	Repo BuildTargetCommitCompletedCompletedCommitRepo `json:"repo,required"`
+	Sha  string                                        `json:"sha,required"`
 	// Metadata for the response, check the presence of optional fields with the
 	// [resp.Field.IsPresent] method.
 	JSON struct {
@@ -383,12 +345,12 @@ type BuildTargetCommitCompletedCompletedObjectCommit struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildTargetCommitCompletedCompletedObjectCommit) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetCommitCompletedCompletedObjectCommit) UnmarshalJSON(data []byte) error {
+func (r BuildTargetCommitCompletedCompletedCommit) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetCommitCompletedCompletedCommit) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetCommitCompletedCompletedObjectCommitRepo struct {
+type BuildTargetCommitCompletedCompletedCommitRepo struct {
 	Branch string `json:"branch,required"`
 	Name   string `json:"name,required"`
 	Owner  string `json:"owner,required"`
@@ -404,27 +366,46 @@ type BuildTargetCommitCompletedCompletedObjectCommitRepo struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildTargetCommitCompletedCompletedObjectCommitRepo) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetCommitCompletedCompletedObjectCommitRepo) UnmarshalJSON(data []byte) error {
+func (r BuildTargetCommitCompletedCompletedCommitRepo) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetCommitCompletedCompletedCommitRepo) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetCommitCompletedCompletedConclusion struct {
-	// Any of "fatal", "payment_required", "cancelled", "timed_out", "noop",
-	// "version_bump".
-	Conclusion string `json:"conclusion,required"`
+type BuildTargetCommitCompletedCompletedMergeConflictPr struct {
+	Number float64                                                `json:"number,required"`
+	Repo   BuildTargetCommitCompletedCompletedMergeConflictPrRepo `json:"repo,required"`
 	// Metadata for the response, check the presence of optional fields with the
 	// [resp.Field.IsPresent] method.
 	JSON struct {
-		Conclusion  resp.Field
+		Number      resp.Field
+		Repo        resp.Field
 		ExtraFields map[string]resp.Field
 		raw         string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildTargetCommitCompletedCompletedConclusion) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetCommitCompletedCompletedConclusion) UnmarshalJSON(data []byte) error {
+func (r BuildTargetCommitCompletedCompletedMergeConflictPr) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetCommitCompletedCompletedMergeConflictPr) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildTargetCommitCompletedCompletedMergeConflictPrRepo struct {
+	Name  string `json:"name,required"`
+	Owner string `json:"owner,required"`
+	// Metadata for the response, check the presence of optional fields with the
+	// [resp.Field.IsPresent] method.
+	JSON struct {
+		Name        resp.Field
+		Owner       resp.Field
+		ExtraFields map[string]resp.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildTargetCommitCompletedCompletedMergeConflictPrRepo) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetCommitCompletedCompletedMergeConflictPrRepo) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
