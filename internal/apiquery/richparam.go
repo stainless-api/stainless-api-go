@@ -1,7 +1,7 @@
 package apiquery
 
 import (
-	"github.com/stainless-api/stainless-api-go/packages/param"
+	"github.com/stainless-sdks/stainless-v0-go/packages/param"
 	"reflect"
 )
 
