@@ -12,10 +12,12 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#ProjectGetResponse">ProjectGetResponse</a>
 - <a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#ProjectUpdateResponse">ProjectUpdateResponse</a>
 
 Methods:
 
+- <code title="get /v0/projects/{projectName}">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#ProjectService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#ProjectGetResponse">ProjectGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="patch /v0/projects/{projectName}">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#ProjectService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#ProjectUpdateParams">ProjectUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-sdks/stainless-v0-go#ProjectUpdateResponse">ProjectUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Branches
