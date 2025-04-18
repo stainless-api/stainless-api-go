@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-sdks/stainless-v0-go"
-	"github.com/stainless-sdks/stainless-v0-go/internal/testutil"
-	"github.com/stainless-sdks/stainless-v0-go/option"
+	"github.com/stainless-api/stainless-api-go"
+	"github.com/stainless-api/stainless-api-go/internal/testutil"
+	"github.com/stainless-api/stainless-api-go/option"
 )
 
 func TestProjectBranchNew(t *testing.T) {
