@@ -39,6 +39,18 @@ func NewProjectService(opts ...option.RequestOption) (r ProjectService) {
 }
 
 // TODO
+func (r *ProjectService) Get(ctx context.Context, projectName string, opts ...option.RequestOption) (res *ProjectGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if projectName == "" {
+		err = errors.New("missing required projectName parameter")
+		return
+	}
+	path := fmt.Sprintf("v0/projects/%s", projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+// TODO
 func (r *ProjectService) Update(ctx context.Context, projectName string, body ProjectUpdateParams, opts ...option.RequestOption) (res *ProjectUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if projectName == "" {
@@ -49,6 +61,38 @@ func (r *ProjectService) Update(ctx context.Context, projectName string, body Pr
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }
+
+type ProjectGetResponse struct {
+	ConfigRepo  string `json:"config_repo,required"`
+	DisplayName string `json:"display_name,required"`
+	// Any of "project".
+	Object ProjectGetResponseObject `json:"object,required"`
+	Org    string                   `json:"org,required"`
+	Slug   string                   `json:"slug,required"`
+	// Metadata for the response, check the presence of optional fields with the
+	// [resp.Field.IsPresent] method.
+	JSON struct {
+		ConfigRepo  resp.Field
+		DisplayName resp.Field
+		Object      resp.Field
+		Org         resp.Field
+		Slug        resp.Field
+		ExtraFields map[string]resp.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectGetResponse) RawJSON() string { return r.JSON.raw }
+func (r *ProjectGetResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectGetResponseObject string
+
+const (
+	ProjectGetResponseObjectProject ProjectGetResponseObject = "project"
+)
 
 type ProjectUpdateResponse struct {
 	ConfigRepo  string `json:"config_repo,required"`
