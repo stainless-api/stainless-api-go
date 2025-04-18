@@ -18,6 +18,21 @@ func ValueOf[T Constant[T]]() T {
 	return t.Default()
 }
 
+type Completed string  // Always "completed"
+type InProgress string // Always "in_progress"
+type NotStarted string // Always "not_started"
+type Queued string     // Always "queued"
+
+func (c Completed) Default() Completed   { return "completed" }
+func (c InProgress) Default() InProgress { return "in_progress" }
+func (c NotStarted) Default() NotStarted { return "not_started" }
+func (c Queued) Default() Queued         { return "queued" }
+
+func (c Completed) MarshalJSON() ([]byte, error)  { return marshalString(c) }
+func (c InProgress) MarshalJSON() ([]byte, error) { return marshalString(c) }
+func (c NotStarted) MarshalJSON() ([]byte, error) { return marshalString(c) }
+func (c Queued) MarshalJSON() ([]byte, error)     { return marshalString(c) }
+
 type constant[T any] interface {
 	Constant[T]
 	*T
