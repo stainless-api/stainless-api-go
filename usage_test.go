@@ -24,9 +24,9 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	openAPI, err := client.OpenAPI.Get(context.TODO())
+	project, err := client.Projects.Get(context.TODO(), "projectName")
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", openAPI)
+	t.Logf("%+v\n", project.ConfigRepo)
 }
