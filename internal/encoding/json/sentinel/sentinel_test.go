@@ -1,7 +1,7 @@
 package sentinel_test
 
 import (
-	"github.com/stainless-api/stainless-api-go/internal/encoding/json/sentinel"
+	"github.com/stainless-sdks/stainless-v0-go/internal/encoding/json/sentinel"
 	"reflect"
 	"slices"
 	"testing"

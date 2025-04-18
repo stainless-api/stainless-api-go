@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/stainless-api/stainless-api-go/internal/apijson"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-sdks/stainless-v0-go/internal/apijson"
+	"github.com/stainless-sdks/stainless-v0-go/packages/resp"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is

@@ -8,12 +8,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-api/stainless-api-go"
-	"github.com/stainless-api/stainless-api-go/internal/testutil"
-	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-sdks/stainless-v0-go"
+	"github.com/stainless-sdks/stainless-v0-go/internal/testutil"
+	"github.com/stainless-sdks/stainless-v0-go/option"
 )
 
-func TestProjectConfigCommitNewWithOptionalParams(t *testing.T) {
+func TestBuildTargetOutputListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,17 +26,12 @@ func TestProjectConfigCommitNewWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Config.Commits.New(
-		context.TODO(),
-		"projectName",
-		stainlessv0.ProjectConfigCommitNewParams{
-			Branch:          "branch",
-			CommitMessage:   "commit_message",
-			AllowEmpty:      stainlessv0.Bool(true),
-			OpenAPISpec:     stainlessv0.String("openapi_spec"),
-			StainlessConfig: stainlessv0.String("stainless_config"),
-		},
-	)
+	_, err := client.BuildTargetOutputs.List(context.TODO(), stainlessv0.BuildTargetOutputListParams{
+		BuildID: "build_id",
+		Target:  stainlessv0.BuildTargetOutputListParamsTargetNode,
+		Type:    stainlessv0.BuildTargetOutputListParamsTypeSource,
+		Output:  stainlessv0.BuildTargetOutputListParamsOutputURL,
+	})
 	if err != nil {
 		var apierr *stainlessv0.Error
 		if errors.As(err, &apierr) {

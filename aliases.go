@@ -3,8 +3,8 @@
 package stainlessv0
 
 import (
-	"github.com/stainless-api/stainless-api-go/internal/apierror"
-	"github.com/stainless-api/stainless-api-go/packages/param"
+	"github.com/stainless-sdks/stainless-v0-go/internal/apierror"
+	"github.com/stainless-sdks/stainless-v0-go/packages/param"
 )
 
 // aliased to make [param.APIUnion] private when embedding
