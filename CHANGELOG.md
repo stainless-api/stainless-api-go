@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.0 (2025-04-19)
+
+Full Changelog: [v0.1.1...v0.2.0](https://github.com/stainless-api/stainless-api-go/compare/v0.1.1...v0.2.0)
+
+### Features
+
+* **api:** manual updates ([59ac5d0](https://github.com/stainless-api/stainless-api-go/commit/59ac5d095d4677f1722b76a9fc1c7531a424512a))
+* **api:** manual updates ([88c1005](https://github.com/stainless-api/stainless-api-go/commit/88c10052262103a1b01809a0b9d43892f72c8657))
+* **api:** manual updates ([c6af2bc](https://github.com/stainless-api/stainless-api-go/commit/c6af2bc172620f147bdb7b78b02b015c9c647150))
+* **api:** manual updates ([ee18ef8](https://github.com/stainless-api/stainless-api-go/commit/ee18ef80f20bfe06e6c2c4eb665d82f3bfd9143f))
+* **api:** manual updates ([b52a583](https://github.com/stainless-api/stainless-api-go/commit/b52a58329e8013cb34e4add568bc6b2f877c2628))
+* **api:** manual updates ([03ae282](https://github.com/stainless-api/stainless-api-go/commit/03ae28279f75772025d2641212969db6409b11a5))
+
+
+### Bug Fixes
+
+* **client:** time format encoding fix ([67abcf1](https://github.com/stainless-api/stainless-api-go/commit/67abcf1ace98c409d908e09f3d033cbfcf4a32e0))
+
 ## 0.1.1 (2025-04-18)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.1](https://github.com/stainless-api/stainless-api-go/compare/v0.1.0-alpha.2...v0.1.1)
