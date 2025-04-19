@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/option"
 )
 
-func TestBuildTargetOutputListWithOptionalParams(t *testing.T) {
+func TestBuildTargetOutputGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,11 +26,11 @@ func TestBuildTargetOutputListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.BuildTargetOutputs.List(context.TODO(), stainlessv0.BuildTargetOutputListParams{
+	_, err := client.BuildTargetOutputs.Get(context.TODO(), stainlessv0.BuildTargetOutputGetParams{
 		BuildID: "build_id",
-		Target:  stainlessv0.BuildTargetOutputListParamsTargetNode,
-		Type:    stainlessv0.BuildTargetOutputListParamsTypeSource,
-		Output:  stainlessv0.BuildTargetOutputListParamsOutputURL,
+		Target:  stainlessv0.BuildTargetOutputGetParamsTargetNode,
+		Type:    stainlessv0.BuildTargetOutputGetParamsTypeSource,
+		Output:  stainlessv0.BuildTargetOutputGetParamsOutputURL,
 	})
 	if err != nil {
 		var apierr *stainlessv0.Error

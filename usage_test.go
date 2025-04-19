@@ -24,9 +24,14 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	openAPI, err := client.OpenAPI.Get(context.TODO())
+	buildObject, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
+		Project: "project",
+		Revision: stainlessv0.BuildNewParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
+	})
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", openAPI)
+	t.Logf("%+v\n", buildObject.ID)
 }
