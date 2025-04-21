@@ -309,9 +309,9 @@ func (r *BuildTargetCommitCompleted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitCompletedCompleted struct {
 	Commit BuildTargetCommitCompletedCompletedCommit `json:"commit,required"`
-	// Any of "error", "warning", "note", "success", "merge_conflict",
-	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
-	// "timed_out", "noop", "version_bump".
+	// Any of "success", "failure", "skipped", "cancelled", "action_required",
+	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
+	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion      string                                             `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
 	// Metadata for the response, check the presence of optional fields with the
@@ -562,7 +562,8 @@ func (r *BuildTargetLintCompleted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintCompletedCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
-	// "neutral", "timed_out".
+	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
+	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
 	// Metadata for the response, check the presence of optional fields with the
 	// [resp.Field.IsPresent] method.
@@ -747,7 +748,8 @@ func (r *BuildTargetTestCompleted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestCompletedCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
-	// "neutral", "timed_out".
+	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
+	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
 	// Metadata for the response, check the presence of optional fields with the
 	// [resp.Field.IsPresent] method.
