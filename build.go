@@ -800,6 +800,9 @@ type BuildNewParams struct {
 	Branch param.Opt[string] `json:"branch,omitzero"`
 	// Optional commit message to use when creating a new commit.
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
+	// Parent build ID. Cannot be specified if branch is main. Defaults to last build
+	// on branch.
+	ParentBuildID param.Opt[string] `json:"parent_build_id,omitzero"`
 	// Optional list of SDK targets to build. If not specified, all configured targets
 	// will be built.
 	//
