@@ -866,12 +866,14 @@ type BuildListParams struct {
 	Project string `query:"project,required" json:"-"`
 	// Branch name
 	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
-	// Config commit SHA
-	ConfigCommit param.Opt[string] `query:"config_commit,omitzero" json:"-"`
+	// Hash of the Stainless config used for the build
+	ConfigHash param.Opt[string] `query:"config_hash,omitzero" json:"-"`
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
 	// Maximum number of builds to return, defaults to 10
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
+	// Hash of the OpenAPI spec used for the build
+	SpecHash param.Opt[string] `query:"spec_hash,omitzero" json:"-"`
 	paramObj
 }
 
