@@ -34,6 +34,7 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 		AllowEmpty:    stainlessv0.Bool(true),
 		Branch:        stainlessv0.String("branch"),
 		CommitMessage: stainlessv0.String("commit_message"),
+		ParentBuildID: stainlessv0.String("parent_build_id"),
 		Targets:       []string{"node"},
 	})
 	if err != nil {
