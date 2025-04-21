@@ -859,8 +859,10 @@ func (r BuildNewParamsRevisionMapItem) MarshalJSON() (data []byte, err error) {
 type BuildListParams struct {
 	// Project name
 	Project string `query:"project,required" json:"-"`
-	// Branch name, defaults to "main"
+	// Branch name
 	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
+	// Config commit SHA
+	ConfigCommit param.Opt[string] `query:"config_commit,omitzero" json:"-"`
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
 	// Maximum number of builds to return, defaults to 10

@@ -82,10 +82,11 @@ func TestBuildListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Builds.List(context.TODO(), stainlessv0.BuildListParams{
-		Project: "project",
-		Branch:  stainlessv0.String("branch"),
-		Cursor:  stainlessv0.String("cursor"),
-		Limit:   stainlessv0.Float(0),
+		Project:      "project",
+		Branch:       stainlessv0.String("branch"),
+		ConfigCommit: stainlessv0.String("config_commit"),
+		Cursor:       stainlessv0.String("cursor"),
+		Limit:        stainlessv0.Float(0),
 	})
 	if err != nil {
 		var apierr *stainlessv0.Error

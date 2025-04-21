@@ -55,15 +55,12 @@ type BuildTargetOutputGetResponseUnion struct {
 	// This field is from variant [BuildTargetOutputGetResponseObject].
 	Token string `json:"token"`
 	// This field is from variant [BuildTargetOutputGetResponseObject].
-	Ref string `json:"ref"`
-	// This field is from variant [BuildTargetOutputGetResponseObject].
-	Repo string `json:"repo"`
+	Ref  string `json:"ref"`
 	JSON struct {
 		Output resp.Field
 		URL    resp.Field
 		Token  resp.Field
 		Ref    resp.Field
-		Repo   resp.Field
 		raw    string
 	} `json:"-"`
 }
