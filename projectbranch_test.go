@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/option"
 )
 
-func TestProjectBranchNew(t *testing.T) {
+func TestProjectBranchNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -32,6 +32,7 @@ func TestProjectBranchNew(t *testing.T) {
 		stainlessv0.ProjectBranchNewParams{
 			Branch:     "branch",
 			BranchFrom: "branch_from",
+			Force:      stainlessv0.Bool(true),
 		},
 	)
 	if err != nil {
