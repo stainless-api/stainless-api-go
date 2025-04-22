@@ -34,7 +34,6 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 		AllowEmpty:    stainlessv0.Bool(true),
 		Branch:        stainlessv0.String("branch"),
 		CommitMessage: stainlessv0.String("commit_message"),
-		ParentBuildID: stainlessv0.String("parent_build_id"),
 		Targets:       []string{"node"},
 	})
 	if err != nil {
@@ -83,12 +82,13 @@ func TestBuildListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Builds.List(context.TODO(), stainlessv0.BuildListParams{
-		Project:    "project",
-		Branch:     stainlessv0.String("branch"),
-		ConfigHash: stainlessv0.String("config_hash"),
-		Cursor:     stainlessv0.String("cursor"),
-		Limit:      stainlessv0.Float(0),
-		SpecHash:   stainlessv0.String("spec_hash"),
+		Project: "project",
+		Branch:  stainlessv0.String("branch"),
+		Cursor:  stainlessv0.String("cursor"),
+		Limit:   stainlessv0.Float(0),
+		Revision: stainlessv0.BuildListParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
 	})
 	if err != nil {
 		var apierr *stainlessv0.Error
