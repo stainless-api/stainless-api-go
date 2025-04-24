@@ -24,6 +24,7 @@ import (
 type ProjectService struct {
 	Options  []option.RequestOption
 	Branches ProjectBranchService
+	Configs  ProjectConfigService
 }
 
 // NewProjectService generates a new service that applies the given options to each
@@ -33,6 +34,7 @@ func NewProjectService(opts ...option.RequestOption) (r ProjectService) {
 	r = ProjectService{}
 	r.Options = opts
 	r.Branches = NewProjectBranchService(opts...)
+	r.Configs = NewProjectConfigService(opts...)
 	return
 }
 
