@@ -36,57 +36,53 @@ func NewBuildTargetOutputService(opts ...option.RequestOption) (r BuildTargetOut
 }
 
 // TODO
-func (r *BuildTargetOutputService) List(ctx context.Context, query BuildTargetOutputListParams, opts ...option.RequestOption) (res *BuildTargetOutputListResponseUnion, err error) {
+func (r *BuildTargetOutputService) Get(ctx context.Context, query BuildTargetOutputGetParams, opts ...option.RequestOption) (res *BuildTargetOutputGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/build_target_outputs"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-// BuildTargetOutputListResponseUnion contains all possible properties and values
-// from [BuildTargetOutputListResponseObject],
-// [BuildTargetOutputListResponseObject].
+// BuildTargetOutputGetResponseUnion contains all possible properties and values
+// from [BuildTargetOutputGetResponseObject], [BuildTargetOutputGetResponseObject].
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
-type BuildTargetOutputListResponseUnion struct {
-	// This field is from variant [BuildTargetOutputListResponseObject].
+type BuildTargetOutputGetResponseUnion struct {
+	// This field is from variant [BuildTargetOutputGetResponseObject].
 	Output string `json:"output"`
-	// This field is from variant [BuildTargetOutputListResponseObject].
+	// This field is from variant [BuildTargetOutputGetResponseObject].
 	URL string `json:"url"`
-	// This field is from variant [BuildTargetOutputListResponseObject].
+	// This field is from variant [BuildTargetOutputGetResponseObject].
 	Token string `json:"token"`
-	// This field is from variant [BuildTargetOutputListResponseObject].
-	Ref string `json:"ref"`
-	// This field is from variant [BuildTargetOutputListResponseObject].
-	Repo string `json:"repo"`
+	// This field is from variant [BuildTargetOutputGetResponseObject].
+	Ref  string `json:"ref"`
 	JSON struct {
 		Output resp.Field
 		URL    resp.Field
 		Token  resp.Field
 		Ref    resp.Field
-		Repo   resp.Field
 		raw    string
 	} `json:"-"`
 }
 
-func (u BuildTargetOutputListResponseUnion) AsBuildTargetOutputListResponseObject() (v BuildTargetOutputListResponseObject) {
+func (u BuildTargetOutputGetResponseUnion) AsBuildTargetOutputGetResponseObject() (v BuildTargetOutputGetResponseObject) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
-func (u BuildTargetOutputListResponseUnion) AsunionMember2() (v BuildTargetOutputListResponseObject) {
+func (u BuildTargetOutputGetResponseUnion) AsunionMember2() (v BuildTargetOutputGetResponseObject) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
 // Returns the unmodified JSON received from the API
-func (u BuildTargetOutputListResponseUnion) RawJSON() string { return u.JSON.raw }
+func (u BuildTargetOutputGetResponseUnion) RawJSON() string { return u.JSON.raw }
 
-func (r *BuildTargetOutputListResponseUnion) UnmarshalJSON(data []byte) error {
+func (r *BuildTargetOutputGetResponseUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetOutputListResponseObject struct {
+type BuildTargetOutputGetResponseObject struct {
 	// Any of "url".
 	Output string `json:"output,required"`
 	// URL for direct download
@@ -102,37 +98,37 @@ type BuildTargetOutputListResponseObject struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildTargetOutputListResponseObject) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetOutputListResponseObject) UnmarshalJSON(data []byte) error {
+func (r BuildTargetOutputGetResponseObject) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetOutputGetResponseObject) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetOutputListParams struct {
+type BuildTargetOutputGetParams struct {
 	// Build ID
 	BuildID string `query:"build_id,required" json:"-"`
 	// SDK language target name
 	//
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli".
-	Target BuildTargetOutputListParamsTarget `query:"target,omitzero,required" json:"-"`
+	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero,required" json:"-"`
 	// Type of output to download: source code
 	//
 	// Any of "source".
-	Type BuildTargetOutputListParamsType `query:"type,omitzero,required" json:"-"`
+	Type BuildTargetOutputGetParamsType `query:"type,omitzero,required" json:"-"`
 	// Output format: url (download URL) or git (temporary access token)
 	//
 	// Any of "url", "git".
-	Output BuildTargetOutputListParamsOutput `query:"output,omitzero" json:"-"`
+	Output BuildTargetOutputGetParamsOutput `query:"output,omitzero" json:"-"`
 	paramObj
 }
 
 // IsPresent returns true if the field's value is not omitted and not the JSON
 // "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildTargetOutputListParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
+func (f BuildTargetOutputGetParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
-// URLQuery serializes [BuildTargetOutputListParams]'s query parameters as
+// URLQuery serializes [BuildTargetOutputGetParams]'s query parameters as
 // `url.Values`.
-func (r BuildTargetOutputListParams) URLQuery() (v url.Values, err error) {
+func (r BuildTargetOutputGetParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -140,31 +136,31 @@ func (r BuildTargetOutputListParams) URLQuery() (v url.Values, err error) {
 }
 
 // SDK language target name
-type BuildTargetOutputListParamsTarget string
+type BuildTargetOutputGetParamsTarget string
 
 const (
-	BuildTargetOutputListParamsTargetNode       BuildTargetOutputListParamsTarget = "node"
-	BuildTargetOutputListParamsTargetTypescript BuildTargetOutputListParamsTarget = "typescript"
-	BuildTargetOutputListParamsTargetPython     BuildTargetOutputListParamsTarget = "python"
-	BuildTargetOutputListParamsTargetGo         BuildTargetOutputListParamsTarget = "go"
-	BuildTargetOutputListParamsTargetJava       BuildTargetOutputListParamsTarget = "java"
-	BuildTargetOutputListParamsTargetKotlin     BuildTargetOutputListParamsTarget = "kotlin"
-	BuildTargetOutputListParamsTargetRuby       BuildTargetOutputListParamsTarget = "ruby"
-	BuildTargetOutputListParamsTargetTerraform  BuildTargetOutputListParamsTarget = "terraform"
-	BuildTargetOutputListParamsTargetCli        BuildTargetOutputListParamsTarget = "cli"
+	BuildTargetOutputGetParamsTargetNode       BuildTargetOutputGetParamsTarget = "node"
+	BuildTargetOutputGetParamsTargetTypescript BuildTargetOutputGetParamsTarget = "typescript"
+	BuildTargetOutputGetParamsTargetPython     BuildTargetOutputGetParamsTarget = "python"
+	BuildTargetOutputGetParamsTargetGo         BuildTargetOutputGetParamsTarget = "go"
+	BuildTargetOutputGetParamsTargetJava       BuildTargetOutputGetParamsTarget = "java"
+	BuildTargetOutputGetParamsTargetKotlin     BuildTargetOutputGetParamsTarget = "kotlin"
+	BuildTargetOutputGetParamsTargetRuby       BuildTargetOutputGetParamsTarget = "ruby"
+	BuildTargetOutputGetParamsTargetTerraform  BuildTargetOutputGetParamsTarget = "terraform"
+	BuildTargetOutputGetParamsTargetCli        BuildTargetOutputGetParamsTarget = "cli"
 )
 
 // Type of output to download: source code
-type BuildTargetOutputListParamsType string
+type BuildTargetOutputGetParamsType string
 
 const (
-	BuildTargetOutputListParamsTypeSource BuildTargetOutputListParamsType = "source"
+	BuildTargetOutputGetParamsTypeSource BuildTargetOutputGetParamsType = "source"
 )
 
 // Output format: url (download URL) or git (temporary access token)
-type BuildTargetOutputListParamsOutput string
+type BuildTargetOutputGetParamsOutput string
 
 const (
-	BuildTargetOutputListParamsOutputURL BuildTargetOutputListParamsOutput = "url"
-	BuildTargetOutputListParamsOutputGit BuildTargetOutputListParamsOutput = "git"
+	BuildTargetOutputGetParamsOutputURL BuildTargetOutputGetParamsOutput = "url"
+	BuildTargetOutputGetParamsOutputGit BuildTargetOutputGetParamsOutput = "git"
 )

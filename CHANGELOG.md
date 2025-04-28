@@ -1,5 +1,42 @@
 # Changelog
 
+## 0.2.0 (2025-04-24)
+
+Full Changelog: [v0.1.1...v0.2.0](https://github.com/stainless-api/stainless-api-go/compare/v0.1.1...v0.2.0)
+
+### Features
+
+* add typescript ([1631f7a](https://github.com/stainless-api/stainless-api-go/commit/1631f7ad568491a66ed0b7e5821879cd5645cb21))
+* **api:** configs ([675c5b1](https://github.com/stainless-api/stainless-api-go/commit/675c5b10c1cffd923f32261fa1cb06e1134b1775))
+* **api:** fix enum name conflict maybe ([f21813c](https://github.com/stainless-api/stainless-api-go/commit/f21813cad5d2237595d1389bbe25747649055da7))
+* **api:** manual updates ([f9b7e82](https://github.com/stainless-api/stainless-api-go/commit/f9b7e82bda7ad171be29985d013ce47781a8b6b0))
+* **api:** manual updates ([4b28524](https://github.com/stainless-api/stainless-api-go/commit/4b285245767a00f24bda90c3088279d7d3b1a1e7))
+* **api:** manual updates ([59ac5d0](https://github.com/stainless-api/stainless-api-go/commit/59ac5d095d4677f1722b76a9fc1c7531a424512a))
+* **api:** manual updates ([88c1005](https://github.com/stainless-api/stainless-api-go/commit/88c10052262103a1b01809a0b9d43892f72c8657))
+* **api:** manual updates ([c6af2bc](https://github.com/stainless-api/stainless-api-go/commit/c6af2bc172620f147bdb7b78b02b015c9c647150))
+* **api:** manual updates ([ee18ef8](https://github.com/stainless-api/stainless-api-go/commit/ee18ef80f20bfe06e6c2c4eb665d82f3bfd9143f))
+* **api:** manual updates ([b52a583](https://github.com/stainless-api/stainless-api-go/commit/b52a58329e8013cb34e4add568bc6b2f877c2628))
+* **api:** manual updates ([03ae282](https://github.com/stainless-api/stainless-api-go/commit/03ae28279f75772025d2641212969db6409b11a5))
+* **api:** parent build id ([ef14ee0](https://github.com/stainless-api/stainless-api-go/commit/ef14ee06c9ca5b16e10d2bdc6dce19d327cc1355))
+* **api:** remove discriminator thing ([40f8bc0](https://github.com/stainless-api/stainless-api-go/commit/40f8bc0dd275031d0f7bc9a90e5a610676edda6e))
+* **api:** use correct hashes ([e118e5a](https://github.com/stainless-api/stainless-api-go/commit/e118e5a173e468eb037b0e12e25d7e4e62cba6e9))
+* change list endpoint ([8a34e45](https://github.com/stainless-api/stainless-api-go/commit/8a34e451abf01b2748a339990944f93b33787ddf))
+* **client:** support more time formats ([dde7235](https://github.com/stainless-api/stainless-api-go/commit/dde72351a8cfbf8271984e9fda80b630d3fdf161))
+
+
+### Bug Fixes
+
+* **client:** time format encoding fix ([67abcf1](https://github.com/stainless-api/stainless-api-go/commit/67abcf1ace98c409d908e09f3d033cbfcf4a32e0))
+
+
+### Chores
+
+* **ci:** add timeout thresholds for CI jobs ([d6b6255](https://github.com/stainless-api/stainless-api-go/commit/d6b625593d4244a7a5ef5f98dbec567e5befb0de))
+* **ci:** only use depot for staging repos ([2275406](https://github.com/stainless-api/stainless-api-go/commit/22754063ee707b8b0527f7b72b736180c48ecbc7))
+* **internal:** codegen related update ([d0aa369](https://github.com/stainless-api/stainless-api-go/commit/d0aa3690b2c934f19a9d3d0f60d0f1167fb1eb9c))
+* **readme:** improve formatting ([cc1106d](https://github.com/stainless-api/stainless-api-go/commit/cc1106df35a95fb7719589acc66c42c6bf2ff8cc))
+* **utils:** add internal resp to param utility ([d69809f](https://github.com/stainless-api/stainless-api-go/commit/d69809f2f39bd1717bae31887079edac00ccabcc))
+
 ## 0.1.1 (2025-04-18)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.1](https://github.com/stainless-api/stainless-api-go/compare/v0.1.0-alpha.2...v0.1.1)

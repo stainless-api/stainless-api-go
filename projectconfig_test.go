@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/option"
 )
 
-func TestProjectBranchNewWithOptionalParams(t *testing.T) {
+func TestProjectConfigGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,13 +26,11 @@ func TestProjectBranchNewWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Branches.New(
+	_, err := client.Projects.Configs.Get(
 		context.TODO(),
 		"project",
-		stainlessv0.ProjectBranchNewParams{
-			Branch:     "branch",
-			BranchFrom: "branch_from",
-			Force:      stainlessv0.Bool(true),
+		stainlessv0.ProjectConfigGetParams{
+			Branch: stainlessv0.String("branch"),
 		},
 	)
 	if err != nil {
@@ -44,7 +42,7 @@ func TestProjectBranchNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestProjectBranchGet(t *testing.T) {
+func TestProjectConfigGuessWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -57,10 +55,13 @@ func TestProjectBranchGet(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Branches.Get(
+	_, err := client.Projects.Configs.Guess(
 		context.TODO(),
 		"project",
-		"branch",
+		stainlessv0.ProjectConfigGuessParams{
+			Spec:   "spec",
+			Branch: stainlessv0.String("branch"),
+		},
 	)
 	if err != nil {
 		var apierr *stainlessv0.Error

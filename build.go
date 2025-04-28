@@ -309,9 +309,9 @@ func (r *BuildTargetCommitCompleted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitCompletedCompleted struct {
 	Commit BuildTargetCommitCompletedCompletedCommit `json:"commit,required"`
-	// Any of "error", "warning", "note", "success", "merge_conflict",
-	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
-	// "timed_out", "noop", "version_bump".
+	// Any of "success", "failure", "skipped", "cancelled", "action_required",
+	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
+	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion      string                                             `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
 	// Metadata for the response, check the presence of optional fields with the
@@ -562,7 +562,8 @@ func (r *BuildTargetLintCompleted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintCompletedCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
-	// "neutral", "timed_out".
+	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
+	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
 	// Metadata for the response, check the presence of optional fields with the
 	// [resp.Field.IsPresent] method.
@@ -747,7 +748,8 @@ func (r *BuildTargetTestCompleted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestCompletedCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
-	// "neutral", "timed_out".
+	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
+	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
 	// Metadata for the response, check the presence of optional fields with the
 	// [resp.Field.IsPresent] method.
@@ -859,12 +861,14 @@ func (r BuildNewParamsRevisionMapItem) MarshalJSON() (data []byte, err error) {
 type BuildListParams struct {
 	// Project name
 	Project string `query:"project,required" json:"-"`
-	// Branch name, defaults to "main"
+	// Branch name
 	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
 	// Maximum number of builds to return, defaults to 10
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
+	// A config commit SHA used for the build
+	Revision BuildListParamsRevisionUnion `query:"revision,omitzero" json:"-"`
 	paramObj
 }
 
@@ -874,6 +878,48 @@ func (f BuildListParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsN
 
 // URLQuery serializes [BuildListParams]'s query parameters as `url.Values`.
 func (r BuildListParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type BuildListParamsRevisionUnion struct {
+	OfString                param.Opt[string]                         `query:",omitzero,inline"`
+	OfBuildListsRevisionMap map[string]BuildListParamsRevisionMapItem `query:",omitzero,inline"`
+	paramUnion
+}
+
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (u BuildListParamsRevisionUnion) IsPresent() bool { return !param.IsOmitted(u) && !u.IsNull() }
+
+func (u *BuildListParamsRevisionUnion) asAny() any {
+	if !param.IsOmitted(u.OfString) {
+		return &u.OfString.Value
+	} else if !param.IsOmitted(u.OfBuildListsRevisionMap) {
+		return &u.OfBuildListsRevisionMap
+	}
+	return nil
+}
+
+// The property Hash is required.
+type BuildListParamsRevisionMapItem struct {
+	// File content hash
+	Hash string `query:"hash,required" json:"-"`
+	paramObj
+}
+
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (f BuildListParamsRevisionMapItem) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
+
+// URLQuery serializes [BuildListParamsRevisionMapItem]'s query parameters as
+// `url.Values`.
+func (r BuildListParamsRevisionMapItem) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

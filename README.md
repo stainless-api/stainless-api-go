@@ -24,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/stainless-api/stainless-api-go@v0.1.1'
+go get -u 'github.com/stainless-api/stainless-api-go@v0.2.0'
 ```
 
 <!-- x-release-please-end -->
@@ -52,11 +52,16 @@ func main() {
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_V0_API_KEY")
 	)
-	openAPI, err := client.OpenAPI.Get(context.TODO())
+	buildObject, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
+		Project: "project",
+		Revision: stainlessv0.BuildNewParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
+	})
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", openAPI)
+	fmt.Printf("%+v\n", buildObject.ID)
 }
 
 ```
@@ -66,29 +71,18 @@ func main() {
 The stainlessv0 library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
 semantics from the Go 1.24+ `encoding/json` release for request fields.
 
-Required primitive fields (`int64`, `string`, etc.) feature the tag <code>\`json:...,required\`</code>. These
+Required primitive fields (`int64`, `string`, etc.) feature the tag <code>\`json:"...,required"\`</code>. These
 fields are always serialized, even their zero values.
 
-Optional primitive types are wrapped in a `param.Opt[T]`. Use the provided constructors set `param.Opt[T]` fields such as `stainlessv0.String(string)`, `stainlessv0.Int(int64)`, etc.
+Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, `stainlessv0.String(string)`, `stainlessv0.Int(int64)`, etc.
 
-Optional primitives, maps, slices and structs and string enums (represented as `string`) always feature the
-tag <code>\`json:"...,omitzero"\`</code>. Their zero values are considered omitted.
-
-Any non-nil slice of length zero will serialize as an empty JSON array, `"[]"`. Similarly, any non-nil map with length zero with serialize as an empty JSON object, `"{}"`.
-
-To send `null` instead of an `param.Opt[T]`, use `param.NullOpt[T]()`.
-To send `null` instead of a struct, use `param.NullObj[T]()`, where `T` is a struct.
-To send a custom value instead of a struct, use `param.OverrideObj[T](value)`.
-
-To override request structs contain a `.WithExtraFields(map[string]any)` method which can be used to
-send non-conforming fields in the request body. Extra fields overwrite any struct fields with a matching
-key, so only use with trusted data.
+Any `param.Opt[T]`, map, slice, struct or string enum uses the
+tag <code>\`json:"...,omitzero"\`</code>. Its zero value is considered omitted.
 
 ```go
 params := stainlessv0.ExampleParams{
-	ID:          "id_xxx",                  // required property
-	Name:        stainlessv0.String("..."), // optional property
-	Description: param.NullOpt[string](),   // explicit null property
+	ID:   "id_xxx",                  // required property
+	Name: stainlessv0.String("..."), // optional property
 
 	Point: stainlessv0.Point{
 		X: 0,                  // required field will serialize as 0
@@ -98,7 +92,23 @@ params := stainlessv0.ExampleParams{
 
 	Origin: stainlessv0.Origin{}, // the zero value of [Origin] is considered omitted
 }
+```
 
+To send `null` instead of a `param.Opt[T]`, use `param.NullOpt[T]()`.
+To send `null` instead of a struct `T`, use `param.NullObj[T]()`.
+
+```go
+params.Description = param.NullOpt[string]() // explicit null string property
+params.Point = param.NullObj[Point]()        // explicit null struct property
+```
+
+Request structs contain a `.WithExtraFields(map[string]any)` method which can send non-conforming
+fields in the request body. Extra fields overwrite any struct fields with a matching
+key. For security reasons, only use `WithExtraFields` with trusted data.
+
+To send a custom value instead of a struct, use `param.OverrideObj[T](value)`.
+
+```go
 // In cases where the API specifies a given type,
 // but you want to send something else, use [WithExtraFields]:
 params.WithExtraFields(map[string]any{
@@ -110,7 +120,7 @@ custom := param.OverrideObj[stainlessv0.FooParams](12)
 ```
 
 When available, use the `.IsPresent()` method to check if an optional parameter is not omitted or `null`.
-Otherwise, the `param.IsOmitted(any)` function can confirm the presence of any `omitzero` field.
+The `param.IsOmitted(any)` function can confirm the presence of any `omitzero` field.
 
 ### Request unions
 
@@ -144,14 +154,9 @@ if address := animal.GetOwner().GetAddress(); address != nil {
 
 ### Response objects
 
-All fields in response structs are value types (not pointers or wrappers).
-
-If a given field is `null`, not present, or invalid, the corresponding field
-will simply be its zero value. To handle optional fields, see the `IsPresent()` method
-below.
-
-All response structs also include a special `JSON` field, containing more detailed
-information about each property, which you can use like so:
+All fields in response structs are ordinary value types (not pointers or wrappers).
+Response structs also include a special `JSON` field containing metadata about
+each property.
 
 ```go
 type Animal struct {
@@ -159,19 +164,28 @@ type Animal struct {
 	Owners int    `json:"owners"`
 	Age    int    `json:"age"`
 	JSON   struct {
-		Name  resp.Field
-		Owner resp.Field
-		Age   resp.Field
+		Name        resp.Field
+		Owner       resp.Field
+		Age         resp.Field
+		ExtraFields map[string]resp.Field
 	} `json:"-"`
 }
+```
+
+To handle optional data, use the `IsPresent()` method on the JSON field.
+If a field is `null`, not present, or invalid, the corresponding field
+will simply be its zero value.
+
+```go
+raw := `{"owners": 1, "name": null}`
 
 var res Animal
-json.Unmarshal([]byte(`{"name": null, "owners": 0}`), &res)
+json.Unmarshal([]byte(raw), &res)
 
 // Use the IsPresent() method to handle optional fields
-res.Owners                  // 0
+res.Owners                  // 1
 res.JSON.Owners.IsPresent() // true
-res.JSON.Owners.Raw()       // "0"
+res.JSON.Owners.Raw()       // "1"
 
 res.Age                  // 0
 res.JSON.Age.IsPresent() // false
@@ -244,7 +258,7 @@ client := stainlessv0.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.OpenAPI.Get(context.TODO(), ...,
+client.Builds.New(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -273,14 +287,19 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.OpenAPI.Get(context.TODO())
+_, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
+	Project: "project",
+	Revision: stainlessv0.BuildNewParamsRevisionUnion{
+		OfString: stainlessv0.String("string"),
+	},
+})
 if err != nil {
 	var apierr *stainlessv0.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/v0/openapi": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/v0/builds": 400 Bad Request { ... }
 }
 ```
 
@@ -298,8 +317,14 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.OpenAPI.Get(
+client.Builds.New(
 	ctx,
+	stainlessv0.BuildNewParams{
+		Project: "project",
+		Revision: stainlessv0.BuildNewParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
+	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -333,7 +358,16 @@ client := stainlessv0.NewClient(
 )
 
 // Override per-request:
-client.OpenAPI.Get(context.TODO(), option.WithMaxRetries(5))
+client.Builds.New(
+	context.TODO(),
+	stainlessv0.BuildNewParams{
+		Project: "project",
+		Revision: stainlessv0.BuildNewParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
+	},
+	option.WithMaxRetries(5),
+)
 ```
 
 ### Accessing raw response data (e.g. response headers)
@@ -344,11 +378,20 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-openAPI, err := client.OpenAPI.Get(context.TODO(), option.WithResponseInto(&response))
+buildObject, err := client.Builds.New(
+	context.TODO(),
+	stainlessv0.BuildNewParams{
+		Project: "project",
+		Revision: stainlessv0.BuildNewParamsRevisionUnion{
+			OfString: stainlessv0.String("string"),
+		},
+	},
+	option.WithResponseInto(&response),
+)
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", openAPI)
+fmt.Printf("%+v\n", buildObject)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)

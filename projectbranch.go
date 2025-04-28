@@ -137,8 +137,9 @@ const (
 )
 
 type ProjectBranchNewParams struct {
-	Branch     string `json:"branch,required"`
-	BranchFrom string `json:"branch_from,required"`
+	Branch     string          `json:"branch,required"`
+	BranchFrom string          `json:"branch_from,required"`
+	Force      param.Opt[bool] `json:"force,omitzero"`
 	paramObj
 }
 
