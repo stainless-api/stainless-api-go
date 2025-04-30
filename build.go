@@ -71,6 +71,8 @@ type BuildObject struct {
 	ConfigCommit string `json:"config_commit,required"`
 	// Any of "build".
 	Object  BuildObjectObject  `json:"object,required"`
+	Org     string             `json:"org,required"`
+	Project string             `json:"project,required"`
 	Targets BuildObjectTargets `json:"targets,required"`
 	// Metadata for the response, check the presence of optional fields with the
 	// [resp.Field.IsPresent] method.
@@ -78,6 +80,8 @@ type BuildObject struct {
 		ID           resp.Field
 		ConfigCommit resp.Field
 		Object       resp.Field
+		Org          resp.Field
+		Project      resp.Field
 		Targets      resp.Field
 		ExtraFields  map[string]resp.Field
 		raw          string
@@ -865,7 +869,7 @@ type BuildListParams struct {
 	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
-	// Maximum number of builds to return, defaults to 10
+	// Maximum number of builds to return, defaults to 10 (maximum: 100)
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
 	// A config commit SHA used for the build
 	Revision BuildListParamsRevisionUnion `query:"revision,omitzero" json:"-"`
