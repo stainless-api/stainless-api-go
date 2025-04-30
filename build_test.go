@@ -85,7 +85,7 @@ func TestBuildListWithOptionalParams(t *testing.T) {
 		Project: "project",
 		Branch:  stainlessv0.String("branch"),
 		Cursor:  stainlessv0.String("cursor"),
-		Limit:   stainlessv0.Float(0),
+		Limit:   stainlessv0.Float(1),
 		Revision: stainlessv0.BuildListParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},

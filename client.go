@@ -19,24 +19,25 @@ type Client struct {
 	Projects           ProjectService
 	Builds             BuildService
 	BuildTargetOutputs BuildTargetOutputService
+	Orgs               OrgService
 }
 
-// DefaultClientOptions read from the environment (STAINLESS_API_KEY,
+// DefaultClientOptions read from the environment (STAINLESS_V0_API_KEY,
 // STAINLESS_V0_BASE_URL). This should be used to initialize new clients.
 func DefaultClientOptions() []option.RequestOption {
 	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("STAINLESS_V0_BASE_URL"); ok {
 		defaults = append(defaults, option.WithBaseURL(o))
 	}
-	if o, ok := os.LookupEnv("STAINLESS_API_KEY"); ok {
+	if o, ok := os.LookupEnv("STAINLESS_V0_API_KEY"); ok {
 		defaults = append(defaults, option.WithAPIKey(o))
 	}
 	return defaults
 }
 
 // NewClient generates a new client with the default option read from the
-// environment (STAINLESS_API_KEY, STAINLESS_V0_BASE_URL). The option passed in as
-// arguments are applied after these default arguments, and all option will be
+// environment (STAINLESS_V0_API_KEY, STAINLESS_V0_BASE_URL). The option passed in
+// as arguments are applied after these default arguments, and all option will be
 // passed down to the services and requests that this client makes.
 func NewClient(opts ...option.RequestOption) (r Client) {
 	opts = append(DefaultClientOptions(), opts...)
@@ -46,6 +47,7 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.Projects = NewProjectService(opts...)
 	r.Builds = NewBuildService(opts...)
 	r.BuildTargetOutputs = NewBuildTargetOutputService(opts...)
+	r.Orgs = NewOrgService(opts...)
 
 	return
 }
