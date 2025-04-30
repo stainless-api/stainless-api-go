@@ -42,7 +42,7 @@ func NewProjectService(opts ...option.RequestOption) (r ProjectService) {
 	return
 }
 
-// TODO
+// Retrieve a project by name
 func (r *ProjectService) Get(ctx context.Context, projectName string, opts ...option.RequestOption) (res *ProjectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if projectName == "" {
@@ -54,7 +54,7 @@ func (r *ProjectService) Get(ctx context.Context, projectName string, opts ...op
 	return
 }
 
-// TODO
+// Update a project's properties
 func (r *ProjectService) Update(ctx context.Context, projectName string, body ProjectUpdateParams, opts ...option.RequestOption) (res *ProjectUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if projectName == "" {
@@ -66,7 +66,7 @@ func (r *ProjectService) Update(ctx context.Context, projectName string, body Pr
 	return
 }
 
-// TODO
+// List projects in an organization
 func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *ProjectListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/projects"

@@ -34,7 +34,6 @@ func NewProjectSnippetService(opts ...option.RequestOption) (r ProjectSnippetSer
 	return
 }
 
-// TODO
 func (r *ProjectSnippetService) NewRequest(ctx context.Context, projectName string, body ProjectSnippetNewRequestParams, opts ...option.RequestOption) (res *ProjectSnippetNewRequestResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if projectName == "" {

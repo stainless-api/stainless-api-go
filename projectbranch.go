@@ -34,7 +34,7 @@ func NewProjectBranchService(opts ...option.RequestOption) (r ProjectBranchServi
 	return
 }
 
-// TODO
+// Create a new branch for a project
 func (r *ProjectBranchService) New(ctx context.Context, project string, body ProjectBranchNewParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = append(r.Options[:], opts...)
 	if project == "" {
@@ -46,7 +46,7 @@ func (r *ProjectBranchService) New(ctx context.Context, project string, body Pro
 	return
 }
 
-// TODO
+// Retrieve a project branch
 func (r *ProjectBranchService) Get(ctx context.Context, project string, branch string, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = append(r.Options[:], opts...)
 	if project == "" {

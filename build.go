@@ -38,7 +38,7 @@ func NewBuildService(opts ...option.RequestOption) (r BuildService) {
 	return
 }
 
-// TODO
+// Create a new build
 func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...option.RequestOption) (res *BuildObject, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/builds"
@@ -46,7 +46,7 @@ func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...opt
 	return
 }
 
-// TODO
+// Retrieve a build by ID
 func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.RequestOption) (res *BuildObject, err error) {
 	opts = append(r.Options[:], opts...)
 	if buildID == "" {
@@ -58,7 +58,7 @@ func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.R
 	return
 }
 
-// TODO
+// List builds for a project
 func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...option.RequestOption) (res *BuildListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/builds"
