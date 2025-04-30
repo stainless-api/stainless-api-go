@@ -35,7 +35,7 @@ func NewBuildTargetOutputService(opts ...option.RequestOption) (r BuildTargetOut
 	return
 }
 
-// TODO
+// Download the output of a build target
 func (r *BuildTargetOutputService) Get(ctx context.Context, query BuildTargetOutputGetParams, opts ...option.RequestOption) (res *BuildTargetOutputGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/build_target_outputs"
