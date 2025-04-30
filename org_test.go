@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/option"
 )
 
-func TestProjectGet(t *testing.T) {
+func TestOrgGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,7 +26,7 @@ func TestProjectGet(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Get(context.TODO(), "projectName")
+	_, err := client.Orgs.Get(context.TODO(), "orgName")
 	if err != nil {
 		var apierr *stainlessv0.Error
 		if errors.As(err, &apierr) {
@@ -36,7 +36,7 @@ func TestProjectGet(t *testing.T) {
 	}
 }
 
-func TestProjectUpdateWithOptionalParams(t *testing.T) {
+func TestOrgList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -49,40 +49,7 @@ func TestProjectUpdateWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Update(
-		context.TODO(),
-		"projectName",
-		stainlessv0.ProjectUpdateParams{
-			DisplayName: stainlessv0.String("display_name"),
-		},
-	)
-	if err != nil {
-		var apierr *stainlessv0.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestProjectListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := stainlessv0.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
-	)
-	_, err := client.Projects.List(context.TODO(), stainlessv0.ProjectListParams{
-		Org:    "org",
-		Cursor: stainlessv0.String("cursor"),
-		Limit:  stainlessv0.Float(1),
-	})
+	_, err := client.Orgs.List(context.TODO())
 	if err != nil {
 		var apierr *stainlessv0.Error
 		if errors.As(err, &apierr) {

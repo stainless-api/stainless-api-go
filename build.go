@@ -38,7 +38,7 @@ func NewBuildService(opts ...option.RequestOption) (r BuildService) {
 	return
 }
 
-// TODO
+// Create a new build
 func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...option.RequestOption) (res *BuildObject, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/builds"
@@ -46,7 +46,7 @@ func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...opt
 	return
 }
 
-// TODO
+// Retrieve a build by ID
 func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.RequestOption) (res *BuildObject, err error) {
 	opts = append(r.Options[:], opts...)
 	if buildID == "" {
@@ -58,7 +58,7 @@ func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.R
 	return
 }
 
-// TODO
+// List builds for a project
 func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...option.RequestOption) (res *BuildListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/builds"
@@ -71,6 +71,8 @@ type BuildObject struct {
 	ConfigCommit string `json:"config_commit,required"`
 	// Any of "build".
 	Object  BuildObjectObject  `json:"object,required"`
+	Org     string             `json:"org,required"`
+	Project string             `json:"project,required"`
 	Targets BuildObjectTargets `json:"targets,required"`
 	// Metadata for the response, check the presence of optional fields with the
 	// [resp.Field.IsPresent] method.
@@ -78,6 +80,8 @@ type BuildObject struct {
 		ID           resp.Field
 		ConfigCommit resp.Field
 		Object       resp.Field
+		Org          resp.Field
+		Project      resp.Field
 		Targets      resp.Field
 		ExtraFields  map[string]resp.Field
 		raw          string
@@ -865,7 +869,7 @@ type BuildListParams struct {
 	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
-	// Maximum number of builds to return, defaults to 10
+	// Maximum number of builds to return, defaults to 10 (maximum: 100)
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
 	// A config commit SHA used for the build
 	Revision BuildListParamsRevisionUnion `query:"revision,omitzero" json:"-"`

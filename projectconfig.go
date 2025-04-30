@@ -36,7 +36,7 @@ func NewProjectConfigService(opts ...option.RequestOption) (r ProjectConfigServi
 	return
 }
 
-// TODO
+// Retrieve configuration files for a project
 func (r *ProjectConfigService) Get(ctx context.Context, project string, query ProjectConfigGetParams, opts ...option.RequestOption) (res *ProjectConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if project == "" {
@@ -48,7 +48,7 @@ func (r *ProjectConfigService) Get(ctx context.Context, project string, query Pr
 	return
 }
 
-// TODO
+// Generate configuration suggestions based on an OpenAPI spec
 func (r *ProjectConfigService) Guess(ctx context.Context, project string, body ProjectConfigGuessParams, opts ...option.RequestOption) (res *ProjectConfigGuessResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if project == "" {

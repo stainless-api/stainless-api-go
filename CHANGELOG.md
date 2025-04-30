@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.0 (2025-04-30)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/stainless-api/stainless-api-go/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** manual updates ([b70002c](https://github.com/stainless-api/stainless-api-go/commit/b70002ccd217cd38db964c808bac5b461d9c3ec8))
+* **api:** manual updates ([ed7ad5e](https://github.com/stainless-api/stainless-api-go/commit/ed7ad5e15998d43a0c816d33b7f7d9ad0e28af2b))
+* **api:** manual updates ([acd5c8a](https://github.com/stainless-api/stainless-api-go/commit/acd5c8ad4db43eaf0f973c1be16b26b70abbdce0))
+* **api:** rename api key ([32e86f4](https://github.com/stainless-api/stainless-api-go/commit/32e86f4320ea2bab4b873d2c43885acc4956b50c))
+
+
+### Bug Fixes
+
+* **client:** resolve issue with optional multipart files ([e0f6aae](https://github.com/stainless-api/stainless-api-go/commit/e0f6aae0788e375d8d87e0da1576b787ccd1b4c3))
+* handle empty bodies in WithJSONSet ([0bb41cc](https://github.com/stainless-api/stainless-api-go/commit/0bb41cc9ad16ee1f4b7aaddf64764d75ba22a198))
+
 ## 0.2.0 (2025-04-24)
 
 Full Changelog: [v0.1.1...v0.2.0](https://github.com/stainless-api/stainless-api-go/compare/v0.1.1...v0.2.0)
