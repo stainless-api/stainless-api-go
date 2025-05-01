@@ -47,9 +47,9 @@ func (r *ProjectBranchService) New(ctx context.Context, project string, body Pro
 }
 
 // Retrieve a project branch
-func (r *ProjectBranchService) Get(ctx context.Context, project string, branch string, opts ...option.RequestOption) (res *ProjectBranch, err error) {
+func (r *ProjectBranchService) Get(ctx context.Context, branch string, query ProjectBranchGetParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = append(r.Options[:], opts...)
-	if project == "" {
+	if query.Project == "" {
 		err = errors.New("missing required project parameter")
 		return
 	}
@@ -57,7 +57,7 @@ func (r *ProjectBranchService) Get(ctx context.Context, project string, branch s
 		err = errors.New("missing required branch parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/branches/%s", project, branch)
+	path := fmt.Sprintf("v0/projects/%s/branches/%s", query.Project, branch)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -151,3 +151,12 @@ func (r ProjectBranchNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectBranchNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+
+type ProjectBranchGetParams struct {
+	Project string `path:"project,required" json:"-"`
+	paramObj
+}
+
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (f ProjectBranchGetParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
