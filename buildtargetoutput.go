@@ -70,7 +70,7 @@ func (u BuildTargetOutputGetResponseUnion) AsBuildTargetOutputGetResponseObject(
 	return
 }
 
-func (u BuildTargetOutputGetResponseUnion) AsunionMember2() (v BuildTargetOutputGetResponseObject) {
+func (u BuildTargetOutputGetResponseUnion) AsVariant2() (v BuildTargetOutputGetResponseObject) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
