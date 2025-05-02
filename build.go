@@ -826,8 +826,8 @@ func (r BuildNewParams) MarshalJSON() (data []byte, err error) {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildNewParamsRevisionUnion struct {
-	OfString               param.Opt[string]                        `json:",omitzero,inline"`
-	OfBuildNewsRevisionMap map[string]BuildNewParamsRevisionMapItem `json:",omitzero,inline"`
+	OfString                      param.Opt[string]                        `json:",omitzero,inline"`
+	OfBuildNewsRevisionMapItemMap map[string]BuildNewParamsRevisionMapItem `json:",omitzero,inline"`
 	paramUnion
 }
 
@@ -835,14 +835,14 @@ type BuildNewParamsRevisionUnion struct {
 // "null". To check if this field is omitted, use [param.IsOmitted].
 func (u BuildNewParamsRevisionUnion) IsPresent() bool { return !param.IsOmitted(u) && !u.IsNull() }
 func (u BuildNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[BuildNewParamsRevisionUnion](u.OfString, u.OfBuildNewsRevisionMap)
+	return param.MarshalUnion[BuildNewParamsRevisionUnion](u.OfString, u.OfBuildNewsRevisionMapItemMap)
 }
 
 func (u *BuildNewParamsRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildNewsRevisionMap) {
-		return &u.OfBuildNewsRevisionMap
+	} else if !param.IsOmitted(u.OfBuildNewsRevisionMapItemMap) {
+		return &u.OfBuildNewsRevisionMapItemMap
 	}
 	return nil
 }
@@ -892,8 +892,8 @@ func (r BuildListParams) URLQuery() (v url.Values, err error) {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildListParamsRevisionUnion struct {
-	OfString                param.Opt[string]                         `query:",omitzero,inline"`
-	OfBuildListsRevisionMap map[string]BuildListParamsRevisionMapItem `query:",omitzero,inline"`
+	OfString                       param.Opt[string]                         `query:",omitzero,inline"`
+	OfBuildListsRevisionMapItemMap map[string]BuildListParamsRevisionMapItem `query:",omitzero,inline"`
 	paramUnion
 }
 
@@ -904,8 +904,8 @@ func (u BuildListParamsRevisionUnion) IsPresent() bool { return !param.IsOmitted
 func (u *BuildListParamsRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildListsRevisionMap) {
-		return &u.OfBuildListsRevisionMap
+	} else if !param.IsOmitted(u.OfBuildListsRevisionMapItemMap) {
+		return &u.OfBuildListsRevisionMapItemMap
 	}
 	return nil
 }
