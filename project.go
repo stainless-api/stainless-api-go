@@ -14,7 +14,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // ProjectService contains methods and other services that help with interacting
@@ -81,14 +81,14 @@ type ProjectGetResponse struct {
 	Object ProjectGetResponseObject `json:"object,required"`
 	Org    string                   `json:"org,required"`
 	Slug   string                   `json:"slug,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ConfigRepo  resp.Field
-		DisplayName resp.Field
-		Object      resp.Field
-		Org         resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -112,14 +112,14 @@ type ProjectUpdateResponse struct {
 	Object ProjectUpdateResponseObject `json:"object,required"`
 	Org    string                      `json:"org,required"`
 	Slug   string                      `json:"slug,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ConfigRepo  resp.Field
-		DisplayName resp.Field
-		Object      resp.Field
-		Org         resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -140,12 +140,12 @@ type ProjectListResponse struct {
 	Data       []ProjectListResponseData `json:"data,required"`
 	HasMore    bool                      `json:"has_more,required"`
 	NextCursor string                    `json:"next_cursor"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Data        resp.Field
-		HasMore     resp.Field
-		NextCursor  resp.Field
-		ExtraFields map[string]resp.Field
+		Data        respjson.Field
+		HasMore     respjson.Field
+		NextCursor  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -163,14 +163,14 @@ type ProjectListResponseData struct {
 	Object string `json:"object,required"`
 	Org    string `json:"org,required"`
 	Slug   string `json:"slug,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ConfigRepo  resp.Field
-		DisplayName resp.Field
-		Object      resp.Field
-		Org         resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

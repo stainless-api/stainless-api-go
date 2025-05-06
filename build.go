@@ -15,7 +15,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 	"github.com/stainless-api/stainless-api-go/shared/constant"
 )
 
@@ -74,15 +74,15 @@ type BuildObject struct {
 	Org     string             `json:"org,required"`
 	Project string             `json:"project,required"`
 	Targets BuildObjectTargets `json:"targets,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID           resp.Field
-		ConfigCommit resp.Field
-		Object       resp.Field
-		Org          resp.Field
-		Project      resp.Field
-		Targets      resp.Field
-		ExtraFields  map[string]resp.Field
+		ID           respjson.Field
+		ConfigCommit respjson.Field
+		Object       respjson.Field
+		Org          respjson.Field
+		Project      respjson.Field
+		Targets      respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
@@ -109,18 +109,18 @@ type BuildObjectTargets struct {
 	Ruby       BuildTarget `json:"ruby"`
 	Terraform  BuildTarget `json:"terraform"`
 	Typescript BuildTarget `json:"typescript"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Cli         resp.Field
-		Go          resp.Field
-		Java        resp.Field
-		Kotlin      resp.Field
-		Node        resp.Field
-		Python      resp.Field
-		Ruby        resp.Field
-		Terraform   resp.Field
-		Typescript  resp.Field
-		ExtraFields map[string]resp.Field
+		Cli         respjson.Field
+		Go          respjson.Field
+		Java        respjson.Field
+		Kotlin      respjson.Field
+		Node        respjson.Field
+		Python      respjson.Field
+		Ruby        respjson.Field
+		Terraform   respjson.Field
+		Typescript  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -139,14 +139,14 @@ type BuildTarget struct {
 	// Any of "not_started", "codegen", "postgen", "completed".
 	Status BuildTargetStatus    `json:"status,required"`
 	Test   BuildTargetTestUnion `json:"test,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Commit      resp.Field
-		Lint        resp.Field
-		Object      resp.Field
-		Status      resp.Field
-		Test        resp.Field
-		ExtraFields map[string]resp.Field
+		Commit      respjson.Field
+		Lint        respjson.Field
+		Object      respjson.Field
+		Status      respjson.Field
+		Test        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -170,8 +170,8 @@ type BuildTargetCommitUnion struct {
 	// This field is from variant [BuildTargetCommitCompleted].
 	Completed BuildTargetCommitCompletedCompleted `json:"completed"`
 	JSON      struct {
-		Status    resp.Field
-		Completed resp.Field
+		Status    respjson.Field
+		Completed respjson.Field
 		raw       string
 	} `json:"-"`
 }
@@ -240,10 +240,10 @@ func (r *BuildTargetCommitUnion) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitNotStarted struct {
 	Status constant.NotStarted `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -256,10 +256,10 @@ func (r *BuildTargetCommitNotStarted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitQueued struct {
 	Status constant.Queued `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -272,10 +272,10 @@ func (r *BuildTargetCommitQueued) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitInProgress struct {
 	Status constant.InProgress `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -289,11 +289,11 @@ func (r *BuildTargetCommitInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetCommitCompleted struct {
 	Completed BuildTargetCommitCompletedCompleted `json:"completed,required"`
 	Status    constant.Completed                  `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Completed   resp.Field
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Completed   respjson.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -311,12 +311,12 @@ type BuildTargetCommitCompletedCompleted struct {
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion      string                                             `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Commit          resp.Field
-		Conclusion      resp.Field
-		MergeConflictPr resp.Field
-		ExtraFields     map[string]resp.Field
+		Commit          respjson.Field
+		Conclusion      respjson.Field
+		MergeConflictPr respjson.Field
+		ExtraFields     map[string]respjson.Field
 		raw             string
 	} `json:"-"`
 }
@@ -330,11 +330,11 @@ func (r *BuildTargetCommitCompletedCompleted) UnmarshalJSON(data []byte) error {
 type BuildTargetCommitCompletedCompletedCommit struct {
 	Repo BuildTargetCommitCompletedCompletedCommitRepo `json:"repo,required"`
 	Sha  string                                        `json:"sha,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Repo        resp.Field
-		Sha         resp.Field
-		ExtraFields map[string]resp.Field
+		Repo        respjson.Field
+		Sha         respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -349,12 +349,12 @@ type BuildTargetCommitCompletedCompletedCommitRepo struct {
 	Branch string `json:"branch,required"`
 	Name   string `json:"name,required"`
 	Owner  string `json:"owner,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Branch      resp.Field
-		Name        resp.Field
-		Owner       resp.Field
-		ExtraFields map[string]resp.Field
+		Branch      respjson.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -368,11 +368,11 @@ func (r *BuildTargetCommitCompletedCompletedCommitRepo) UnmarshalJSON(data []byt
 type BuildTargetCommitCompletedCompletedMergeConflictPr struct {
 	Number float64                                                `json:"number,required"`
 	Repo   BuildTargetCommitCompletedCompletedMergeConflictPrRepo `json:"repo,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Number      resp.Field
-		Repo        resp.Field
-		ExtraFields map[string]resp.Field
+		Number      respjson.Field
+		Repo        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -386,11 +386,11 @@ func (r *BuildTargetCommitCompletedCompletedMergeConflictPr) UnmarshalJSON(data 
 type BuildTargetCommitCompletedCompletedMergeConflictPrRepo struct {
 	Name  string `json:"name,required"`
 	Owner string `json:"owner,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Name        resp.Field
-		Owner       resp.Field
-		ExtraFields map[string]resp.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -414,8 +414,8 @@ type BuildTargetLintUnion struct {
 	// This field is from variant [BuildTargetLintCompleted].
 	Completed BuildTargetLintCompletedCompleted `json:"completed"`
 	JSON      struct {
-		Status    resp.Field
-		Completed resp.Field
+		Status    respjson.Field
+		Completed respjson.Field
 		raw       string
 	} `json:"-"`
 }
@@ -484,10 +484,10 @@ func (r *BuildTargetLintUnion) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintNotStarted struct {
 	Status constant.NotStarted `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -500,10 +500,10 @@ func (r *BuildTargetLintNotStarted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintQueued struct {
 	Status constant.Queued `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -516,10 +516,10 @@ func (r *BuildTargetLintQueued) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintInProgress struct {
 	Status constant.InProgress `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -533,11 +533,11 @@ func (r *BuildTargetLintInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetLintCompleted struct {
 	Completed BuildTargetLintCompletedCompleted `json:"completed,required"`
 	Status    constant.Completed                `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Completed   resp.Field
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Completed   respjson.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -553,10 +553,10 @@ type BuildTargetLintCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Conclusion  resp.Field
-		ExtraFields map[string]resp.Field
+		Conclusion  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -595,8 +595,8 @@ type BuildTargetTestUnion struct {
 	// This field is from variant [BuildTargetTestCompleted].
 	Completed BuildTargetTestCompletedCompleted `json:"completed"`
 	JSON      struct {
-		Status    resp.Field
-		Completed resp.Field
+		Status    respjson.Field
+		Completed respjson.Field
 		raw       string
 	} `json:"-"`
 }
@@ -665,10 +665,10 @@ func (r *BuildTargetTestUnion) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestNotStarted struct {
 	Status constant.NotStarted `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -681,10 +681,10 @@ func (r *BuildTargetTestNotStarted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestQueued struct {
 	Status constant.Queued `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -697,10 +697,10 @@ func (r *BuildTargetTestQueued) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestInProgress struct {
 	Status constant.InProgress `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -714,11 +714,11 @@ func (r *BuildTargetTestInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetTestCompleted struct {
 	Completed BuildTargetTestCompletedCompleted `json:"completed,required"`
 	Status    constant.Completed                `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Completed   resp.Field
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Completed   respjson.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -734,10 +734,10 @@ type BuildTargetTestCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Conclusion  resp.Field
-		ExtraFields map[string]resp.Field
+		Conclusion  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -752,12 +752,12 @@ type BuildListResponse struct {
 	Data       []BuildObject `json:"data,required"`
 	HasMore    bool          `json:"has_more,required"`
 	NextCursor string        `json:"next_cursor"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Data        resp.Field
-		HasMore     resp.Field
-		NextCursor  resp.Field
-		ExtraFields map[string]resp.Field
+		Data        respjson.Field
+		HasMore     respjson.Field
+		NextCursor  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

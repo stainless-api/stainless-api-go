@@ -12,7 +12,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // ProjectBranchService contains methods and other services that help with
@@ -70,15 +70,15 @@ type ProjectBranch struct {
 	Object  ProjectBranchObject `json:"object,required"`
 	Org     string              `json:"org,required"`
 	Project string              `json:"project,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Branch       resp.Field
-		ConfigCommit resp.Field
-		LatestBuild  resp.Field
-		Object       resp.Field
-		Org          resp.Field
-		Project      resp.Field
-		ExtraFields  map[string]resp.Field
+		Branch       respjson.Field
+		ConfigCommit respjson.Field
+		LatestBuild  respjson.Field
+		Object       respjson.Field
+		Org          respjson.Field
+		Project      respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
@@ -92,11 +92,11 @@ func (r *ProjectBranch) UnmarshalJSON(data []byte) error {
 type ProjectBranchConfigCommit struct {
 	Repo ProjectBranchConfigCommitRepo `json:"repo,required"`
 	Sha  string                        `json:"sha,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Repo        resp.Field
-		Sha         resp.Field
-		ExtraFields map[string]resp.Field
+		Repo        respjson.Field
+		Sha         respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -111,12 +111,12 @@ type ProjectBranchConfigCommitRepo struct {
 	Branch string `json:"branch,required"`
 	Name   string `json:"name,required"`
 	Owner  string `json:"owner,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Branch      resp.Field
-		Name        resp.Field
-		Owner       resp.Field
-		ExtraFields map[string]resp.Field
+		Branch      respjson.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // ProjectSnippetService contains methods and other services that help with
@@ -47,10 +47,10 @@ func (r *ProjectSnippetService) NewRequest(ctx context.Context, projectName stri
 
 type ProjectSnippetNewRequestResponse struct {
 	Snippet string `json:"snippet,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Snippet     resp.Field
-		ExtraFields map[string]resp.Field
+		Snippet     respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
