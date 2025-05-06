@@ -14,7 +14,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // ProjectConfigService contains methods and other services that help with
@@ -65,10 +65,10 @@ type ProjectConfigGetResponse map[string]ProjectConfigGetResponseItem
 type ProjectConfigGetResponseItem struct {
 	// The file content
 	Content string `json:"content,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Content     resp.Field
-		ExtraFields map[string]resp.Field
+		Content     respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -84,10 +84,10 @@ type ProjectConfigGuessResponse map[string]ProjectConfigGuessResponseItem
 type ProjectConfigGuessResponseItem struct {
 	// The file content
 	Content string `json:"content,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Content     resp.Field
-		ExtraFields map[string]resp.Field
+		Content     respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // BuildTargetOutputService contains methods and other services that help with
@@ -56,10 +56,10 @@ type BuildTargetOutputGetResponseUnion struct {
 	// This field is from variant [BuildTargetOutputGetResponseObject].
 	Ref  string `json:"ref"`
 	JSON struct {
-		Output resp.Field
-		URL    resp.Field
-		Token  resp.Field
-		Ref    resp.Field
+		Output respjson.Field
+		URL    respjson.Field
+		Token  respjson.Field
+		Ref    respjson.Field
 		raw    string
 	} `json:"-"`
 }
@@ -86,11 +86,11 @@ type BuildTargetOutputGetResponseObject struct {
 	Output string `json:"output,required"`
 	// URL for direct download
 	URL string `json:"url,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Output      resp.Field
-		URL         resp.Field
-		ExtraFields map[string]resp.Field
+		Output      respjson.Field
+		URL         respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

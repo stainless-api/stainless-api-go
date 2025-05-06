@@ -11,7 +11,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // OrgService contains methods and other services that help with interacting with
@@ -58,12 +58,12 @@ type OrgGetResponse struct {
 	// Any of "org".
 	Object OrgGetResponseObject `json:"object,required"`
 	Slug   string               `json:"slug,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		DisplayName resp.Field
-		Object      resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -84,12 +84,12 @@ type OrgListResponse struct {
 	Data       []OrgListResponseData `json:"data,required"`
 	HasMore    bool                  `json:"has_more,required"`
 	NextCursor string                `json:"next_cursor"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Data        resp.Field
-		HasMore     resp.Field
-		NextCursor  resp.Field
-		ExtraFields map[string]resp.Field
+		Data        respjson.Field
+		HasMore     respjson.Field
+		NextCursor  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -105,12 +105,12 @@ type OrgListResponseData struct {
 	// Any of "org".
 	Object string `json:"object,required"`
 	Slug   string `json:"slug,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		DisplayName resp.Field
-		Object      resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
