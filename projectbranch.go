@@ -70,8 +70,7 @@ type ProjectBranch struct {
 	Object  ProjectBranchObject `json:"object,required"`
 	Org     string              `json:"org,required"`
 	Project string              `json:"project,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Branch       resp.Field
 		ConfigCommit resp.Field
@@ -93,8 +92,7 @@ func (r *ProjectBranch) UnmarshalJSON(data []byte) error {
 type ProjectBranchConfigCommit struct {
 	Repo ProjectBranchConfigCommitRepo `json:"repo,required"`
 	Sha  string                        `json:"sha,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Repo        resp.Field
 		Sha         resp.Field
@@ -113,8 +111,7 @@ type ProjectBranchConfigCommitRepo struct {
 	Branch string `json:"branch,required"`
 	Name   string `json:"name,required"`
 	Owner  string `json:"owner,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Branch      resp.Field
 		Name        resp.Field
@@ -143,10 +140,6 @@ type ProjectBranchNewParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectBranchNewParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 func (r ProjectBranchNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectBranchNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
@@ -156,7 +149,3 @@ type ProjectBranchGetParams struct {
 	Project string `path:"project,required" json:"-"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectBranchGetParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }

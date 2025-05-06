@@ -47,8 +47,7 @@ func (r *ProjectSnippetService) NewRequest(ctx context.Context, projectName stri
 
 type ProjectSnippetNewRequestResponse struct {
 	Snippet string `json:"snippet,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Snippet     resp.Field
 		ExtraFields map[string]resp.Field
@@ -71,10 +70,6 @@ type ProjectSnippetNewRequestParams struct {
 	Version ProjectSnippetNewRequestParamsVersion `json:"version,omitzero,required"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectSnippetNewRequestParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 func (r ProjectSnippetNewRequestParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParams
@@ -104,11 +99,6 @@ type ProjectSnippetNewRequestParamsRequest struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectSnippetNewRequestParamsRequest) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
 func (r ProjectSnippetNewRequestParamsRequest) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParamsRequest
 	return param.MarshalObject(r, (*shadow)(&r))
@@ -123,11 +113,6 @@ type ProjectSnippetNewRequestParamsRequestParameter struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectSnippetNewRequestParamsRequestParameter) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
 func (r ProjectSnippetNewRequestParamsRequestParameter) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParamsRequestParameter
 	return param.MarshalObject(r, (*shadow)(&r))
@@ -145,11 +130,6 @@ type ProjectSnippetNewRequestParamsRequestBody struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectSnippetNewRequestParamsRequestBody) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
 func (r ProjectSnippetNewRequestParamsRequestBody) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParamsRequestBody
 	return param.MarshalObject(r, (*shadow)(&r))

@@ -65,8 +65,7 @@ type ProjectConfigGetResponse map[string]ProjectConfigGetResponseItem
 type ProjectConfigGetResponseItem struct {
 	// The file content
 	Content string `json:"content,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Content     resp.Field
 		ExtraFields map[string]resp.Field
@@ -85,8 +84,7 @@ type ProjectConfigGuessResponse map[string]ProjectConfigGuessResponseItem
 type ProjectConfigGuessResponseItem struct {
 	// The file content
 	Content string `json:"content,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Content     resp.Field
 		ExtraFields map[string]resp.Field
@@ -106,10 +104,6 @@ type ProjectConfigGetParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectConfigGetParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 // URLQuery serializes [ProjectConfigGetParams]'s query parameters as `url.Values`.
 func (r ProjectConfigGetParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
@@ -125,10 +119,6 @@ type ProjectConfigGuessParams struct {
 	Branch param.Opt[string] `json:"branch,omitzero"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectConfigGuessParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 func (r ProjectConfigGuessParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectConfigGuessParams

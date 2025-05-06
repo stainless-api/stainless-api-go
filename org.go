@@ -58,8 +58,7 @@ type OrgGetResponse struct {
 	// Any of "org".
 	Object OrgGetResponseObject `json:"object,required"`
 	Slug   string               `json:"slug,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		DisplayName resp.Field
 		Object      resp.Field
@@ -85,8 +84,7 @@ type OrgListResponse struct {
 	Data       []OrgListResponseData `json:"data,required"`
 	HasMore    bool                  `json:"has_more,required"`
 	NextCursor string                `json:"next_cursor"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Data        resp.Field
 		HasMore     resp.Field
@@ -107,8 +105,7 @@ type OrgListResponseData struct {
 	// Any of "org".
 	Object string `json:"object,required"`
 	Slug   string `json:"slug,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		DisplayName resp.Field
 		Object      resp.Field

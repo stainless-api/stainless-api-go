@@ -12,7 +12,6 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
-	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/resp"
 )
 
@@ -87,8 +86,7 @@ type BuildTargetOutputGetResponseObject struct {
 	Output string `json:"output,required"`
 	// URL for direct download
 	URL string `json:"url,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Output      resp.Field
 		URL         resp.Field
@@ -121,10 +119,6 @@ type BuildTargetOutputGetParams struct {
 	Output BuildTargetOutputGetParamsOutput `query:"output,omitzero" json:"-"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildTargetOutputGetParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 // URLQuery serializes [BuildTargetOutputGetParams]'s query parameters as
 // `url.Values`.
