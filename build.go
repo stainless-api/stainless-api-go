@@ -74,8 +74,7 @@ type BuildObject struct {
 	Org     string             `json:"org,required"`
 	Project string             `json:"project,required"`
 	Targets BuildObjectTargets `json:"targets,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		ID           resp.Field
 		ConfigCommit resp.Field
@@ -110,8 +109,7 @@ type BuildObjectTargets struct {
 	Ruby       BuildTarget `json:"ruby"`
 	Terraform  BuildTarget `json:"terraform"`
 	Typescript BuildTarget `json:"typescript"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Cli         resp.Field
 		Go          resp.Field
@@ -141,8 +139,7 @@ type BuildTarget struct {
 	// Any of "not_started", "codegen", "postgen", "completed".
 	Status BuildTargetStatus    `json:"status,required"`
 	Test   BuildTargetTestUnion `json:"test,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Commit      resp.Field
 		Lint        resp.Field
@@ -243,8 +240,7 @@ func (r *BuildTargetCommitUnion) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitNotStarted struct {
 	Status constant.NotStarted `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field
@@ -260,8 +256,7 @@ func (r *BuildTargetCommitNotStarted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitQueued struct {
 	Status constant.Queued `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field
@@ -277,8 +272,7 @@ func (r *BuildTargetCommitQueued) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitInProgress struct {
 	Status constant.InProgress `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field
@@ -295,8 +289,7 @@ func (r *BuildTargetCommitInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetCommitCompleted struct {
 	Completed BuildTargetCommitCompletedCompleted `json:"completed,required"`
 	Status    constant.Completed                  `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Completed   resp.Field
 		Status      resp.Field
@@ -318,8 +311,7 @@ type BuildTargetCommitCompletedCompleted struct {
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion      string                                             `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Commit          resp.Field
 		Conclusion      resp.Field
@@ -338,8 +330,7 @@ func (r *BuildTargetCommitCompletedCompleted) UnmarshalJSON(data []byte) error {
 type BuildTargetCommitCompletedCompletedCommit struct {
 	Repo BuildTargetCommitCompletedCompletedCommitRepo `json:"repo,required"`
 	Sha  string                                        `json:"sha,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Repo        resp.Field
 		Sha         resp.Field
@@ -358,8 +349,7 @@ type BuildTargetCommitCompletedCompletedCommitRepo struct {
 	Branch string `json:"branch,required"`
 	Name   string `json:"name,required"`
 	Owner  string `json:"owner,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Branch      resp.Field
 		Name        resp.Field
@@ -378,8 +368,7 @@ func (r *BuildTargetCommitCompletedCompletedCommitRepo) UnmarshalJSON(data []byt
 type BuildTargetCommitCompletedCompletedMergeConflictPr struct {
 	Number float64                                                `json:"number,required"`
 	Repo   BuildTargetCommitCompletedCompletedMergeConflictPrRepo `json:"repo,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Number      resp.Field
 		Repo        resp.Field
@@ -397,8 +386,7 @@ func (r *BuildTargetCommitCompletedCompletedMergeConflictPr) UnmarshalJSON(data 
 type BuildTargetCommitCompletedCompletedMergeConflictPrRepo struct {
 	Name  string `json:"name,required"`
 	Owner string `json:"owner,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Name        resp.Field
 		Owner       resp.Field
@@ -496,8 +484,7 @@ func (r *BuildTargetLintUnion) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintNotStarted struct {
 	Status constant.NotStarted `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field
@@ -513,8 +500,7 @@ func (r *BuildTargetLintNotStarted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintQueued struct {
 	Status constant.Queued `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field
@@ -530,8 +516,7 @@ func (r *BuildTargetLintQueued) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintInProgress struct {
 	Status constant.InProgress `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field
@@ -548,8 +533,7 @@ func (r *BuildTargetLintInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetLintCompleted struct {
 	Completed BuildTargetLintCompletedCompleted `json:"completed,required"`
 	Status    constant.Completed                `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Completed   resp.Field
 		Status      resp.Field
@@ -569,8 +553,7 @@ type BuildTargetLintCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Conclusion  resp.Field
 		ExtraFields map[string]resp.Field
@@ -682,8 +665,7 @@ func (r *BuildTargetTestUnion) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestNotStarted struct {
 	Status constant.NotStarted `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field
@@ -699,8 +681,7 @@ func (r *BuildTargetTestNotStarted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestQueued struct {
 	Status constant.Queued `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field
@@ -716,8 +697,7 @@ func (r *BuildTargetTestQueued) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestInProgress struct {
 	Status constant.InProgress `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field
@@ -734,8 +714,7 @@ func (r *BuildTargetTestInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetTestCompleted struct {
 	Completed BuildTargetTestCompletedCompleted `json:"completed,required"`
 	Status    constant.Completed                `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Completed   resp.Field
 		Status      resp.Field
@@ -755,8 +734,7 @@ type BuildTargetTestCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Conclusion  resp.Field
 		ExtraFields map[string]resp.Field
@@ -774,8 +752,7 @@ type BuildListResponse struct {
 	Data       []BuildObject `json:"data,required"`
 	HasMore    bool          `json:"has_more,required"`
 	NextCursor string        `json:"next_cursor"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Data        resp.Field
 		HasMore     resp.Field
@@ -813,10 +790,6 @@ type BuildNewParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildNewParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 func (r BuildNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow BuildNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
@@ -831,9 +804,6 @@ type BuildNewParamsRevisionUnion struct {
 	paramUnion
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (u BuildNewParamsRevisionUnion) IsPresent() bool { return !param.IsOmitted(u) && !u.IsNull() }
 func (u BuildNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion[BuildNewParamsRevisionUnion](u.OfString, u.OfBuildNewsRevisionMapItemMap)
 }
@@ -854,9 +824,6 @@ type BuildNewParamsRevisionMapItem struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildNewParamsRevisionMapItem) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 func (r BuildNewParamsRevisionMapItem) MarshalJSON() (data []byte, err error) {
 	type shadow BuildNewParamsRevisionMapItem
 	return param.MarshalObject(r, (*shadow)(&r))
@@ -876,10 +843,6 @@ type BuildListParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildListParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 // URLQuery serializes [BuildListParams]'s query parameters as `url.Values`.
 func (r BuildListParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
@@ -897,10 +860,6 @@ type BuildListParamsRevisionUnion struct {
 	paramUnion
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (u BuildListParamsRevisionUnion) IsPresent() bool { return !param.IsOmitted(u) && !u.IsNull() }
-
 func (u *BuildListParamsRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
@@ -916,10 +875,6 @@ type BuildListParamsRevisionMapItem struct {
 	Hash string `query:"hash,required" json:"-"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildListParamsRevisionMapItem) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 // URLQuery serializes [BuildListParamsRevisionMapItem]'s query parameters as
 // `url.Values`.
