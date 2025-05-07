@@ -144,6 +144,9 @@ func (r ProjectBranchNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectBranchNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *ProjectBranchNewParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type ProjectBranchGetParams struct {
 	Project string `path:"project,required" json:"-"`

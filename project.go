@@ -190,6 +190,9 @@ func (r ProjectUpdateParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectUpdateParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *ProjectUpdateParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type ProjectListParams struct {
 	Org string `query:"org,required" json:"-"`
