@@ -75,6 +75,9 @@ func (r ProjectSnippetNewRequestParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *ProjectSnippetNewRequestParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type ProjectSnippetNewRequestParamsLanguage string
 
@@ -103,6 +106,9 @@ func (r ProjectSnippetNewRequestParamsRequest) MarshalJSON() (data []byte, err e
 	type shadow ProjectSnippetNewRequestParamsRequest
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *ProjectSnippetNewRequestParamsRequest) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 // The properties In, Name are required.
 type ProjectSnippetNewRequestParamsRequestParameter struct {
@@ -117,10 +123,13 @@ func (r ProjectSnippetNewRequestParamsRequestParameter) MarshalJSON() (data []by
 	type shadow ProjectSnippetNewRequestParamsRequestParameter
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *ProjectSnippetNewRequestParamsRequestParameter) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 func init() {
 	apijson.RegisterFieldValidator[ProjectSnippetNewRequestParamsRequestParameter](
-		"In", false, "path", "query", "header", "cookie",
+		"in", "path", "query", "header", "cookie",
 	)
 }
 
@@ -133,6 +142,9 @@ type ProjectSnippetNewRequestParamsRequestBody struct {
 func (r ProjectSnippetNewRequestParamsRequestBody) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParamsRequestBody
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectSnippetNewRequestParamsRequestBody) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type ProjectSnippetNewRequestParamsVersion string

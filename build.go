@@ -794,6 +794,9 @@ func (r BuildNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow BuildNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *BuildNewParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 // Only one field can be non-zero.
 //
@@ -806,6 +809,9 @@ type BuildNewParamsRevisionUnion struct {
 
 func (u BuildNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
 	return param.MarshalUnion[BuildNewParamsRevisionUnion](u.OfString, u.OfBuildNewsRevisionMapItemMap)
+}
+func (u *BuildNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
 }
 
 func (u *BuildNewParamsRevisionUnion) asAny() any {
@@ -827,6 +833,9 @@ type BuildNewParamsRevisionMapItem struct {
 func (r BuildNewParamsRevisionMapItem) MarshalJSON() (data []byte, err error) {
 	type shadow BuildNewParamsRevisionMapItem
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildNewParamsRevisionMapItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type BuildListParams struct {

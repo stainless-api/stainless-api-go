@@ -124,3 +124,6 @@ func (r ProjectConfigGuessParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectConfigGuessParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *ProjectConfigGuessParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
