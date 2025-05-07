@@ -1,4 +1,4 @@
-package param
+package paramutil
 
 import (
 	"github.com/stainless-api/stainless-api-go/internal/encoding/json/sentinel"

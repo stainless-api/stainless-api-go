@@ -11,7 +11,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // OrgService contains methods and other services that help with interacting with
@@ -58,13 +58,12 @@ type OrgGetResponse struct {
 	// Any of "org".
 	Object OrgGetResponseObject `json:"object,required"`
 	Slug   string               `json:"slug,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		DisplayName resp.Field
-		Object      resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -85,13 +84,12 @@ type OrgListResponse struct {
 	Data       []OrgListResponseData `json:"data,required"`
 	HasMore    bool                  `json:"has_more,required"`
 	NextCursor string                `json:"next_cursor"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Data        resp.Field
-		HasMore     resp.Field
-		NextCursor  resp.Field
-		ExtraFields map[string]resp.Field
+		Data        respjson.Field
+		HasMore     respjson.Field
+		NextCursor  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -107,13 +105,12 @@ type OrgListResponseData struct {
 	// Any of "org".
 	Object string `json:"object,required"`
 	Slug   string `json:"slug,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		DisplayName resp.Field
-		Object      resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

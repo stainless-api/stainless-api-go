@@ -14,7 +14,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // ProjectService contains methods and other services that help with interacting
@@ -81,15 +81,14 @@ type ProjectGetResponse struct {
 	Object ProjectGetResponseObject `json:"object,required"`
 	Org    string                   `json:"org,required"`
 	Slug   string                   `json:"slug,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ConfigRepo  resp.Field
-		DisplayName resp.Field
-		Object      resp.Field
-		Org         resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -113,15 +112,14 @@ type ProjectUpdateResponse struct {
 	Object ProjectUpdateResponseObject `json:"object,required"`
 	Org    string                      `json:"org,required"`
 	Slug   string                      `json:"slug,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ConfigRepo  resp.Field
-		DisplayName resp.Field
-		Object      resp.Field
-		Org         resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -142,13 +140,12 @@ type ProjectListResponse struct {
 	Data       []ProjectListResponseData `json:"data,required"`
 	HasMore    bool                      `json:"has_more,required"`
 	NextCursor string                    `json:"next_cursor"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Data        resp.Field
-		HasMore     resp.Field
-		NextCursor  resp.Field
-		ExtraFields map[string]resp.Field
+		Data        respjson.Field
+		HasMore     respjson.Field
+		NextCursor  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -166,15 +163,14 @@ type ProjectListResponseData struct {
 	Object string `json:"object,required"`
 	Org    string `json:"org,required"`
 	Slug   string `json:"slug,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ConfigRepo  resp.Field
-		DisplayName resp.Field
-		Object      resp.Field
-		Org         resp.Field
-		Slug        resp.Field
-		ExtraFields map[string]resp.Field
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -190,13 +186,12 @@ type ProjectUpdateParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectUpdateParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 func (r ProjectUpdateParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectUpdateParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectUpdateParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type ProjectListParams struct {
@@ -207,10 +202,6 @@ type ProjectListParams struct {
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectListParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 // URLQuery serializes [ProjectListParams]'s query parameters as `url.Values`.
 func (r ProjectListParams) URLQuery() (v url.Values, err error) {
