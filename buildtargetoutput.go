@@ -107,7 +107,7 @@ type BuildTargetOutputGetParams struct {
 	// SDK language target name
 	//
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli".
+	// "terraform", "cli", "php", "csharp".
 	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero,required" json:"-"`
 	// Type of output to download: source code
 	//
@@ -142,6 +142,8 @@ const (
 	BuildTargetOutputGetParamsTargetRuby       BuildTargetOutputGetParamsTarget = "ruby"
 	BuildTargetOutputGetParamsTargetTerraform  BuildTargetOutputGetParamsTarget = "terraform"
 	BuildTargetOutputGetParamsTargetCli        BuildTargetOutputGetParamsTarget = "cli"
+	BuildTargetOutputGetParamsTargetPhp        BuildTargetOutputGetParamsTarget = "php"
+	BuildTargetOutputGetParamsTargetCsharp     BuildTargetOutputGetParamsTarget = "csharp"
 )
 
 // Type of output to download: source code
