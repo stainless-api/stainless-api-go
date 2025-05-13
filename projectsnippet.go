@@ -12,7 +12,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // ProjectSnippetService contains methods and other services that help with
@@ -47,11 +47,10 @@ func (r *ProjectSnippetService) NewRequest(ctx context.Context, projectName stri
 
 type ProjectSnippetNewRequestResponse struct {
 	Snippet string `json:"snippet,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Snippet     resp.Field
-		ExtraFields map[string]resp.Field
+		Snippet     respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -64,7 +63,7 @@ func (r *ProjectSnippetNewRequestResponse) UnmarshalJSON(data []byte) error {
 
 type ProjectSnippetNewRequestParams struct {
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli".
+	// "terraform", "cli", "php", "csharp".
 	Language ProjectSnippetNewRequestParamsLanguage `json:"language,omitzero,required"`
 	Request  ProjectSnippetNewRequestParamsRequest  `json:"request,omitzero,required"`
 	// Any of "next", "latest_released".
@@ -72,13 +71,12 @@ type ProjectSnippetNewRequestParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectSnippetNewRequestParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 func (r ProjectSnippetNewRequestParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectSnippetNewRequestParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type ProjectSnippetNewRequestParamsLanguage string
@@ -93,6 +91,8 @@ const (
 	ProjectSnippetNewRequestParamsLanguageRuby       ProjectSnippetNewRequestParamsLanguage = "ruby"
 	ProjectSnippetNewRequestParamsLanguageTerraform  ProjectSnippetNewRequestParamsLanguage = "terraform"
 	ProjectSnippetNewRequestParamsLanguageCli        ProjectSnippetNewRequestParamsLanguage = "cli"
+	ProjectSnippetNewRequestParamsLanguagePhp        ProjectSnippetNewRequestParamsLanguage = "php"
+	ProjectSnippetNewRequestParamsLanguageCsharp     ProjectSnippetNewRequestParamsLanguage = "csharp"
 )
 
 // The properties Method, Parameters, Path are required.
@@ -104,14 +104,12 @@ type ProjectSnippetNewRequestParamsRequest struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectSnippetNewRequestParamsRequest) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
 func (r ProjectSnippetNewRequestParamsRequest) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParamsRequest
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectSnippetNewRequestParamsRequest) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // The properties In, Name are required.
@@ -123,19 +121,17 @@ type ProjectSnippetNewRequestParamsRequestParameter struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectSnippetNewRequestParamsRequestParameter) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
 func (r ProjectSnippetNewRequestParamsRequestParameter) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParamsRequestParameter
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *ProjectSnippetNewRequestParamsRequestParameter) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 func init() {
 	apijson.RegisterFieldValidator[ProjectSnippetNewRequestParamsRequestParameter](
-		"In", false, "path", "query", "header", "cookie",
+		"in", "path", "query", "header", "cookie",
 	)
 }
 
@@ -145,14 +141,12 @@ type ProjectSnippetNewRequestParamsRequestBody struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectSnippetNewRequestParamsRequestBody) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
 func (r ProjectSnippetNewRequestParamsRequestBody) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectSnippetNewRequestParamsRequestBody
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectSnippetNewRequestParamsRequestBody) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type ProjectSnippetNewRequestParamsVersion string

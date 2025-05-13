@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.4.0 (2025-05-13)
+
+Full Changelog: [v0.3.0...v0.4.0](https://github.com/stainless-api/stainless-api-go/compare/v0.3.0...v0.4.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** rename resp package
+* **client:** improve core function names
+* **client:** improve union variant names
+
+### Features
+
+* **api:** add build compare to v0 ([b74be33](https://github.com/stainless-api/stainless-api-go/commit/b74be333a6635561427ad62806d892a161aad6c3))
+* **api:** enable macos publishing ([dfd46df](https://github.com/stainless-api/stainless-api-go/commit/dfd46df667ed6f23d4eb602df2db236326da23bc))
+* **client:** experimental support for unmarshalling into param structs ([304a75b](https://github.com/stainless-api/stainless-api-go/commit/304a75b5b6ea718fdd45f829bfa96d7f611b1e43))
+* **client:** rename resp package ([d554f47](https://github.com/stainless-api/stainless-api-go/commit/d554f478582782eb50b2305d8d1233c2908b07c2))
+
+
+### Bug Fixes
+
+* **client:** clean up reader resources ([69e116e](https://github.com/stainless-api/stainless-api-go/commit/69e116e4e92e5906258971e6394e2b0869663135))
+* **client:** correctly update body in WithJSONSet ([fed7230](https://github.com/stainless-api/stainless-api-go/commit/fed72307ffa68a02c7e8241c0841d19f6f46c63a))
+* **client:** improve core function names ([6a55bff](https://github.com/stainless-api/stainless-api-go/commit/6a55bff84360c6b5f45261d621fd3a7c0b55a2b4))
+* **client:** improve docs ([e0221f2](https://github.com/stainless-api/stainless-api-go/commit/e0221f2fa6ff755f2b71d3f5f3920999b205e107))
+* **client:** improve union variant names ([e555b82](https://github.com/stainless-api/stainless-api-go/commit/e555b826254cde0408443d1cb0a48b693638c060))
+* **client:** include path for type names in example code ([e36155b](https://github.com/stainless-api/stainless-api-go/commit/e36155b7dbd43f6ed920943aa9f208a2b0de0854))
+* **client:** unmarshal responses properly ([4894832](https://github.com/stainless-api/stainless-api-go/commit/489483217aa805f4a093c9492a5dff2b3a305480))
+* update request schema for Postman webhook ([49e4069](https://github.com/stainless-api/stainless-api-go/commit/49e406984f4915919f9c921aeb27c74d6ab5c6e1))
+
+
+### Chores
+
+* bump go sdk version ([bbb906c](https://github.com/stainless-api/stainless-api-go/commit/bbb906cea4dd3065a0fe32f74e15f0f9187144ce))
+* **docs:** update respjson package name ([2054dd0](https://github.com/stainless-api/stainless-api-go/commit/2054dd0c41817c5a29068cf5992f48941b5d4626))
+
 ## 0.3.0 (2025-04-30)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/stainless-api/stainless-api-go/compare/v0.2.0...v0.3.0)

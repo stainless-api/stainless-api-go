@@ -12,8 +12,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
-	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // BuildTargetOutputService contains methods and other services that help with
@@ -57,10 +56,10 @@ type BuildTargetOutputGetResponseUnion struct {
 	// This field is from variant [BuildTargetOutputGetResponseObject].
 	Ref  string `json:"ref"`
 	JSON struct {
-		Output resp.Field
-		URL    resp.Field
-		Token  resp.Field
-		Ref    resp.Field
+		Output respjson.Field
+		URL    respjson.Field
+		Token  respjson.Field
+		Ref    respjson.Field
 		raw    string
 	} `json:"-"`
 }
@@ -70,7 +69,7 @@ func (u BuildTargetOutputGetResponseUnion) AsBuildTargetOutputGetResponseObject(
 	return
 }
 
-func (u BuildTargetOutputGetResponseUnion) AsunionMember2() (v BuildTargetOutputGetResponseObject) {
+func (u BuildTargetOutputGetResponseUnion) AsVariant2() (v BuildTargetOutputGetResponseObject) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
@@ -87,12 +86,11 @@ type BuildTargetOutputGetResponseObject struct {
 	Output string `json:"output,required"`
 	// URL for direct download
 	URL string `json:"url,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Output      resp.Field
-		URL         resp.Field
-		ExtraFields map[string]resp.Field
+		Output      respjson.Field
+		URL         respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -109,7 +107,7 @@ type BuildTargetOutputGetParams struct {
 	// SDK language target name
 	//
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli".
+	// "terraform", "cli", "php", "csharp".
 	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero,required" json:"-"`
 	// Type of output to download: source code
 	//
@@ -121,10 +119,6 @@ type BuildTargetOutputGetParams struct {
 	Output BuildTargetOutputGetParamsOutput `query:"output,omitzero" json:"-"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildTargetOutputGetParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 // URLQuery serializes [BuildTargetOutputGetParams]'s query parameters as
 // `url.Values`.
@@ -148,6 +142,8 @@ const (
 	BuildTargetOutputGetParamsTargetRuby       BuildTargetOutputGetParamsTarget = "ruby"
 	BuildTargetOutputGetParamsTargetTerraform  BuildTargetOutputGetParamsTarget = "terraform"
 	BuildTargetOutputGetParamsTargetCli        BuildTargetOutputGetParamsTarget = "cli"
+	BuildTargetOutputGetParamsTargetPhp        BuildTargetOutputGetParamsTarget = "php"
+	BuildTargetOutputGetParamsTargetCsharp     BuildTargetOutputGetParamsTarget = "csharp"
 )
 
 // Type of output to download: source code

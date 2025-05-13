@@ -15,7 +15,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 	"github.com/stainless-api/stainless-api-go/shared/constant"
 )
 
@@ -66,6 +66,14 @@ func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...
 	return
 }
 
+// Creates two builds whose outputs can be compared directly
+func (r *BuildService) Compare(ctx context.Context, body BuildCompareParams, opts ...option.RequestOption) (res *BuildCompareResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "v0/builds/compare"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
 type BuildObject struct {
 	ID           string `json:"id,required"`
 	ConfigCommit string `json:"config_commit,required"`
@@ -74,16 +82,15 @@ type BuildObject struct {
 	Org     string             `json:"org,required"`
 	Project string             `json:"project,required"`
 	Targets BuildObjectTargets `json:"targets,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID           resp.Field
-		ConfigCommit resp.Field
-		Object       resp.Field
-		Org          resp.Field
-		Project      resp.Field
-		Targets      resp.Field
-		ExtraFields  map[string]resp.Field
+		ID           respjson.Field
+		ConfigCommit respjson.Field
+		Object       respjson.Field
+		Org          respjson.Field
+		Project      respjson.Field
+		Targets      respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
@@ -102,27 +109,30 @@ const (
 
 type BuildObjectTargets struct {
 	Cli        BuildTarget `json:"cli"`
+	Csharp     BuildTarget `json:"csharp"`
 	Go         BuildTarget `json:"go"`
 	Java       BuildTarget `json:"java"`
 	Kotlin     BuildTarget `json:"kotlin"`
 	Node       BuildTarget `json:"node"`
+	Php        BuildTarget `json:"php"`
 	Python     BuildTarget `json:"python"`
 	Ruby       BuildTarget `json:"ruby"`
 	Terraform  BuildTarget `json:"terraform"`
 	Typescript BuildTarget `json:"typescript"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Cli         resp.Field
-		Go          resp.Field
-		Java        resp.Field
-		Kotlin      resp.Field
-		Node        resp.Field
-		Python      resp.Field
-		Ruby        resp.Field
-		Terraform   resp.Field
-		Typescript  resp.Field
-		ExtraFields map[string]resp.Field
+		Cli         respjson.Field
+		Csharp      respjson.Field
+		Go          respjson.Field
+		Java        respjson.Field
+		Kotlin      respjson.Field
+		Node        respjson.Field
+		Php         respjson.Field
+		Python      respjson.Field
+		Ruby        respjson.Field
+		Terraform   respjson.Field
+		Typescript  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -141,15 +151,14 @@ type BuildTarget struct {
 	// Any of "not_started", "codegen", "postgen", "completed".
 	Status BuildTargetStatus    `json:"status,required"`
 	Test   BuildTargetTestUnion `json:"test,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Commit      resp.Field
-		Lint        resp.Field
-		Object      resp.Field
-		Status      resp.Field
-		Test        resp.Field
-		ExtraFields map[string]resp.Field
+		Commit      respjson.Field
+		Lint        respjson.Field
+		Object      respjson.Field
+		Status      respjson.Field
+		Test        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -173,8 +182,8 @@ type BuildTargetCommitUnion struct {
 	// This field is from variant [BuildTargetCommitCompleted].
 	Completed BuildTargetCommitCompletedCompleted `json:"completed"`
 	JSON      struct {
-		Status    resp.Field
-		Completed resp.Field
+		Status    respjson.Field
+		Completed respjson.Field
 		raw       string
 	} `json:"-"`
 }
@@ -193,10 +202,10 @@ func (BuildTargetCommitCompleted) implBuildTargetCommitUnion()  {}
 // Use the following switch statement to find the correct variant
 //
 //	switch variant := BuildTargetCommitUnion.AsAny().(type) {
-//	case BuildTargetCommitNotStarted:
-//	case BuildTargetCommitQueued:
-//	case BuildTargetCommitInProgress:
-//	case BuildTargetCommitCompleted:
+//	case stainlessv0.BuildTargetCommitNotStarted:
+//	case stainlessv0.BuildTargetCommitQueued:
+//	case stainlessv0.BuildTargetCommitInProgress:
+//	case stainlessv0.BuildTargetCommitCompleted:
 //	default:
 //	  fmt.Errorf("no variant present")
 //	}
@@ -243,11 +252,10 @@ func (r *BuildTargetCommitUnion) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitNotStarted struct {
 	Status constant.NotStarted `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -260,11 +268,10 @@ func (r *BuildTargetCommitNotStarted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitQueued struct {
 	Status constant.Queued `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -277,11 +284,10 @@ func (r *BuildTargetCommitQueued) UnmarshalJSON(data []byte) error {
 
 type BuildTargetCommitInProgress struct {
 	Status constant.InProgress `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -295,12 +301,11 @@ func (r *BuildTargetCommitInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetCommitCompleted struct {
 	Completed BuildTargetCommitCompletedCompleted `json:"completed,required"`
 	Status    constant.Completed                  `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Completed   resp.Field
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Completed   respjson.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -318,13 +323,12 @@ type BuildTargetCommitCompletedCompleted struct {
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion      string                                             `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Commit          resp.Field
-		Conclusion      resp.Field
-		MergeConflictPr resp.Field
-		ExtraFields     map[string]resp.Field
+		Commit          respjson.Field
+		Conclusion      respjson.Field
+		MergeConflictPr respjson.Field
+		ExtraFields     map[string]respjson.Field
 		raw             string
 	} `json:"-"`
 }
@@ -338,12 +342,11 @@ func (r *BuildTargetCommitCompletedCompleted) UnmarshalJSON(data []byte) error {
 type BuildTargetCommitCompletedCompletedCommit struct {
 	Repo BuildTargetCommitCompletedCompletedCommitRepo `json:"repo,required"`
 	Sha  string                                        `json:"sha,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Repo        resp.Field
-		Sha         resp.Field
-		ExtraFields map[string]resp.Field
+		Repo        respjson.Field
+		Sha         respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -358,13 +361,12 @@ type BuildTargetCommitCompletedCompletedCommitRepo struct {
 	Branch string `json:"branch,required"`
 	Name   string `json:"name,required"`
 	Owner  string `json:"owner,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Branch      resp.Field
-		Name        resp.Field
-		Owner       resp.Field
-		ExtraFields map[string]resp.Field
+		Branch      respjson.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -378,12 +380,11 @@ func (r *BuildTargetCommitCompletedCompletedCommitRepo) UnmarshalJSON(data []byt
 type BuildTargetCommitCompletedCompletedMergeConflictPr struct {
 	Number float64                                                `json:"number,required"`
 	Repo   BuildTargetCommitCompletedCompletedMergeConflictPrRepo `json:"repo,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Number      resp.Field
-		Repo        resp.Field
-		ExtraFields map[string]resp.Field
+		Number      respjson.Field
+		Repo        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -397,12 +398,11 @@ func (r *BuildTargetCommitCompletedCompletedMergeConflictPr) UnmarshalJSON(data 
 type BuildTargetCommitCompletedCompletedMergeConflictPrRepo struct {
 	Name  string `json:"name,required"`
 	Owner string `json:"owner,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Name        resp.Field
-		Owner       resp.Field
-		ExtraFields map[string]resp.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -426,8 +426,8 @@ type BuildTargetLintUnion struct {
 	// This field is from variant [BuildTargetLintCompleted].
 	Completed BuildTargetLintCompletedCompleted `json:"completed"`
 	JSON      struct {
-		Status    resp.Field
-		Completed resp.Field
+		Status    respjson.Field
+		Completed respjson.Field
 		raw       string
 	} `json:"-"`
 }
@@ -446,10 +446,10 @@ func (BuildTargetLintCompleted) implBuildTargetLintUnion()  {}
 // Use the following switch statement to find the correct variant
 //
 //	switch variant := BuildTargetLintUnion.AsAny().(type) {
-//	case BuildTargetLintNotStarted:
-//	case BuildTargetLintQueued:
-//	case BuildTargetLintInProgress:
-//	case BuildTargetLintCompleted:
+//	case stainlessv0.BuildTargetLintNotStarted:
+//	case stainlessv0.BuildTargetLintQueued:
+//	case stainlessv0.BuildTargetLintInProgress:
+//	case stainlessv0.BuildTargetLintCompleted:
 //	default:
 //	  fmt.Errorf("no variant present")
 //	}
@@ -496,11 +496,10 @@ func (r *BuildTargetLintUnion) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintNotStarted struct {
 	Status constant.NotStarted `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -513,11 +512,10 @@ func (r *BuildTargetLintNotStarted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintQueued struct {
 	Status constant.Queued `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -530,11 +528,10 @@ func (r *BuildTargetLintQueued) UnmarshalJSON(data []byte) error {
 
 type BuildTargetLintInProgress struct {
 	Status constant.InProgress `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -548,12 +545,11 @@ func (r *BuildTargetLintInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetLintCompleted struct {
 	Completed BuildTargetLintCompletedCompleted `json:"completed,required"`
 	Status    constant.Completed                `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Completed   resp.Field
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Completed   respjson.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -569,11 +565,10 @@ type BuildTargetLintCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Conclusion  resp.Field
-		ExtraFields map[string]resp.Field
+		Conclusion  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -612,8 +607,8 @@ type BuildTargetTestUnion struct {
 	// This field is from variant [BuildTargetTestCompleted].
 	Completed BuildTargetTestCompletedCompleted `json:"completed"`
 	JSON      struct {
-		Status    resp.Field
-		Completed resp.Field
+		Status    respjson.Field
+		Completed respjson.Field
 		raw       string
 	} `json:"-"`
 }
@@ -632,10 +627,10 @@ func (BuildTargetTestCompleted) implBuildTargetTestUnion()  {}
 // Use the following switch statement to find the correct variant
 //
 //	switch variant := BuildTargetTestUnion.AsAny().(type) {
-//	case BuildTargetTestNotStarted:
-//	case BuildTargetTestQueued:
-//	case BuildTargetTestInProgress:
-//	case BuildTargetTestCompleted:
+//	case stainlessv0.BuildTargetTestNotStarted:
+//	case stainlessv0.BuildTargetTestQueued:
+//	case stainlessv0.BuildTargetTestInProgress:
+//	case stainlessv0.BuildTargetTestCompleted:
 //	default:
 //	  fmt.Errorf("no variant present")
 //	}
@@ -682,11 +677,10 @@ func (r *BuildTargetTestUnion) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestNotStarted struct {
 	Status constant.NotStarted `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -699,11 +693,10 @@ func (r *BuildTargetTestNotStarted) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestQueued struct {
 	Status constant.Queued `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -716,11 +709,10 @@ func (r *BuildTargetTestQueued) UnmarshalJSON(data []byte) error {
 
 type BuildTargetTestInProgress struct {
 	Status constant.InProgress `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -734,12 +726,11 @@ func (r *BuildTargetTestInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetTestCompleted struct {
 	Completed BuildTargetTestCompletedCompleted `json:"completed,required"`
 	Status    constant.Completed                `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Completed   resp.Field
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Completed   respjson.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -755,11 +746,10 @@ type BuildTargetTestCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Conclusion  resp.Field
-		ExtraFields map[string]resp.Field
+		Conclusion  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -774,13 +764,12 @@ type BuildListResponse struct {
 	Data       []BuildObject `json:"data,required"`
 	HasMore    bool          `json:"has_more,required"`
 	NextCursor string        `json:"next_cursor"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Data        resp.Field
-		HasMore     resp.Field
-		NextCursor  resp.Field
-		ExtraFields map[string]resp.Field
+		Data        respjson.Field
+		HasMore     respjson.Field
+		NextCursor  respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -788,6 +777,24 @@ type BuildListResponse struct {
 // Returns the unmodified JSON received from the API
 func (r BuildListResponse) RawJSON() string { return r.JSON.raw }
 func (r *BuildListResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildCompareResponse struct {
+	Base BuildObject `json:"base,required"`
+	Head BuildObject `json:"head,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Base        respjson.Field
+		Head        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildCompareResponse) RawJSON() string { return r.JSON.raw }
+func (r *BuildCompareResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -808,41 +815,40 @@ type BuildNewParams struct {
 	// will be built.
 	//
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli".
+	// "terraform", "cli", "php", "csharp".
 	Targets []string `json:"targets,omitzero"`
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildNewParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 func (r BuildNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow BuildNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildNewParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Only one field can be non-zero.
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildNewParamsRevisionUnion struct {
-	OfString               param.Opt[string]                        `json:",omitzero,inline"`
-	OfBuildNewsRevisionMap map[string]BuildNewParamsRevisionMapItem `json:",omitzero,inline"`
+	OfString                      param.Opt[string]                        `json:",omitzero,inline"`
+	OfBuildNewsRevisionMapItemMap map[string]BuildNewParamsRevisionMapItem `json:",omitzero,inline"`
 	paramUnion
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (u BuildNewParamsRevisionUnion) IsPresent() bool { return !param.IsOmitted(u) && !u.IsNull() }
 func (u BuildNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[BuildNewParamsRevisionUnion](u.OfString, u.OfBuildNewsRevisionMap)
+	return param.MarshalUnion[BuildNewParamsRevisionUnion](u.OfString, u.OfBuildNewsRevisionMapItemMap)
+}
+func (u *BuildNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
 }
 
 func (u *BuildNewParamsRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildNewsRevisionMap) {
-		return &u.OfBuildNewsRevisionMap
+	} else if !param.IsOmitted(u.OfBuildNewsRevisionMapItemMap) {
+		return &u.OfBuildNewsRevisionMapItemMap
 	}
 	return nil
 }
@@ -854,12 +860,12 @@ type BuildNewParamsRevisionMapItem struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildNewParamsRevisionMapItem) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 func (r BuildNewParamsRevisionMapItem) MarshalJSON() (data []byte, err error) {
 	type shadow BuildNewParamsRevisionMapItem
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildNewParamsRevisionMapItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type BuildListParams struct {
@@ -876,10 +882,6 @@ type BuildListParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildListParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 // URLQuery serializes [BuildListParams]'s query parameters as `url.Values`.
 func (r BuildListParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
@@ -892,20 +894,16 @@ func (r BuildListParams) URLQuery() (v url.Values, err error) {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildListParamsRevisionUnion struct {
-	OfString                param.Opt[string]                         `query:",omitzero,inline"`
-	OfBuildListsRevisionMap map[string]BuildListParamsRevisionMapItem `query:",omitzero,inline"`
+	OfString                       param.Opt[string]                         `query:",omitzero,inline"`
+	OfBuildListsRevisionMapItemMap map[string]BuildListParamsRevisionMapItem `query:",omitzero,inline"`
 	paramUnion
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (u BuildListParamsRevisionUnion) IsPresent() bool { return !param.IsOmitted(u) && !u.IsNull() }
 
 func (u *BuildListParamsRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildListsRevisionMap) {
-		return &u.OfBuildListsRevisionMap
+	} else if !param.IsOmitted(u.OfBuildListsRevisionMapItemMap) {
+		return &u.OfBuildListsRevisionMapItemMap
 	}
 	return nil
 }
@@ -917,10 +915,6 @@ type BuildListParamsRevisionMapItem struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f BuildListParamsRevisionMapItem) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 // URLQuery serializes [BuildListParamsRevisionMapItem]'s query parameters as
 // `url.Values`.
 func (r BuildListParamsRevisionMapItem) URLQuery() (v url.Values, err error) {
@@ -928,4 +922,152 @@ func (r BuildListParamsRevisionMapItem) URLQuery() (v url.Values, err error) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type BuildCompareParams struct {
+	// Parameters for the base build
+	Base BuildCompareParamsBase `json:"base,omitzero,required"`
+	// Parameters for the head build
+	Head BuildCompareParamsHead `json:"head,omitzero,required"`
+	// Project name
+	Project string `json:"project,required"`
+	// Optional list of SDK targets to build. If not specified, all configured targets
+	// will be built.
+	//
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,omitzero"`
+	paramObj
+}
+
+func (r BuildCompareParams) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Parameters for the base build
+//
+// The property Revision is required.
+type BuildCompareParamsBase struct {
+	// Specifies what to build: a branch name, a commit SHA, or file contents
+	Revision BuildCompareParamsBaseRevisionUnion `json:"revision,omitzero,required"`
+	// Optional branch to use. If not specified, defaults to "main". When using a
+	// branch name as revision, this must match or be omitted.
+	Branch param.Opt[string] `json:"branch,omitzero"`
+	// Optional commit message to use when creating a new commit.
+	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
+	paramObj
+}
+
+func (r BuildCompareParamsBase) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsBase
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsBase) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type BuildCompareParamsBaseRevisionUnion struct {
+	OfString                              param.Opt[string]                                `json:",omitzero,inline"`
+	OfBuildComparesBaseRevisionMapItemMap map[string]BuildCompareParamsBaseRevisionMapItem `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u BuildCompareParamsBaseRevisionUnion) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion[BuildCompareParamsBaseRevisionUnion](u.OfString, u.OfBuildComparesBaseRevisionMapItemMap)
+}
+func (u *BuildCompareParamsBaseRevisionUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
+}
+
+func (u *BuildCompareParamsBaseRevisionUnion) asAny() any {
+	if !param.IsOmitted(u.OfString) {
+		return &u.OfString.Value
+	} else if !param.IsOmitted(u.OfBuildComparesBaseRevisionMapItemMap) {
+		return &u.OfBuildComparesBaseRevisionMapItemMap
+	}
+	return nil
+}
+
+// The property Content is required.
+type BuildCompareParamsBaseRevisionMapItem struct {
+	// The file content
+	Content string `json:"content,required"`
+	paramObj
+}
+
+func (r BuildCompareParamsBaseRevisionMapItem) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsBaseRevisionMapItem
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsBaseRevisionMapItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Parameters for the head build
+//
+// The property Revision is required.
+type BuildCompareParamsHead struct {
+	// Specifies what to build: a branch name, a commit SHA, or file contents
+	Revision BuildCompareParamsHeadRevisionUnion `json:"revision,omitzero,required"`
+	// Optional branch to use. If not specified, defaults to "main". When using a
+	// branch name as revision, this must match or be omitted.
+	Branch param.Opt[string] `json:"branch,omitzero"`
+	// Optional commit message to use when creating a new commit.
+	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
+	paramObj
+}
+
+func (r BuildCompareParamsHead) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsHead
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsHead) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type BuildCompareParamsHeadRevisionUnion struct {
+	OfString                              param.Opt[string]                                `json:",omitzero,inline"`
+	OfBuildComparesHeadRevisionMapItemMap map[string]BuildCompareParamsHeadRevisionMapItem `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u BuildCompareParamsHeadRevisionUnion) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion[BuildCompareParamsHeadRevisionUnion](u.OfString, u.OfBuildComparesHeadRevisionMapItemMap)
+}
+func (u *BuildCompareParamsHeadRevisionUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
+}
+
+func (u *BuildCompareParamsHeadRevisionUnion) asAny() any {
+	if !param.IsOmitted(u.OfString) {
+		return &u.OfString.Value
+	} else if !param.IsOmitted(u.OfBuildComparesHeadRevisionMapItemMap) {
+		return &u.OfBuildComparesHeadRevisionMapItemMap
+	}
+	return nil
+}
+
+// The property Content is required.
+type BuildCompareParamsHeadRevisionMapItem struct {
+	// The file content
+	Content string `json:"content,required"`
+	paramObj
+}
+
+func (r BuildCompareParamsHeadRevisionMapItem) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsHeadRevisionMapItem
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsHeadRevisionMapItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }

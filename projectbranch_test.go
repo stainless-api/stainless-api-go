@@ -59,8 +59,10 @@ func TestProjectBranchGet(t *testing.T) {
 	)
 	_, err := client.Projects.Branches.Get(
 		context.TODO(),
-		"project",
 		"branch",
+		stainlessv0.ProjectBranchGetParams{
+			Project: "project",
+		},
 	)
 	if err != nil {
 		var apierr *stainlessv0.Error

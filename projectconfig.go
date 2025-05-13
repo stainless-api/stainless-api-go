@@ -14,7 +14,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // ProjectConfigService contains methods and other services that help with
@@ -65,11 +65,10 @@ type ProjectConfigGetResponse map[string]ProjectConfigGetResponseItem
 type ProjectConfigGetResponseItem struct {
 	// The file content
 	Content string `json:"content,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Content     resp.Field
-		ExtraFields map[string]resp.Field
+		Content     respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -85,11 +84,10 @@ type ProjectConfigGuessResponse map[string]ProjectConfigGuessResponseItem
 type ProjectConfigGuessResponseItem struct {
 	// The file content
 	Content string `json:"content,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Content     resp.Field
-		ExtraFields map[string]resp.Field
+		Content     respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -105,10 +103,6 @@ type ProjectConfigGetParams struct {
 	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectConfigGetParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 // URLQuery serializes [ProjectConfigGetParams]'s query parameters as `url.Values`.
 func (r ProjectConfigGetParams) URLQuery() (v url.Values, err error) {
@@ -126,11 +120,10 @@ type ProjectConfigGuessParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectConfigGuessParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 func (r ProjectConfigGuessParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectConfigGuessParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectConfigGuessParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }

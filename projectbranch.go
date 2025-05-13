@@ -12,7 +12,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/resp"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // ProjectBranchService contains methods and other services that help with
@@ -47,9 +47,9 @@ func (r *ProjectBranchService) New(ctx context.Context, project string, body Pro
 }
 
 // Retrieve a project branch
-func (r *ProjectBranchService) Get(ctx context.Context, project string, branch string, opts ...option.RequestOption) (res *ProjectBranch, err error) {
+func (r *ProjectBranchService) Get(ctx context.Context, branch string, query ProjectBranchGetParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = append(r.Options[:], opts...)
-	if project == "" {
+	if query.Project == "" {
 		err = errors.New("missing required project parameter")
 		return
 	}
@@ -57,7 +57,7 @@ func (r *ProjectBranchService) Get(ctx context.Context, project string, branch s
 		err = errors.New("missing required branch parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/branches/%s", project, branch)
+	path := fmt.Sprintf("v0/projects/%s/branches/%s", query.Project, branch)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -70,16 +70,15 @@ type ProjectBranch struct {
 	Object  ProjectBranchObject `json:"object,required"`
 	Org     string              `json:"org,required"`
 	Project string              `json:"project,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Branch       resp.Field
-		ConfigCommit resp.Field
-		LatestBuild  resp.Field
-		Object       resp.Field
-		Org          resp.Field
-		Project      resp.Field
-		ExtraFields  map[string]resp.Field
+		Branch       respjson.Field
+		ConfigCommit respjson.Field
+		LatestBuild  respjson.Field
+		Object       respjson.Field
+		Org          respjson.Field
+		Project      respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
@@ -93,12 +92,11 @@ func (r *ProjectBranch) UnmarshalJSON(data []byte) error {
 type ProjectBranchConfigCommit struct {
 	Repo ProjectBranchConfigCommitRepo `json:"repo,required"`
 	Sha  string                        `json:"sha,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Repo        resp.Field
-		Sha         resp.Field
-		ExtraFields map[string]resp.Field
+		Repo        respjson.Field
+		Sha         respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -113,13 +111,12 @@ type ProjectBranchConfigCommitRepo struct {
 	Branch string `json:"branch,required"`
 	Name   string `json:"name,required"`
 	Owner  string `json:"owner,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Branch      resp.Field
-		Name        resp.Field
-		Owner       resp.Field
-		ExtraFields map[string]resp.Field
+		Branch      respjson.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -137,17 +134,24 @@ const (
 )
 
 type ProjectBranchNewParams struct {
-	Branch     string          `json:"branch,required"`
-	BranchFrom string          `json:"branch_from,required"`
-	Force      param.Opt[bool] `json:"force,omitzero"`
+	// Name of the new project branch.
+	Branch string `json:"branch,required"`
+	// Branch or commit SHA to branch from.
+	BranchFrom string `json:"branch_from,required"`
+	// Whether to throw an error if the branch already exists. Defaults to false.
+	Force param.Opt[bool] `json:"force,omitzero"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f ProjectBranchNewParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 func (r ProjectBranchNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow ProjectBranchNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectBranchNewParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectBranchGetParams struct {
+	Project string `path:"project,required" json:"-"`
+	paramObj
 }
