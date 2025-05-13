@@ -134,9 +134,12 @@ const (
 )
 
 type ProjectBranchNewParams struct {
-	Branch     string          `json:"branch,required"`
-	BranchFrom string          `json:"branch_from,required"`
-	Force      param.Opt[bool] `json:"force,omitzero"`
+	// Name of the new project branch.
+	Branch string `json:"branch,required"`
+	// Branch or commit SHA to branch from.
+	BranchFrom string `json:"branch_from,required"`
+	// Whether to throw an error if the branch already exists. Defaults to false.
+	Force param.Opt[bool] `json:"force,omitzero"`
 	paramObj
 }
 

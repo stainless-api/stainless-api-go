@@ -66,6 +66,14 @@ func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...
 	return
 }
 
+// Creates two builds whose outputs can be compared directly
+func (r *BuildService) Compare(ctx context.Context, body BuildCompareParams, opts ...option.RequestOption) (res *BuildCompareResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "v0/builds/compare"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
 type BuildObject struct {
 	ID           string `json:"id,required"`
 	ConfigCommit string `json:"config_commit,required"`
@@ -101,10 +109,12 @@ const (
 
 type BuildObjectTargets struct {
 	Cli        BuildTarget `json:"cli"`
+	Csharp     BuildTarget `json:"csharp"`
 	Go         BuildTarget `json:"go"`
 	Java       BuildTarget `json:"java"`
 	Kotlin     BuildTarget `json:"kotlin"`
 	Node       BuildTarget `json:"node"`
+	Php        BuildTarget `json:"php"`
 	Python     BuildTarget `json:"python"`
 	Ruby       BuildTarget `json:"ruby"`
 	Terraform  BuildTarget `json:"terraform"`
@@ -112,10 +122,12 @@ type BuildObjectTargets struct {
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Cli         respjson.Field
+		Csharp      respjson.Field
 		Go          respjson.Field
 		Java        respjson.Field
 		Kotlin      respjson.Field
 		Node        respjson.Field
+		Php         respjson.Field
 		Python      respjson.Field
 		Ruby        respjson.Field
 		Terraform   respjson.Field
@@ -768,6 +780,24 @@ func (r *BuildListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type BuildCompareResponse struct {
+	Base BuildObject `json:"base,required"`
+	Head BuildObject `json:"head,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Base        respjson.Field
+		Head        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildCompareResponse) RawJSON() string { return r.JSON.raw }
+func (r *BuildCompareResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type BuildNewParams struct {
 	// Project name
 	Project string `json:"project,required"`
@@ -785,7 +815,7 @@ type BuildNewParams struct {
 	// will be built.
 	//
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli".
+	// "terraform", "cli", "php", "csharp".
 	Targets []string `json:"targets,omitzero"`
 	paramObj
 }
@@ -892,4 +922,152 @@ func (r BuildListParamsRevisionMapItem) URLQuery() (v url.Values, err error) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type BuildCompareParams struct {
+	// Parameters for the base build
+	Base BuildCompareParamsBase `json:"base,omitzero,required"`
+	// Parameters for the head build
+	Head BuildCompareParamsHead `json:"head,omitzero,required"`
+	// Project name
+	Project string `json:"project,required"`
+	// Optional list of SDK targets to build. If not specified, all configured targets
+	// will be built.
+	//
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,omitzero"`
+	paramObj
+}
+
+func (r BuildCompareParams) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Parameters for the base build
+//
+// The property Revision is required.
+type BuildCompareParamsBase struct {
+	// Specifies what to build: a branch name, a commit SHA, or file contents
+	Revision BuildCompareParamsBaseRevisionUnion `json:"revision,omitzero,required"`
+	// Optional branch to use. If not specified, defaults to "main". When using a
+	// branch name as revision, this must match or be omitted.
+	Branch param.Opt[string] `json:"branch,omitzero"`
+	// Optional commit message to use when creating a new commit.
+	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
+	paramObj
+}
+
+func (r BuildCompareParamsBase) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsBase
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsBase) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type BuildCompareParamsBaseRevisionUnion struct {
+	OfString                              param.Opt[string]                                `json:",omitzero,inline"`
+	OfBuildComparesBaseRevisionMapItemMap map[string]BuildCompareParamsBaseRevisionMapItem `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u BuildCompareParamsBaseRevisionUnion) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion[BuildCompareParamsBaseRevisionUnion](u.OfString, u.OfBuildComparesBaseRevisionMapItemMap)
+}
+func (u *BuildCompareParamsBaseRevisionUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
+}
+
+func (u *BuildCompareParamsBaseRevisionUnion) asAny() any {
+	if !param.IsOmitted(u.OfString) {
+		return &u.OfString.Value
+	} else if !param.IsOmitted(u.OfBuildComparesBaseRevisionMapItemMap) {
+		return &u.OfBuildComparesBaseRevisionMapItemMap
+	}
+	return nil
+}
+
+// The property Content is required.
+type BuildCompareParamsBaseRevisionMapItem struct {
+	// The file content
+	Content string `json:"content,required"`
+	paramObj
+}
+
+func (r BuildCompareParamsBaseRevisionMapItem) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsBaseRevisionMapItem
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsBaseRevisionMapItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Parameters for the head build
+//
+// The property Revision is required.
+type BuildCompareParamsHead struct {
+	// Specifies what to build: a branch name, a commit SHA, or file contents
+	Revision BuildCompareParamsHeadRevisionUnion `json:"revision,omitzero,required"`
+	// Optional branch to use. If not specified, defaults to "main". When using a
+	// branch name as revision, this must match or be omitted.
+	Branch param.Opt[string] `json:"branch,omitzero"`
+	// Optional commit message to use when creating a new commit.
+	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
+	paramObj
+}
+
+func (r BuildCompareParamsHead) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsHead
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsHead) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type BuildCompareParamsHeadRevisionUnion struct {
+	OfString                              param.Opt[string]                                `json:",omitzero,inline"`
+	OfBuildComparesHeadRevisionMapItemMap map[string]BuildCompareParamsHeadRevisionMapItem `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u BuildCompareParamsHeadRevisionUnion) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion[BuildCompareParamsHeadRevisionUnion](u.OfString, u.OfBuildComparesHeadRevisionMapItemMap)
+}
+func (u *BuildCompareParamsHeadRevisionUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
+}
+
+func (u *BuildCompareParamsHeadRevisionUnion) asAny() any {
+	if !param.IsOmitted(u.OfString) {
+		return &u.OfString.Value
+	} else if !param.IsOmitted(u.OfBuildComparesHeadRevisionMapItemMap) {
+		return &u.OfBuildComparesHeadRevisionMapItemMap
+	}
+	return nil
+}
+
+// The property Content is required.
+type BuildCompareParamsHeadRevisionMapItem struct {
+	// The file content
+	Content string `json:"content,required"`
+	paramObj
+}
+
+func (r BuildCompareParamsHeadRevisionMapItem) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsHeadRevisionMapItem
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsHeadRevisionMapItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }

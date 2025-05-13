@@ -63,7 +63,7 @@ func (r *ProjectSnippetNewRequestResponse) UnmarshalJSON(data []byte) error {
 
 type ProjectSnippetNewRequestParams struct {
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli".
+	// "terraform", "cli", "php", "csharp".
 	Language ProjectSnippetNewRequestParamsLanguage `json:"language,omitzero,required"`
 	Request  ProjectSnippetNewRequestParamsRequest  `json:"request,omitzero,required"`
 	// Any of "next", "latest_released".
@@ -91,6 +91,8 @@ const (
 	ProjectSnippetNewRequestParamsLanguageRuby       ProjectSnippetNewRequestParamsLanguage = "ruby"
 	ProjectSnippetNewRequestParamsLanguageTerraform  ProjectSnippetNewRequestParamsLanguage = "terraform"
 	ProjectSnippetNewRequestParamsLanguageCli        ProjectSnippetNewRequestParamsLanguage = "cli"
+	ProjectSnippetNewRequestParamsLanguagePhp        ProjectSnippetNewRequestParamsLanguage = "php"
+	ProjectSnippetNewRequestParamsLanguageCsharp     ProjectSnippetNewRequestParamsLanguage = "csharp"
 )
 
 // The properties Method, Parameters, Path are required.
