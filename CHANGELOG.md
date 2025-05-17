@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.0 (2025-05-17)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/stainless-api/stainless-api-go/compare/v0.4.0...v0.5.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** clearer array variant names
+
+### Features
+
+* **client:** add support for endpoint-specific base URLs in python ([73bf8a6](https://github.com/stainless-api/stainless-api-go/commit/73bf8a65ed56a538725b476f12ffb03919cbab59))
+* **client:** clearer array variant names ([4582227](https://github.com/stainless-api/stainless-api-go/commit/4582227ff4050f1f47e161e119ffc3b7415dfac9))
+
 ## 0.4.0 (2025-05-13)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/stainless-api/stainless-api-go/compare/v0.3.0...v0.4.0)
