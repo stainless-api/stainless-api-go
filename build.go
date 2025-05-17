@@ -832,13 +832,13 @@ func (r *BuildNewParams) UnmarshalJSON(data []byte) error {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildNewParamsRevisionUnion struct {
-	OfString                      param.Opt[string]                        `json:",omitzero,inline"`
-	OfBuildNewsRevisionMapItemMap map[string]BuildNewParamsRevisionMapItem `json:",omitzero,inline"`
+	OfString                  param.Opt[string]                        `json:",omitzero,inline"`
+	OfBuildNewsRevisionMapMap map[string]BuildNewParamsRevisionMapItem `json:",omitzero,inline"`
 	paramUnion
 }
 
 func (u BuildNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[BuildNewParamsRevisionUnion](u.OfString, u.OfBuildNewsRevisionMapItemMap)
+	return param.MarshalUnion[BuildNewParamsRevisionUnion](u.OfString, u.OfBuildNewsRevisionMapMap)
 }
 func (u *BuildNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
@@ -847,8 +847,8 @@ func (u *BuildNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
 func (u *BuildNewParamsRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildNewsRevisionMapItemMap) {
-		return &u.OfBuildNewsRevisionMapItemMap
+	} else if !param.IsOmitted(u.OfBuildNewsRevisionMapMap) {
+		return &u.OfBuildNewsRevisionMapMap
 	}
 	return nil
 }
@@ -894,16 +894,16 @@ func (r BuildListParams) URLQuery() (v url.Values, err error) {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildListParamsRevisionUnion struct {
-	OfString                       param.Opt[string]                         `query:",omitzero,inline"`
-	OfBuildListsRevisionMapItemMap map[string]BuildListParamsRevisionMapItem `query:",omitzero,inline"`
+	OfString                   param.Opt[string]                         `query:",omitzero,inline"`
+	OfBuildListsRevisionMapMap map[string]BuildListParamsRevisionMapItem `query:",omitzero,inline"`
 	paramUnion
 }
 
 func (u *BuildListParamsRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildListsRevisionMapItemMap) {
-		return &u.OfBuildListsRevisionMapItemMap
+	} else if !param.IsOmitted(u.OfBuildListsRevisionMapMap) {
+		return &u.OfBuildListsRevisionMapMap
 	}
 	return nil
 }
@@ -974,13 +974,13 @@ func (r *BuildCompareParamsBase) UnmarshalJSON(data []byte) error {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildCompareParamsBaseRevisionUnion struct {
-	OfString                              param.Opt[string]                                `json:",omitzero,inline"`
-	OfBuildComparesBaseRevisionMapItemMap map[string]BuildCompareParamsBaseRevisionMapItem `json:",omitzero,inline"`
+	OfString                          param.Opt[string]                                `json:",omitzero,inline"`
+	OfBuildComparesBaseRevisionMapMap map[string]BuildCompareParamsBaseRevisionMapItem `json:",omitzero,inline"`
 	paramUnion
 }
 
 func (u BuildCompareParamsBaseRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[BuildCompareParamsBaseRevisionUnion](u.OfString, u.OfBuildComparesBaseRevisionMapItemMap)
+	return param.MarshalUnion[BuildCompareParamsBaseRevisionUnion](u.OfString, u.OfBuildComparesBaseRevisionMapMap)
 }
 func (u *BuildCompareParamsBaseRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
@@ -989,8 +989,8 @@ func (u *BuildCompareParamsBaseRevisionUnion) UnmarshalJSON(data []byte) error {
 func (u *BuildCompareParamsBaseRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildComparesBaseRevisionMapItemMap) {
-		return &u.OfBuildComparesBaseRevisionMapItemMap
+	} else if !param.IsOmitted(u.OfBuildComparesBaseRevisionMapMap) {
+		return &u.OfBuildComparesBaseRevisionMapMap
 	}
 	return nil
 }
@@ -1036,13 +1036,13 @@ func (r *BuildCompareParamsHead) UnmarshalJSON(data []byte) error {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildCompareParamsHeadRevisionUnion struct {
-	OfString                              param.Opt[string]                                `json:",omitzero,inline"`
-	OfBuildComparesHeadRevisionMapItemMap map[string]BuildCompareParamsHeadRevisionMapItem `json:",omitzero,inline"`
+	OfString                          param.Opt[string]                                `json:",omitzero,inline"`
+	OfBuildComparesHeadRevisionMapMap map[string]BuildCompareParamsHeadRevisionMapItem `json:",omitzero,inline"`
 	paramUnion
 }
 
 func (u BuildCompareParamsHeadRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[BuildCompareParamsHeadRevisionUnion](u.OfString, u.OfBuildComparesHeadRevisionMapItemMap)
+	return param.MarshalUnion[BuildCompareParamsHeadRevisionUnion](u.OfString, u.OfBuildComparesHeadRevisionMapMap)
 }
 func (u *BuildCompareParamsHeadRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
@@ -1051,8 +1051,8 @@ func (u *BuildCompareParamsHeadRevisionUnion) UnmarshalJSON(data []byte) error {
 func (u *BuildCompareParamsHeadRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildComparesHeadRevisionMapItemMap) {
-		return &u.OfBuildComparesHeadRevisionMapItemMap
+	} else if !param.IsOmitted(u.OfBuildComparesHeadRevisionMapMap) {
+		return &u.OfBuildComparesHeadRevisionMapMap
 	}
 	return nil
 }
