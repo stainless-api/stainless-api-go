@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.5.0 (2025-05-22)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/stainless-api/stainless-api-go/compare/v0.4.0...v0.5.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** apply x-stainless-naming properly
+* **client:** clearer array variant names
+
+### Features
+
+* **api:** add documented spec to build object ([48e73b5](https://github.com/stainless-api/stainless-api-go/commit/48e73b597ef328835dd0df9e8ecf6a8689b6ea79))
+* **api:** change v0 path param projectName -&gt; project ([b1e0a4f](https://github.com/stainless-api/stainless-api-go/commit/b1e0a4f199776dee07a0479ee354517bae401e6b))
+* **api:** manual updates ([6a35675](https://github.com/stainless-api/stainless-api-go/commit/6a3567550ab09b8862a495034d9243158b394a53))
+* **client:** add support for endpoint-specific base URLs in python ([73bf8a6](https://github.com/stainless-api/stainless-api-go/commit/73bf8a65ed56a538725b476f12ffb03919cbab59))
+* **client:** clearer array variant names ([4582227](https://github.com/stainless-api/stainless-api-go/commit/4582227ff4050f1f47e161e119ffc3b7415dfac9))
+
+
+### Bug Fixes
+
+* **client:** apply x-stainless-naming properly ([b5431b6](https://github.com/stainless-api/stainless-api-go/commit/b5431b64be197c65e381a25c13d39a6c62a83be0))
+* **client:** correctly set stream key for multipart ([4f43384](https://github.com/stainless-api/stainless-api-go/commit/4f43384c84b5171e67b6dac5ef33249d9abbef8b))
+* **client:** don't panic on marshal with extra null field ([75907c7](https://github.com/stainless-api/stainless-api-go/commit/75907c735cea8973fe425d560720413231a594db))
+
+
+### Chores
+
+* **docs:** grammar improvements ([386ec39](https://github.com/stainless-api/stainless-api-go/commit/386ec399fcbe1db2a2b4afb830644aa02c84c4e3))
+* improve devcontainer setup ([0397ae0](https://github.com/stainless-api/stainless-api-go/commit/0397ae07fa94953efb6c4c75c9857e29f6176c37))
+
 ## 0.4.0 (2025-05-13)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/stainless-api/stainless-api-go/compare/v0.3.0...v0.4.0)
