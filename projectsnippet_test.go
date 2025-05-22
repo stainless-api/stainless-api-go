@@ -30,21 +30,24 @@ func TestProjectSnippetNewRequestWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"projectName",
 		stainlessv0.ProjectSnippetNewRequestParams{
-			Language: stainlessv0.ProjectSnippetNewRequestParamsLanguageNode,
-			Request: stainlessv0.ProjectSnippetNewRequestParamsRequest{
-				Method: "method",
-				Parameters: []stainlessv0.ProjectSnippetNewRequestParamsRequestParameter{{
-					In:    "path",
-					Name:  "name",
-					Value: map[string]interface{}{},
-				}},
-				Path: "path",
-				Body: stainlessv0.ProjectSnippetNewRequestParamsRequestBody{
-					FileParam: stainlessv0.String("fileParam"),
-					FilePath:  stainlessv0.String("filePath"),
+			OfObject: &stainlessv0.ProjectSnippetNewRequestParamsBodyObject{
+				Request: stainlessv0.ProjectSnippetNewRequestParamsBodyObjectRequest{
+					Method: "method",
+					Parameters: []stainlessv0.ProjectSnippetNewRequestParamsBodyObjectRequestParameter{{
+						In:    "path",
+						Name:  "name",
+						Value: map[string]interface{}{},
+					}},
+					Path: "path",
+					Body: stainlessv0.ProjectSnippetNewRequestParamsBodyObjectRequestBody{
+						FileParam: stainlessv0.String("fileParam"),
+						FilePath:  stainlessv0.String("filePath"),
+					},
 				},
+				Har:      nil,
+				Language: "node",
+				Version:  "next",
 			},
-			Version: stainlessv0.ProjectSnippetNewRequestParamsVersionNext,
 		},
 	)
 	if err != nil {

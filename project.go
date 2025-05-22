@@ -43,25 +43,25 @@ func NewProjectService(opts ...option.RequestOption) (r ProjectService) {
 }
 
 // Retrieve a project by name
-func (r *ProjectService) Get(ctx context.Context, projectName string, opts ...option.RequestOption) (res *ProjectGetResponse, err error) {
+func (r *ProjectService) Get(ctx context.Context, project string, opts ...option.RequestOption) (res *ProjectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if projectName == "" {
-		err = errors.New("missing required projectName parameter")
+	if project == "" {
+		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s", projectName)
+	path := fmt.Sprintf("v0/projects/%s", project)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Update a project's properties
-func (r *ProjectService) Update(ctx context.Context, projectName string, body ProjectUpdateParams, opts ...option.RequestOption) (res *ProjectUpdateResponse, err error) {
+func (r *ProjectService) Update(ctx context.Context, project string, body ProjectUpdateParams, opts ...option.RequestOption) (res *ProjectUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if projectName == "" {
-		err = errors.New("missing required projectName parameter")
+	if project == "" {
+		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s", projectName)
+	path := fmt.Sprintf("v0/projects/%s", project)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }

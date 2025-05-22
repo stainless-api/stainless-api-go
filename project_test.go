@@ -26,7 +26,7 @@ func TestProjectGet(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Get(context.TODO(), "projectName")
+	_, err := client.Projects.Get(context.TODO(), "project")
 	if err != nil {
 		var apierr *stainlessv0.Error
 		if errors.As(err, &apierr) {
@@ -51,7 +51,7 @@ func TestProjectUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Projects.Update(
 		context.TODO(),
-		"projectName",
+		"project",
 		stainlessv0.ProjectUpdateParams{
 			DisplayName: stainlessv0.String("display_name"),
 		},
