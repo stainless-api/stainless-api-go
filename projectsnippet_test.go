@@ -25,6 +25,7 @@ func TestProjectSnippetNewRequestWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithProject("example-project"),
 	)
 	_, err := client.Projects.Snippets.NewRequest(
 		context.TODO(),
