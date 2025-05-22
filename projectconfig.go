@@ -37,26 +37,36 @@ func NewProjectConfigService(opts ...option.RequestOption) (r ProjectConfigServi
 }
 
 // Retrieve configuration files for a project
-func (r *ProjectConfigService) Get(ctx context.Context, project string, query ProjectConfigGetParams, opts ...option.RequestOption) (res *ProjectConfigGetResponse, err error) {
+func (r *ProjectConfigService) Get(ctx context.Context, params ProjectConfigGetParams, opts ...option.RequestOption) (res *ProjectConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if project == "" {
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
+	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/configs", project)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("v0/projects/%s/configs", params.Project.Value)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
 }
 
 // Generate configuration suggestions based on an OpenAPI spec
-func (r *ProjectConfigService) Guess(ctx context.Context, project string, body ProjectConfigGuessParams, opts ...option.RequestOption) (res *ProjectConfigGuessResponse, err error) {
+func (r *ProjectConfigService) Guess(ctx context.Context, params ProjectConfigGuessParams, opts ...option.RequestOption) (res *ProjectConfigGuessResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if project == "" {
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
+	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/configs/guess", project)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	path := fmt.Sprintf("v0/projects/%s/configs/guess", params.Project.Value)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
@@ -99,6 +109,8 @@ func (r *ProjectConfigGuessResponseItem) UnmarshalJSON(data []byte) error {
 }
 
 type ProjectConfigGetParams struct {
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
 	// Branch name, defaults to "main"
 	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
 	paramObj
@@ -113,6 +125,8 @@ func (r ProjectConfigGetParams) URLQuery() (v url.Values, err error) {
 }
 
 type ProjectConfigGuessParams struct {
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
 	// OpenAPI spec
 	Spec string `json:"spec,required"`
 	// Branch name

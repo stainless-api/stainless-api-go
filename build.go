@@ -61,6 +61,11 @@ func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.R
 // List builds for a project
 func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...option.RequestOption) (res *BuildListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&query.Project, precfg.Project)
 	path := "v0/builds"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
@@ -927,7 +932,9 @@ func (r *BuildNewParamsRevisionMapItem) UnmarshalJSON(data []byte) error {
 
 type BuildListParams struct {
 	// Project name
-	Project string `query:"project,required" json:"-"`
+	//
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project param.Opt[string] `query:"project,omitzero,required" json:"-"`
 	// Branch name
 	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
 	// Pagination cursor from a previous response

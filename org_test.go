@@ -25,6 +25,7 @@ func TestOrgGet(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithProject("example-project"),
 	)
 	_, err := client.Orgs.Get(context.TODO(), "orgName")
 	if err != nil {
@@ -48,6 +49,7 @@ func TestOrgList(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithProject("example-project"),
 	)
 	_, err := client.Orgs.List(context.TODO())
 	if err != nil {
