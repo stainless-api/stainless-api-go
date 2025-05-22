@@ -25,6 +25,7 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
 		Project: "project",
@@ -57,6 +58,7 @@ func TestBuildGet(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.Get(context.TODO(), "buildId")
 	if err != nil {
@@ -80,9 +82,10 @@ func TestBuildListWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.List(context.TODO(), stainlessv0.BuildListParams{
-		Project: "project",
+		Project: stainlessv0.String("project"),
 		Branch:  stainlessv0.String("branch"),
 		Cursor:  stainlessv0.String("cursor"),
 		Limit:   stainlessv0.Float(1),
@@ -111,6 +114,7 @@ func TestBuildCompareWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.Compare(context.TODO(), stainlessv0.BuildCompareParams{
 		Base: stainlessv0.BuildCompareParamsBase{

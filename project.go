@@ -43,26 +43,36 @@ func NewProjectService(opts ...option.RequestOption) (r ProjectService) {
 }
 
 // Retrieve a project by name
-func (r *ProjectService) Get(ctx context.Context, project string, opts ...option.RequestOption) (res *ProjectGetResponse, err error) {
+func (r *ProjectService) Get(ctx context.Context, query ProjectGetParams, opts ...option.RequestOption) (res *ProjectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if project == "" {
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&query.Project, precfg.Project)
+	if query.Project.Value == "" {
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s", project)
+	path := fmt.Sprintf("v0/projects/%s", query.Project.Value)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Update a project's properties
-func (r *ProjectService) Update(ctx context.Context, project string, body ProjectUpdateParams, opts ...option.RequestOption) (res *ProjectUpdateResponse, err error) {
+func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams, opts ...option.RequestOption) (res *ProjectUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if project == "" {
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
+	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s", project)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
+	path := fmt.Sprintf("v0/projects/%s", params.Project.Value)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
 	return
 }
 
@@ -181,7 +191,15 @@ func (r *ProjectListResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type ProjectGetParams struct {
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	paramObj
+}
+
 type ProjectUpdateParams struct {
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project     param.Opt[string] `path:"project,omitzero,required" json:"-"`
 	DisplayName param.Opt[string] `json:"display_name,omitzero"`
 	paramObj
 }

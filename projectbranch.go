@@ -35,21 +35,31 @@ func NewProjectBranchService(opts ...option.RequestOption) (r ProjectBranchServi
 }
 
 // Create a new branch for a project
-func (r *ProjectBranchService) New(ctx context.Context, project string, body ProjectBranchNewParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
+func (r *ProjectBranchService) New(ctx context.Context, params ProjectBranchNewParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = append(r.Options[:], opts...)
-	if project == "" {
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
+	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/branches", project)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	path := fmt.Sprintf("v0/projects/%s/branches", params.Project.Value)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
 // Retrieve a project branch
 func (r *ProjectBranchService) Get(ctx context.Context, branch string, query ProjectBranchGetParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = append(r.Options[:], opts...)
-	if query.Project == "" {
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&query.Project, precfg.Project)
+	if query.Project.Value == "" {
 		err = errors.New("missing required project parameter")
 		return
 	}
@@ -57,7 +67,7 @@ func (r *ProjectBranchService) Get(ctx context.Context, branch string, query Pro
 		err = errors.New("missing required branch parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/branches/%s", query.Project, branch)
+	path := fmt.Sprintf("v0/projects/%s/branches/%s", query.Project.Value, branch)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -134,6 +144,8 @@ const (
 )
 
 type ProjectBranchNewParams struct {
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
 	// Name of the new project branch.
 	Branch string `json:"branch,required"`
 	// Branch or commit SHA to branch from.
@@ -152,6 +164,7 @@ func (r *ProjectBranchNewParams) UnmarshalJSON(data []byte) error {
 }
 
 type ProjectBranchGetParams struct {
-	Project string `path:"project,required" json:"-"`
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
 	paramObj
 }

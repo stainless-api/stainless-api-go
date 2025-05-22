@@ -272,3 +272,14 @@ func WithAPIKey(value string) RequestOption {
 		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIKey)))
 	})
 }
+
+// WithProject returns a RequestOption that sets the client setting "project".
+func WithProject(value string) RequestOption {
+	return requestconfig.PreRequestOptionFunc(func(r *requestconfig.RequestConfig) error {
+		if value == "" {
+			return fmt.Errorf("default param cannot be empty string")
+		}
+		r.Project = &value
+		return nil
+	})
+}
