@@ -28,7 +28,6 @@ func TestProjectBranchNewWithOptionalParams(t *testing.T) {
 		option.WithProject("example-project"),
 	)
 	_, err := client.Projects.Branches.New(context.TODO(), stainlessv0.ProjectBranchNewParams{
-		Project:    stainlessv0.String("project"),
 		Branch:     "branch",
 		BranchFrom: "branch_from",
 		Force:      stainlessv0.Bool(true),
@@ -59,9 +58,7 @@ func TestProjectBranchGet(t *testing.T) {
 	_, err := client.Projects.Branches.Get(
 		context.TODO(),
 		"branch",
-		stainlessv0.ProjectBranchGetParams{
-			Project: stainlessv0.String("project"),
-		},
+		stainlessv0.ProjectBranchGetParams{},
 	)
 	if err != nil {
 		var apierr *stainlessv0.Error

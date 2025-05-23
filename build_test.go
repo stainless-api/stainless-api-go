@@ -28,7 +28,6 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -85,10 +84,9 @@ func TestBuildListWithOptionalParams(t *testing.T) {
 		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.List(context.TODO(), stainlessv0.BuildListParams{
-		Project: stainlessv0.String("project"),
-		Branch:  stainlessv0.String("branch"),
-		Cursor:  stainlessv0.String("cursor"),
-		Limit:   stainlessv0.Float(1),
+		Branch: stainlessv0.String("branch"),
+		Cursor: stainlessv0.String("cursor"),
+		Limit:  stainlessv0.Float(1),
 		Revision: stainlessv0.BuildListParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -131,7 +129,6 @@ func TestBuildCompareWithOptionalParams(t *testing.T) {
 			Branch:        stainlessv0.String("branch"),
 			CommitMessage: stainlessv0.String("commit_message"),
 		},
-		Project: "project",
 		Targets: []string{"node"},
 	})
 	if err != nil {
