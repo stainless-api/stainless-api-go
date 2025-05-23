@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.1 (2025-05-23)
+
+Full Changelog: [v0.5.0...v0.5.1](https://github.com/stainless-api/stainless-api-go/compare/v0.5.0...v0.5.1)
+
+### Chores
+
+* **internal:** codegen related update ([ba637f7](https://github.com/stainless-api/stainless-api-go/commit/ba637f79985d2015082e0ded170061910d234020))
+* **internal:** codegen related update ([bc93236](https://github.com/stainless-api/stainless-api-go/commit/bc93236c1b04f82436e08a0c516462259902bf7e))
+
 ## 0.5.0 (2025-05-22)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/stainless-api/stainless-api-go/compare/v0.4.0...v0.5.0)
