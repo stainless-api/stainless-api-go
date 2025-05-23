@@ -40,7 +40,6 @@ func TestUserAgentHeader(t *testing.T) {
 		}),
 	)
 	client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -70,7 +69,6 @@ func TestRetryAfter(t *testing.T) {
 		}),
 	)
 	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -111,7 +109,6 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 		option.WithHeaderDel("X-Stainless-Retry-Count"),
 	)
 	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -147,7 +144,6 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 		option.WithHeader("X-Stainless-Retry-Count", "42"),
 	)
 	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -182,7 +178,6 @@ func TestRetryAfterMs(t *testing.T) {
 		}),
 	)
 	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -211,7 +206,6 @@ func TestContextCancel(t *testing.T) {
 	cancelCtx, cancel := context.WithCancel(context.Background())
 	cancel()
 	_, err := client.Builds.New(cancelCtx, stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -237,7 +231,6 @@ func TestContextCancelDelay(t *testing.T) {
 	cancelCtx, cancel := context.WithTimeout(context.Background(), 2*time.Millisecond)
 	defer cancel()
 	_, err := client.Builds.New(cancelCtx, stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -269,7 +262,6 @@ func TestContextDeadline(t *testing.T) {
 			}),
 		)
 		_, err := client.Builds.New(deadlineCtx, stainlessv0.BuildNewParams{
-			Project: "project",
 			Revision: stainlessv0.BuildNewParamsRevisionUnion{
 				OfString: stainlessv0.String("string"),
 			},

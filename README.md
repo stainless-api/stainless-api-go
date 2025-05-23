@@ -54,7 +54,6 @@ func main() {
 		option.WithProject("example-project"),
 	)
 	buildObject, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -298,7 +297,6 @@ To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
 _, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
-	Project: "project",
 	Revision: stainlessv0.BuildNewParamsRevisionUnion{
 		OfString: stainlessv0.String("string"),
 	},
@@ -330,7 +328,6 @@ defer cancel()
 client.Builds.New(
 	ctx,
 	stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -371,7 +368,6 @@ client := stainlessv0.NewClient(
 client.Builds.New(
 	context.TODO(),
 	stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -391,7 +387,6 @@ var response *http.Response
 buildObject, err := client.Builds.New(
 	context.TODO(),
 	stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},

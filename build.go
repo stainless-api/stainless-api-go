@@ -41,6 +41,11 @@ func NewBuildService(opts ...option.RequestOption) (r BuildService) {
 // Create a new build
 func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...option.RequestOption) (res *BuildObject, err error) {
 	opts = append(r.Options[:], opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&body.Project, precfg.Project)
 	path := "v0/builds"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
@@ -74,6 +79,11 @@ func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...
 // Creates two builds whose outputs can be compared directly
 func (r *BuildService) Compare(ctx context.Context, body BuildCompareParams, opts ...option.RequestOption) (res *BuildCompareResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&body.Project, precfg.Project)
 	path := "v0/builds/compare"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
@@ -862,7 +872,7 @@ func (r *BuildCompareResponse) UnmarshalJSON(data []byte) error {
 
 type BuildNewParams struct {
 	// Project name
-	Project string `json:"project,required"`
+	Project param.Opt[string] `json:"project,omitzero,required"`
 	// Specifies what to build: a branch name, commit SHA, merge command
 	// ("base..head"), or file contents
 	Revision BuildNewParamsRevisionUnion `json:"revision,omitzero,required"`
@@ -989,12 +999,12 @@ func (r BuildListParamsRevisionMapItem) URLQuery() (v url.Values, err error) {
 }
 
 type BuildCompareParams struct {
+	// Project name
+	Project param.Opt[string] `json:"project,omitzero,required"`
 	// Parameters for the base build
 	Base BuildCompareParamsBase `json:"base,omitzero,required"`
 	// Parameters for the head build
 	Head BuildCompareParamsHead `json:"head,omitzero,required"`
-	// Project name
-	Project string `json:"project,required"`
 	// Optional list of SDK targets to build. If not specified, all configured targets
 	// will be built.
 	//

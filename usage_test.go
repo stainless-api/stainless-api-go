@@ -26,7 +26,6 @@ func TestUsage(t *testing.T) {
 		option.WithProject("example-project"),
 	)
 	buildObject, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
-		Project: "project",
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
