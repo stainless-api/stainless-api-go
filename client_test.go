@@ -44,7 +44,7 @@ func TestUserAgentHeader(t *testing.T) {
 			OfString: stainlessv0.String("string"),
 		},
 	})
-	if userAgent != fmt.Sprintf("StainlessV0/Go %s", internal.PackageVersion) {
+	if userAgent != fmt.Sprintf("Stainless/Go %s", internal.PackageVersion) {
 		t.Errorf("Expected User-Agent to be correct, but got: %#v", userAgent)
 	}
 }
