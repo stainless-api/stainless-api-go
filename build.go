@@ -395,11 +395,13 @@ type BuildTargetCommitCompletedCompleted struct {
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion      string                                             `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
+	Diagnostics     []any                                              `json:"diagnostics"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Commit          respjson.Field
 		Conclusion      respjson.Field
 		MergeConflictPr respjson.Field
+		Diagnostics     respjson.Field
 		ExtraFields     map[string]respjson.Field
 		raw             string
 	} `json:"-"`

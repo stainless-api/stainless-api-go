@@ -78,9 +78,9 @@ func TestProjectListWithOptionalParams(t *testing.T) {
 		option.WithProject("example-project"),
 	)
 	_, err := client.Projects.List(context.TODO(), stainlessv0.ProjectListParams{
-		Org:    "org",
 		Cursor: stainlessv0.String("cursor"),
 		Limit:  stainlessv0.Float(1),
+		Org:    stainlessv0.String("org"),
 	})
 	if err != nil {
 		var apierr *stainlessv0.Error
