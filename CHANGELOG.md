@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.6.0 (2025-06-02)
+
+Full Changelog: [v0.5.1...v0.6.0](https://github.com/stainless-api/stainless-api-go/compare/v0.5.1...v0.6.0)
+
+### Features
+
+* **api:** add diagnostics to build object ([3926c2d](https://github.com/stainless-api/stainless-api-go/commit/3926c2d0ec9410fa52eab374b29bd5f98617d0ca))
+* **api:** manual updates ([76484d3](https://github.com/stainless-api/stainless-api-go/commit/76484d3536ad3285dc342c4a0eca5e883e4827df))
+
+
+### Bug Fixes
+
+* fix error ([7ab2328](https://github.com/stainless-api/stainless-api-go/commit/7ab2328e4e8845f76c1a0cb7c1ba9d5102217e9a))
+
+
+### Chores
+
+* make go mod tidy continue on error ([09ddaee](https://github.com/stainless-api/stainless-api-go/commit/09ddaee2ae8abc3cf1f97b02e99ff74b28706788))
+
 ## 0.5.1 (2025-05-23)
 
 Full Changelog: [v0.5.0...v0.5.1](https://github.com/stainless-api/stainless-api-go/compare/v0.5.0...v0.5.1)
