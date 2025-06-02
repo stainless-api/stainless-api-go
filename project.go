@@ -213,11 +213,11 @@ func (r *ProjectUpdateParams) UnmarshalJSON(data []byte) error {
 }
 
 type ProjectListParams struct {
-	Org string `query:"org,required" json:"-"`
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
 	// Maximum number of projects to return, defaults to 10 (maximum: 100)
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
+	Org   param.Opt[string]  `query:"org,omitzero" json:"-"`
 	paramObj
 }
 
