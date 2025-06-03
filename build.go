@@ -26,7 +26,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewBuildService] method instead.
 type BuildService struct {
-	Options []option.RequestOption
+	Options       []option.RequestOption
+	TargetOutputs BuildTargetOutputService
 }
 
 // NewBuildService generates a new service that applies the given options to each
@@ -35,6 +36,7 @@ type BuildService struct {
 func NewBuildService(opts ...option.RequestOption) (r BuildService) {
 	r = BuildService{}
 	r.Options = opts
+	r.TargetOutputs = NewBuildTargetOutputService(opts...)
 	return
 }
 
