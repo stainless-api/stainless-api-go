@@ -76,7 +76,7 @@ type ProjectSnippetNewRequestParams struct {
 }
 
 func (u ProjectSnippetNewRequestParams) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[ProjectSnippetNewRequestParams](u.OfObject, u.OfProjectSnippetNewRequestsBodyObject)
+	return param.MarshalUnion(u, u.OfObject, u.OfProjectSnippetNewRequestsBodyObject)
 }
 func (r *ProjectSnippetNewRequestParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
