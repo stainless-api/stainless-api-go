@@ -15,11 +15,10 @@ import (
 // interacting with the stainless API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
-	Options            []option.RequestOption
-	Projects           ProjectService
-	Builds             BuildService
-	BuildTargetOutputs BuildTargetOutputService
-	Orgs               OrgService
+	Options  []option.RequestOption
+	Projects ProjectService
+	Builds   BuildService
+	Orgs     OrgService
 }
 
 // DefaultClientOptions read from the environment (STAINLESS_V0_API_KEY,
@@ -46,7 +45,6 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 
 	r.Projects = NewProjectService(opts...)
 	r.Builds = NewBuildService(opts...)
-	r.BuildTargetOutputs = NewBuildTargetOutputService(opts...)
 	r.Orgs = NewOrgService(opts...)
 
 	return
