@@ -62,141 +62,74 @@ func (r *ProjectSnippetNewRequestResponse) UnmarshalJSON(data []byte) error {
 }
 
 type ProjectSnippetNewRequestParams struct {
-	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli", "php", "csharp".
-	Language ProjectSnippetNewRequestParamsLanguage     `json:"language,omitzero,required"`
-	Request  ProjectSnippetNewRequestParamsRequestUnion `json:"request,omitzero,required"`
-	// Any of "next", "latest_released".
-	Version ProjectSnippetNewRequestParamsVersion `json:"version,omitzero,required"`
+
+	//
+	// Request body variants
+	//
+
+	// This field is a request body variant, only one variant field can be set.
+	OfObject *ProjectSnippetNewRequestParamsBodyObject `json:",inline"`
+	// This field is a request body variant, only one variant field can be set.
+	OfProjectSnippetNewRequestsBodyObject *ProjectSnippetNewRequestParamsBodyObject `json:",inline"`
+
 	paramObj
 }
 
-func (r ProjectSnippetNewRequestParams) MarshalJSON() (data []byte, err error) {
-	type shadow ProjectSnippetNewRequestParams
-	return param.MarshalObject(r, (*shadow)(&r))
+func (u ProjectSnippetNewRequestParams) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion[ProjectSnippetNewRequestParams](u.OfObject, u.OfProjectSnippetNewRequestsBodyObject)
 }
 func (r *ProjectSnippetNewRequestParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProjectSnippetNewRequestParamsLanguage string
-
-const (
-	ProjectSnippetNewRequestParamsLanguageNode       ProjectSnippetNewRequestParamsLanguage = "node"
-	ProjectSnippetNewRequestParamsLanguageTypescript ProjectSnippetNewRequestParamsLanguage = "typescript"
-	ProjectSnippetNewRequestParamsLanguagePython     ProjectSnippetNewRequestParamsLanguage = "python"
-	ProjectSnippetNewRequestParamsLanguageGo         ProjectSnippetNewRequestParamsLanguage = "go"
-	ProjectSnippetNewRequestParamsLanguageJava       ProjectSnippetNewRequestParamsLanguage = "java"
-	ProjectSnippetNewRequestParamsLanguageKotlin     ProjectSnippetNewRequestParamsLanguage = "kotlin"
-	ProjectSnippetNewRequestParamsLanguageRuby       ProjectSnippetNewRequestParamsLanguage = "ruby"
-	ProjectSnippetNewRequestParamsLanguageTerraform  ProjectSnippetNewRequestParamsLanguage = "terraform"
-	ProjectSnippetNewRequestParamsLanguageCli        ProjectSnippetNewRequestParamsLanguage = "cli"
-	ProjectSnippetNewRequestParamsLanguagePhp        ProjectSnippetNewRequestParamsLanguage = "php"
-	ProjectSnippetNewRequestParamsLanguageCsharp     ProjectSnippetNewRequestParamsLanguage = "csharp"
-)
-
-// Only one field can be non-zero.
-//
-// Use [param.IsOmitted] to confirm if a field is set.
-type ProjectSnippetNewRequestParamsRequestUnion struct {
-	OfProjectSnippetNewRequestsRequestObject *ProjectSnippetNewRequestParamsRequestObject `json:",omitzero,inline"`
-	OfVariant2                               *ProjectSnippetNewRequestParamsRequestObject `json:",omitzero,inline"`
-	paramUnion
-}
-
-func (u ProjectSnippetNewRequestParamsRequestUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfProjectSnippetNewRequestsRequestObject, u.OfVariant2)
-}
-func (u *ProjectSnippetNewRequestParamsRequestUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, u)
-}
-
-func (u *ProjectSnippetNewRequestParamsRequestUnion) asAny() any {
-	if !param.IsOmitted(u.OfProjectSnippetNewRequestsRequestObject) {
-		return u.OfProjectSnippetNewRequestsRequestObject
-	} else if !param.IsOmitted(u.OfVariant2) {
-		return u.OfVariant2
-	}
-	return nil
-}
-
-// Returns a pointer to the underlying variant's property, if present.
-func (u ProjectSnippetNewRequestParamsRequestUnion) GetParameters() []ProjectSnippetNewRequestParamsRequestObjectParameter {
-	if vt := u.OfProjectSnippetNewRequestsRequestObject; vt != nil {
-		return vt.Parameters
-	}
-	return nil
-}
-
-// Returns a pointer to the underlying variant's property, if present.
-func (u ProjectSnippetNewRequestParamsRequestUnion) GetPath() *string {
-	if vt := u.OfProjectSnippetNewRequestsRequestObject; vt != nil {
-		return &vt.Path
-	}
-	return nil
-}
-
-// Returns a pointer to the underlying variant's property, if present.
-func (u ProjectSnippetNewRequestParamsRequestUnion) GetBody() *ProjectSnippetNewRequestParamsRequestObjectBody {
-	if vt := u.OfProjectSnippetNewRequestsRequestObject; vt != nil {
-		return &vt.Body
-	}
-	return nil
-}
-
-// Returns a pointer to the underlying variant's property, if present.
-func (u ProjectSnippetNewRequestParamsRequestUnion) GetQueryString() []ProjectSnippetNewRequestParamsRequestObjectQueryString {
-	if vt := u.OfVariant2; vt != nil {
-		return vt.QueryString
-	}
-	return nil
-}
-
-// Returns a pointer to the underlying variant's property, if present.
-func (u ProjectSnippetNewRequestParamsRequestUnion) GetURL() *string {
-	if vt := u.OfVariant2; vt != nil {
-		return &vt.URL
-	}
-	return nil
-}
-
-// Returns a pointer to the underlying variant's property, if present.
-func (u ProjectSnippetNewRequestParamsRequestUnion) GetPostData() *ProjectSnippetNewRequestParamsRequestObjectPostData {
-	if vt := u.OfVariant2; vt != nil {
-		return &vt.PostData
-	}
-	return nil
-}
-
-// Returns a pointer to the underlying variant's property, if present.
-func (u ProjectSnippetNewRequestParamsRequestUnion) GetMethod() *string {
-	if vt := u.OfProjectSnippetNewRequestsRequestObject; vt != nil {
-		return (*string)(&vt.Method)
-	} else if vt := u.OfVariant2; vt != nil {
-		return (*string)(&vt.Method)
-	}
-	return nil
-}
-
-// The properties Method, Parameters, Path are required.
-type ProjectSnippetNewRequestParamsRequestObject struct {
-	Method     string                                                 `json:"method,required"`
-	Parameters []ProjectSnippetNewRequestParamsRequestObjectParameter `json:"parameters,omitzero,required"`
-	Path       string                                                 `json:"path,required"`
-	Body       ProjectSnippetNewRequestParamsRequestObjectBody        `json:"body,omitzero"`
+// The property Request is required.
+type ProjectSnippetNewRequestParamsBodyObject struct {
+	Request ProjectSnippetNewRequestParamsBodyObjectRequest `json:"request,omitzero,required"`
+	Har     any                                             `json:"har"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Language string `json:"language,omitzero"`
+	// Any of "next", "latest_released".
+	Version string `json:"version,omitzero"`
 	paramObj
 }
 
-func (r ProjectSnippetNewRequestParamsRequestObject) MarshalJSON() (data []byte, err error) {
-	type shadow ProjectSnippetNewRequestParamsRequestObject
+func (r ProjectSnippetNewRequestParamsBodyObject) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectSnippetNewRequestParamsBodyObject
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *ProjectSnippetNewRequestParamsRequestObject) UnmarshalJSON(data []byte) error {
+func (r *ProjectSnippetNewRequestParamsBodyObject) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func init() {
+	apijson.RegisterFieldValidator[ProjectSnippetNewRequestParamsBodyObject](
+		"language", "node", "typescript", "python", "go", "java", "kotlin", "ruby", "terraform", "cli", "php", "csharp",
+	)
+	apijson.RegisterFieldValidator[ProjectSnippetNewRequestParamsBodyObject](
+		"version", "next", "latest_released",
+	)
+}
+
+// The properties Method, Parameters, Path are required.
+type ProjectSnippetNewRequestParamsBodyObjectRequest struct {
+	Method     string                                                     `json:"method,required"`
+	Parameters []ProjectSnippetNewRequestParamsBodyObjectRequestParameter `json:"parameters,omitzero,required"`
+	Path       string                                                     `json:"path,required"`
+	Body       ProjectSnippetNewRequestParamsBodyObjectRequestBody        `json:"body,omitzero"`
+	paramObj
+}
+
+func (r ProjectSnippetNewRequestParamsBodyObjectRequest) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectSnippetNewRequestParamsBodyObjectRequest
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectSnippetNewRequestParamsBodyObjectRequest) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The properties In, Name are required.
-type ProjectSnippetNewRequestParamsRequestObjectParameter struct {
+type ProjectSnippetNewRequestParamsBodyObjectRequestParameter struct {
 	// Any of "path", "query", "header", "cookie".
 	In    string `json:"in,omitzero,required"`
 	Name  string `json:"name,required"`
@@ -204,37 +137,30 @@ type ProjectSnippetNewRequestParamsRequestObjectParameter struct {
 	paramObj
 }
 
-func (r ProjectSnippetNewRequestParamsRequestObjectParameter) MarshalJSON() (data []byte, err error) {
-	type shadow ProjectSnippetNewRequestParamsRequestObjectParameter
+func (r ProjectSnippetNewRequestParamsBodyObjectRequestParameter) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectSnippetNewRequestParamsBodyObjectRequestParameter
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *ProjectSnippetNewRequestParamsRequestObjectParameter) UnmarshalJSON(data []byte) error {
+func (r *ProjectSnippetNewRequestParamsBodyObjectRequestParameter) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 func init() {
-	apijson.RegisterFieldValidator[ProjectSnippetNewRequestParamsRequestObjectParameter](
+	apijson.RegisterFieldValidator[ProjectSnippetNewRequestParamsBodyObjectRequestParameter](
 		"in", "path", "query", "header", "cookie",
 	)
 }
 
-type ProjectSnippetNewRequestParamsRequestObjectBody struct {
+type ProjectSnippetNewRequestParamsBodyObjectRequestBody struct {
 	FileParam param.Opt[string] `json:"fileParam,omitzero"`
 	FilePath  param.Opt[string] `json:"filePath,omitzero"`
 	paramObj
 }
 
-func (r ProjectSnippetNewRequestParamsRequestObjectBody) MarshalJSON() (data []byte, err error) {
-	type shadow ProjectSnippetNewRequestParamsRequestObjectBody
+func (r ProjectSnippetNewRequestParamsBodyObjectRequestBody) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectSnippetNewRequestParamsBodyObjectRequestBody
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *ProjectSnippetNewRequestParamsRequestObjectBody) UnmarshalJSON(data []byte) error {
+func (r *ProjectSnippetNewRequestParamsBodyObjectRequestBody) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type ProjectSnippetNewRequestParamsVersion string
-
-const (
-	ProjectSnippetNewRequestParamsVersionNext           ProjectSnippetNewRequestParamsVersion = "next"
-	ProjectSnippetNewRequestParamsVersionLatestReleased ProjectSnippetNewRequestParamsVersion = "latest_released"
-)

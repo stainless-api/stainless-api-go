@@ -42,6 +42,14 @@ func NewProjectService(opts ...option.RequestOption) (r ProjectService) {
 	return
 }
 
+// Create a new project
+func (r *ProjectService) New(ctx context.Context, body ProjectNewParams, opts ...option.RequestOption) (res *ProjectNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "v0/projects"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
 // Retrieve a project by name
 func (r *ProjectService) Get(ctx context.Context, query ProjectGetParams, opts ...option.RequestOption) (res *ProjectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -84,13 +92,14 @@ func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts
 	return
 }
 
-type ProjectGetResponse struct {
+type ProjectNewResponse struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object ProjectGetResponseObject `json:"object,required"`
-	Org    string                   `json:"org,required"`
-	Slug   string                   `json:"slug,required"`
+	Object  ProjectNewResponseObject `json:"object,required"`
+	Org     string                   `json:"org,required"`
+	Slug    string                   `json:"slug,required"`
+	Targets []string                 `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ConfigRepo  respjson.Field
@@ -98,6 +107,40 @@ type ProjectGetResponse struct {
 		Object      respjson.Field
 		Org         respjson.Field
 		Slug        respjson.Field
+		Targets     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectNewResponse) RawJSON() string { return r.JSON.raw }
+func (r *ProjectNewResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectNewResponseObject string
+
+const (
+	ProjectNewResponseObjectProject ProjectNewResponseObject = "project"
+)
+
+type ProjectGetResponse struct {
+	ConfigRepo  string `json:"config_repo,required"`
+	DisplayName string `json:"display_name,required"`
+	// Any of "project".
+	Object  ProjectGetResponseObject `json:"object,required"`
+	Org     string                   `json:"org,required"`
+	Slug    string                   `json:"slug,required"`
+	Targets []string                 `json:"targets,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		Targets     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -119,9 +162,10 @@ type ProjectUpdateResponse struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object ProjectUpdateResponseObject `json:"object,required"`
-	Org    string                      `json:"org,required"`
-	Slug   string                      `json:"slug,required"`
+	Object  ProjectUpdateResponseObject `json:"object,required"`
+	Org     string                      `json:"org,required"`
+	Slug    string                      `json:"slug,required"`
+	Targets []string                    `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ConfigRepo  respjson.Field
@@ -129,6 +173,7 @@ type ProjectUpdateResponse struct {
 		Object      respjson.Field
 		Org         respjson.Field
 		Slug        respjson.Field
+		Targets     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -170,9 +215,10 @@ type ProjectListResponseData struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object string `json:"object,required"`
-	Org    string `json:"org,required"`
-	Slug   string `json:"slug,required"`
+	Object  string   `json:"object,required"`
+	Org     string   `json:"org,required"`
+	Slug    string   `json:"slug,required"`
+	Targets []string `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ConfigRepo  respjson.Field
@@ -180,6 +226,7 @@ type ProjectListResponseData struct {
 		Object      respjson.Field
 		Org         respjson.Field
 		Slug        respjson.Field
+		Targets     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -188,6 +235,43 @@ type ProjectListResponseData struct {
 // Returns the unmodified JSON received from the API
 func (r ProjectListResponseData) RawJSON() string { return r.JSON.raw }
 func (r *ProjectListResponseData) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectNewParams struct {
+	// Human-readable project name
+	DisplayName string `json:"display_name,required"`
+	// Organization name
+	Org string `json:"org,required"`
+	// File contents to commit
+	Revision map[string]ProjectNewParamsRevision `json:"revision,omitzero,required"`
+	// Project name/slug
+	Slug string `json:"slug,required"`
+	// Targets to generate for
+	Targets []string `json:"targets,omitzero,required"`
+	paramObj
+}
+
+func (r ProjectNewParams) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectNewParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectNewParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The property Content is required.
+type ProjectNewParamsRevision struct {
+	// File content
+	Content string `json:"content,required"`
+	paramObj
+}
+
+func (r ProjectNewParamsRevision) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectNewParamsRevision
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectNewParamsRevision) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
