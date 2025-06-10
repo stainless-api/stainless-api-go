@@ -26,7 +26,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewBuildService] method instead.
 type BuildService struct {
-	Options []option.RequestOption
+	Options       []option.RequestOption
+	TargetOutputs BuildTargetOutputService
 }
 
 // NewBuildService generates a new service that applies the given options to each
@@ -35,6 +36,7 @@ type BuildService struct {
 func NewBuildService(opts ...option.RequestOption) (r BuildService) {
 	r = BuildService{}
 	r.Options = opts
+	r.TargetOutputs = NewBuildTargetOutputService(opts...)
 	return
 }
 
@@ -912,7 +914,7 @@ type BuildNewParamsRevisionUnion struct {
 }
 
 func (u BuildNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[BuildNewParamsRevisionUnion](u.OfString, u.OfBuildNewsRevisionMapMap)
+	return param.MarshalUnion(u, u.OfString, u.OfBuildNewsRevisionMapMap)
 }
 func (u *BuildNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
@@ -929,7 +931,7 @@ func (u *BuildNewParamsRevisionUnion) asAny() any {
 
 // The property Content is required.
 type BuildNewParamsRevisionMapItem struct {
-	// The file content
+	// File content
 	Content string `json:"content,required"`
 	paramObj
 }
@@ -1056,7 +1058,7 @@ type BuildCompareParamsBaseRevisionUnion struct {
 }
 
 func (u BuildCompareParamsBaseRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[BuildCompareParamsBaseRevisionUnion](u.OfString, u.OfBuildComparesBaseRevisionMapMap)
+	return param.MarshalUnion(u, u.OfString, u.OfBuildComparesBaseRevisionMapMap)
 }
 func (u *BuildCompareParamsBaseRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
@@ -1073,7 +1075,7 @@ func (u *BuildCompareParamsBaseRevisionUnion) asAny() any {
 
 // The property Content is required.
 type BuildCompareParamsBaseRevisionMapItem struct {
-	// The file content
+	// File content
 	Content string `json:"content,required"`
 	paramObj
 }
@@ -1118,7 +1120,7 @@ type BuildCompareParamsHeadRevisionUnion struct {
 }
 
 func (u BuildCompareParamsHeadRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[BuildCompareParamsHeadRevisionUnion](u.OfString, u.OfBuildComparesHeadRevisionMapMap)
+	return param.MarshalUnion(u, u.OfString, u.OfBuildComparesHeadRevisionMapMap)
 }
 func (u *BuildCompareParamsHeadRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
@@ -1135,7 +1137,7 @@ func (u *BuildCompareParamsHeadRevisionUnion) asAny() any {
 
 // The property Content is required.
 type BuildCompareParamsHeadRevisionMapItem struct {
-	// The file content
+	// File content
 	Content string `json:"content,required"`
 	paramObj
 }

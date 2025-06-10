@@ -27,7 +27,7 @@ func TestOrgGet(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 		option.WithProject("example-project"),
 	)
-	_, err := client.Orgs.Get(context.TODO(), "orgName")
+	_, err := client.Orgs.Get(context.TODO(), "org")
 	if err != nil {
 		var apierr *stainlessv0.Error
 		if errors.As(err, &apierr) {

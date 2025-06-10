@@ -27,7 +27,7 @@ func TestBuildTargetOutputGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 		option.WithProject("example-project"),
 	)
-	_, err := client.BuildTargetOutputs.Get(context.TODO(), stainlessv0.BuildTargetOutputGetParams{
+	_, err := client.Builds.TargetOutputs.Get(context.TODO(), stainlessv0.BuildTargetOutputGetParams{
 		BuildID: "build_id",
 		Target:  stainlessv0.BuildTargetOutputGetParamsTargetNode,
 		Type:    stainlessv0.BuildTargetOutputGetParamsTypeSource,

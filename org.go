@@ -34,13 +34,13 @@ func NewOrgService(opts ...option.RequestOption) (r OrgService) {
 }
 
 // Retrieve an organization by name
-func (r *OrgService) Get(ctx context.Context, orgName string, opts ...option.RequestOption) (res *OrgGetResponse, err error) {
+func (r *OrgService) Get(ctx context.Context, org string, opts ...option.RequestOption) (res *OrgGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if orgName == "" {
-		err = errors.New("missing required orgName parameter")
+	if org == "" {
+		err = errors.New("missing required org parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/orgs/%s", orgName)
+	path := fmt.Sprintf("v0/orgs/%s", org)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
