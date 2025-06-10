@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.7.0 (2025-06-10)
+
+Full Changelog: [v0.6.0...v0.7.0](https://github.com/stainless-api/stainless-api-go/compare/v0.6.0...v0.7.0)
+
+### Features
+
+* **api:** add v0 project create api ([4cdf7bf](https://github.com/stainless-api/stainless-api-go/commit/4cdf7bf90dd059f71286a680d23060c8039d9b28))
+* **client:** allow overriding unions ([1f0ec85](https://github.com/stainless-api/stainless-api-go/commit/1f0ec85eeb4bd789425f8306ec3aaeea8cbb0fde))
+
+
+### Bug Fixes
+
+* changes har request format for snippets API some more ([4290df0](https://github.com/stainless-api/stainless-api-go/commit/4290df0cb3e25d90373bb45e41033610ceb46028))
+
+
+### Chores
+
+* **internal:** codegen related update ([ee07e73](https://github.com/stainless-api/stainless-api-go/commit/ee07e73496957e77044b1c576f3dfb5301861617))
+* **internal:** codegen related update ([0d55c35](https://github.com/stainless-api/stainless-api-go/commit/0d55c359c5f2ceb288fae9d7adf52096ed823ef2))
+
+
+### Refactors
+
+* move build_target_outputs to builds.target_outputs ([448904e](https://github.com/stainless-api/stainless-api-go/commit/448904e7633c713bdaa33bd26fc98875b9492024))
+
 ## 0.6.0 (2025-06-02)
 
 Full Changelog: [v0.5.1...v0.6.0](https://github.com/stainless-api/stainless-api-go/compare/v0.5.1...v0.6.0)
