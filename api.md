@@ -37,16 +37,6 @@ Methods:
 - <code title="get /v0/projects/{project}/configs">client.Projects.Configs.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectConfigService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectConfigGetParams">ProjectConfigGetParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectConfigGetResponse">ProjectConfigGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="post /v0/projects/{project}/configs/guess">client.Projects.Configs.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectConfigService.Guess">Guess</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectConfigGuessParams">ProjectConfigGuessParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectConfigGuessResponse">ProjectConfigGuessResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## Snippets
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectSnippetNewRequestResponse">ProjectSnippetNewRequestResponse</a>
-
-Methods:
-
-- <code title="post /v0/projects/{projectName}/snippets/request">client.Projects.Snippets.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectSnippetService.NewRequest">NewRequest</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectSnippetNewRequestParams">ProjectSnippetNewRequestParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectSnippetNewRequestResponse">ProjectSnippetNewRequestResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # Builds
 
 Response Types:
