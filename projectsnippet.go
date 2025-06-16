@@ -105,7 +105,7 @@ type ProjectSnippetNewRequestParamsRequestUnion struct {
 }
 
 func (u ProjectSnippetNewRequestParamsRequestUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[ProjectSnippetNewRequestParamsRequestUnion](u.OfProjectSnippetNewRequestsRequestObject, u.OfVariant2)
+	return param.MarshalUnion(u, u.OfProjectSnippetNewRequestsRequestObject, u.OfVariant2)
 }
 func (u *ProjectSnippetNewRequestParamsRequestUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
