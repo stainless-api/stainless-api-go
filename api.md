@@ -74,13 +74,3 @@ Methods:
 
 - <code title="get /v0/orgs/{org}">client.Orgs.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, org <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgGetResponse">OrgGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v0/orgs">client.Orgs.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgListResponse">OrgListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-# Generate
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#GenerateNewSpecResponse">GenerateNewSpecResponse</a>
-
-Methods:
-
-- <code title="post /v0/generate/spec">client.Generate.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#GenerateService.NewSpec">NewSpec</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#GenerateNewSpecParams">GenerateNewSpecParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainlessv0</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#GenerateNewSpecResponse">GenerateNewSpecResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
