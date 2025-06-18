@@ -30,13 +30,15 @@ func TestProjectNew(t *testing.T) {
 	_, err := client.Projects.New(context.TODO(), stainlessv0.ProjectNewParams{
 		DisplayName: "display_name",
 		Org:         "org",
-		Revision: map[string]stainlessv0.ProjectNewParamsRevision{
+		Revision: map[string]stainlessv0.ProjectNewParamsRevisionUnion{
 			"foo": {
-				Content: "content",
+				OfProjectNewsRevisionContent: &stainlessv0.ProjectNewParamsRevisionContent{
+					Content: "content",
+				},
 			},
 		},
 		Slug:    "slug",
-		Targets: []string{"string"},
+		Targets: []string{"node"},
 	})
 	if err != nil {
 		var apierr *stainlessv0.Error
