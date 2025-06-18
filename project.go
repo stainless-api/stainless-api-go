@@ -94,10 +94,12 @@ type ProjectNewResponse struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object  ProjectNewResponseObject `json:"object,required"`
-	Org     string                   `json:"org,required"`
-	Slug    string                   `json:"slug,required"`
-	Targets []string                 `json:"targets,required"`
+	Object ProjectNewResponseObject `json:"object,required"`
+	Org    string                   `json:"org,required"`
+	Slug   string                   `json:"slug,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ConfigRepo  respjson.Field
@@ -127,10 +129,12 @@ type ProjectGetResponse struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object  ProjectGetResponseObject `json:"object,required"`
-	Org     string                   `json:"org,required"`
-	Slug    string                   `json:"slug,required"`
-	Targets []string                 `json:"targets,required"`
+	Object ProjectGetResponseObject `json:"object,required"`
+	Org    string                   `json:"org,required"`
+	Slug   string                   `json:"slug,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ConfigRepo  respjson.Field
@@ -160,10 +164,12 @@ type ProjectUpdateResponse struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object  ProjectUpdateResponseObject `json:"object,required"`
-	Org     string                      `json:"org,required"`
-	Slug    string                      `json:"slug,required"`
-	Targets []string                    `json:"targets,required"`
+	Object ProjectUpdateResponseObject `json:"object,required"`
+	Org    string                      `json:"org,required"`
+	Slug   string                      `json:"slug,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ConfigRepo  respjson.Field
@@ -213,9 +219,11 @@ type ProjectListResponseData struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object  string   `json:"object,required"`
-	Org     string   `json:"org,required"`
-	Slug    string   `json:"slug,required"`
+	Object string `json:"object,required"`
+	Org    string `json:"org,required"`
+	Slug   string `json:"slug,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
 	Targets []string `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -242,10 +250,13 @@ type ProjectNewParams struct {
 	// Organization name
 	Org string `json:"org,required"`
 	// File contents to commit
-	Revision map[string]ProjectNewParamsRevision `json:"revision,omitzero,required"`
+	Revision map[string]ProjectNewParamsRevisionUnion `json:"revision,omitzero,required"`
 	// Project name/slug
 	Slug string `json:"slug,required"`
 	// Targets to generate for
+	//
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
 	Targets []string `json:"targets,omitzero,required"`
 	paramObj
 }
@@ -258,18 +269,58 @@ func (r *ProjectNewParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type ProjectNewParamsRevisionUnion struct {
+	OfProjectNewsRevisionContent *ProjectNewParamsRevisionContent `json:",omitzero,inline"`
+	OfProjectNewsRevisionURL     *ProjectNewParamsRevisionURL     `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u ProjectNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion[ProjectNewParamsRevisionUnion](u.OfProjectNewsRevisionContent, u.OfProjectNewsRevisionURL)
+}
+func (u *ProjectNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
+}
+
+func (u *ProjectNewParamsRevisionUnion) asAny() any {
+	if !param.IsOmitted(u.OfProjectNewsRevisionContent) {
+		return u.OfProjectNewsRevisionContent
+	} else if !param.IsOmitted(u.OfProjectNewsRevisionURL) {
+		return u.OfProjectNewsRevisionURL
+	}
+	return nil
+}
+
 // The property Content is required.
-type ProjectNewParamsRevision struct {
+type ProjectNewParamsRevisionContent struct {
 	// File content
 	Content string `json:"content,required"`
 	paramObj
 }
 
-func (r ProjectNewParamsRevision) MarshalJSON() (data []byte, err error) {
-	type shadow ProjectNewParamsRevision
+func (r ProjectNewParamsRevisionContent) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectNewParamsRevisionContent
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *ProjectNewParamsRevision) UnmarshalJSON(data []byte) error {
+func (r *ProjectNewParamsRevisionContent) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The property URL is required.
+type ProjectNewParamsRevisionURL struct {
+	// URL to fetch file content from
+	URL string `json:"url,required"`
+	paramObj
+}
+
+func (r ProjectNewParamsRevisionURL) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectNewParamsRevisionURL
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectNewParamsRevisionURL) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
