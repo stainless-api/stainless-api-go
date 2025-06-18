@@ -279,7 +279,7 @@ type ProjectNewParamsRevisionUnion struct {
 }
 
 func (u ProjectNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion[ProjectNewParamsRevisionUnion](u.OfProjectNewsRevisionContent, u.OfProjectNewsRevisionURL)
+	return param.MarshalUnion(u, u.OfProjectNewsRevisionContent, u.OfProjectNewsRevisionURL)
 }
 func (u *ProjectNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
