@@ -25,7 +25,6 @@ func TestBuildTargetOutputGetWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.TargetOutputs.Get(context.TODO(), stainlessv0.BuildTargetOutputGetParams{
 		BuildID: "build_id",

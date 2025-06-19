@@ -23,9 +23,9 @@ func TestUsage(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 	)
 	buildObject, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
+		Project: stainlessv0.String("project"),
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
