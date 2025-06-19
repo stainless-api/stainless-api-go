@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.8.0 (2025-06-19)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/stainless-api/stainless-api-go/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** manual updates ([03bf5cc](https://github.com/stainless-api/stainless-api-go/commit/03bf5cca43b8855213a05294052eca33b4650cc3))
+* sdkjson generation API ([d5e6d5a](https://github.com/stainless-api/stainless-api-go/commit/d5e6d5a52c7f74080ed52f24dd4177b085987eb9))
+
+
+### Bug Fixes
+
+* **cli:** fix cli headers ([d59596a](https://github.com/stainless-api/stainless-api-go/commit/d59596a1f9d73944aa02f23bc6147f228f23d688))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([414cbfe](https://github.com/stainless-api/stainless-api-go/commit/414cbfed4a85185dcb0b09ef19f4ef7f9ea6adcd))
+* **internal:** codegen related update ([8840443](https://github.com/stainless-api/stainless-api-go/commit/88404430061eac611a077baac73e34374cd835c4))
+* **internal:** codegen related update ([6e1ed74](https://github.com/stainless-api/stainless-api-go/commit/6e1ed7459fc26b95aa5d946b3c0400af446e2f0c))
+* **internal:** codegen related update ([31f566d](https://github.com/stainless-api/stainless-api-go/commit/31f566df55fe0b045ba6ac02eddf50093f22267f))
+
 ## 0.7.0 (2025-06-16)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/stainless-api/stainless-api-go/compare/v0.6.0...v0.7.0)
