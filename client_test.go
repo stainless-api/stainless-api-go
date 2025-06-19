@@ -27,7 +27,6 @@ func TestUserAgentHeader(t *testing.T) {
 	var userAgent string
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -40,6 +39,7 @@ func TestUserAgentHeader(t *testing.T) {
 		}),
 	)
 	client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
+		Project: stainlessv0.String("project"),
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -53,7 +53,6 @@ func TestRetryAfter(t *testing.T) {
 	retryCountHeaders := make([]string, 0)
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -69,6 +68,7 @@ func TestRetryAfter(t *testing.T) {
 		}),
 	)
 	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
+		Project: stainlessv0.String("project"),
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -92,7 +92,6 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 	retryCountHeaders := make([]string, 0)
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -109,6 +108,7 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 		option.WithHeaderDel("X-Stainless-Retry-Count"),
 	)
 	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
+		Project: stainlessv0.String("project"),
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -127,7 +127,6 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 	retryCountHeaders := make([]string, 0)
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -144,6 +143,7 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 		option.WithHeader("X-Stainless-Retry-Count", "42"),
 	)
 	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
+		Project: stainlessv0.String("project"),
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -162,7 +162,6 @@ func TestRetryAfterMs(t *testing.T) {
 	attempts := 0
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -178,6 +177,7 @@ func TestRetryAfterMs(t *testing.T) {
 		}),
 	)
 	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
+		Project: stainlessv0.String("project"),
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -193,7 +193,6 @@ func TestRetryAfterMs(t *testing.T) {
 func TestContextCancel(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -206,6 +205,7 @@ func TestContextCancel(t *testing.T) {
 	cancelCtx, cancel := context.WithCancel(context.Background())
 	cancel()
 	_, err := client.Builds.New(cancelCtx, stainlessv0.BuildNewParams{
+		Project: stainlessv0.String("project"),
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -218,7 +218,6 @@ func TestContextCancel(t *testing.T) {
 func TestContextCancelDelay(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -231,6 +230,7 @@ func TestContextCancelDelay(t *testing.T) {
 	cancelCtx, cancel := context.WithTimeout(context.Background(), 2*time.Millisecond)
 	defer cancel()
 	_, err := client.Builds.New(cancelCtx, stainlessv0.BuildNewParams{
+		Project: stainlessv0.String("project"),
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -251,7 +251,6 @@ func TestContextDeadline(t *testing.T) {
 	go func() {
 		client := stainlessv0.NewClient(
 			option.WithAPIKey("My API Key"),
-			option.WithProject("example-project"),
 			option.WithHTTPClient(&http.Client{
 				Transport: &closureTransport{
 					fn: func(req *http.Request) (*http.Response, error) {
@@ -262,6 +261,7 @@ func TestContextDeadline(t *testing.T) {
 			}),
 		)
 		_, err := client.Builds.New(deadlineCtx, stainlessv0.BuildNewParams{
+			Project: stainlessv0.String("project"),
 			Revision: stainlessv0.BuildNewParamsRevisionUnion{
 				OfString: stainlessv0.String("string"),
 			},

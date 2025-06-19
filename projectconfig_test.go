@@ -25,10 +25,10 @@ func TestProjectConfigGetWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 	)
 	_, err := client.Projects.Configs.Get(context.TODO(), stainlessv0.ProjectConfigGetParams{
-		Branch: stainlessv0.String("branch"),
+		Project: stainlessv0.String("project"),
+		Branch:  stainlessv0.String("branch"),
 	})
 	if err != nil {
 		var apierr *stainlessv0.Error
@@ -51,11 +51,11 @@ func TestProjectConfigGuessWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 	)
 	_, err := client.Projects.Configs.Guess(context.TODO(), stainlessv0.ProjectConfigGuessParams{
-		Spec:   "spec",
-		Branch: stainlessv0.String("branch"),
+		Project: stainlessv0.String("project"),
+		Spec:    "spec",
+		Branch:  stainlessv0.String("branch"),
 	})
 	if err != nil {
 		var apierr *stainlessv0.Error

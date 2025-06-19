@@ -25,9 +25,9 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
+		Project: stainlessv0.String("project"),
 		Revision: stainlessv0.BuildNewParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -57,7 +57,6 @@ func TestBuildGet(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.Get(context.TODO(), "buildId")
 	if err != nil {
@@ -81,12 +80,12 @@ func TestBuildListWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.List(context.TODO(), stainlessv0.BuildListParams{
-		Branch: stainlessv0.String("branch"),
-		Cursor: stainlessv0.String("cursor"),
-		Limit:  stainlessv0.Float(1),
+		Project: stainlessv0.String("project"),
+		Branch:  stainlessv0.String("branch"),
+		Cursor:  stainlessv0.String("cursor"),
+		Limit:   stainlessv0.Float(1),
 		Revision: stainlessv0.BuildListParamsRevisionUnion{
 			OfString: stainlessv0.String("string"),
 		},
@@ -112,7 +111,6 @@ func TestBuildCompareWithOptionalParams(t *testing.T) {
 	client := stainlessv0.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
-		option.WithProject("example-project"),
 	)
 	_, err := client.Builds.Compare(context.TODO(), stainlessv0.BuildCompareParams{
 		Base: stainlessv0.BuildCompareParamsBase{
@@ -129,6 +127,7 @@ func TestBuildCompareWithOptionalParams(t *testing.T) {
 			Branch:        stainlessv0.String("branch"),
 			CommitMessage: stainlessv0.String("commit_message"),
 		},
+		Project: stainlessv0.String("project"),
 		Targets: []string{"node"},
 	})
 	if err != nil {
