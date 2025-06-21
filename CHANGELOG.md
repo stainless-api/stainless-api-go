@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.10.0 (2025-06-21)
+
+Full Changelog: [v0.9.0...v0.10.0](https://github.com/stainless-api/stainless-api-go/compare/v0.9.0...v0.10.0)
+
+### Features
+
+* **client:** add escape hatch for null slice & maps ([94dbc43](https://github.com/stainless-api/stainless-api-go/commit/94dbc43962273080336ac6e69fe60a65b5d2d0af))
+
+
+### Chores
+
+* fix documentation of null map ([c6db005](https://github.com/stainless-api/stainless-api-go/commit/c6db005e637027278e5469fbca0167c433772d2d))
+
 ## 0.9.0 (2025-06-19)
 
 Full Changelog: [v0.8.0...v0.9.0](https://github.com/stainless-api/stainless-api-go/compare/v0.8.0...v0.9.0)
