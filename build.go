@@ -27,6 +27,7 @@ import (
 // the [NewBuildService] method instead.
 type BuildService struct {
 	Options       []option.RequestOption
+	Diagnostics   BuildDiagnosticService
 	TargetOutputs BuildTargetOutputService
 }
 
@@ -36,6 +37,7 @@ type BuildService struct {
 func NewBuildService(opts ...option.RequestOption) (r BuildService) {
 	r = BuildService{}
 	r.Options = opts
+	r.Diagnostics = NewBuildDiagnosticService(opts...)
 	r.TargetOutputs = NewBuildTargetOutputService(opts...)
 	return
 }
