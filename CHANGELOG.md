@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.10.0 (2025-06-23)
+
+Full Changelog: [v0.9.0...v0.10.0](https://github.com/stainless-api/stainless-api-go/compare/v0.9.0...v0.10.0)
+
+### Features
+
+* **api:** add diagnostics endpoint ([d592bca](https://github.com/stainless-api/stainless-api-go/commit/d592bca7eb4870d52d0f1fbfb2b7ff29822cc3b7))
+* **api:** api update ([fb0ef82](https://github.com/stainless-api/stainless-api-go/commit/fb0ef823502432e58a97e501056d2dd60c37e2f0))
+* **client:** add escape hatch for null slice & maps ([94dbc43](https://github.com/stainless-api/stainless-api-go/commit/94dbc43962273080336ac6e69fe60a65b5d2d0af))
+
+
+### Chores
+
+* fix documentation of null map ([c6db005](https://github.com/stainless-api/stainless-api-go/commit/c6db005e637027278e5469fbca0167c433772d2d))
+
 ## 0.9.0 (2025-06-19)
 
 Full Changelog: [v0.8.0...v0.9.0](https://github.com/stainless-api/stainless-api-go/compare/v0.8.0...v0.9.0)
