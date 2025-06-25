@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ```go
 import (
-	"github.com/stainless-api/stainless-api-go" // imported as stainlessv0
+	"github.com/stainless-api/stainless-api-go" // imported as stainless
 )
 ```
 
@@ -49,13 +49,13 @@ import (
 )
 
 func main() {
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_API_KEY")
 	)
-	buildObject, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	buildObject, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if err != nil {
@@ -68,13 +68,13 @@ func main() {
 
 ### Request fields
 
-The stainlessv0 library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
+The stainless library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
 semantics from the Go 1.24+ `encoding/json` release for request fields.
 
 Required primitive fields (`int64`, `string`, etc.) feature the tag <code>\`json:"...,required"\`</code>. These
 fields are always serialized, even their zero values.
 
-Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, `stainlessv0.String(string)`, `stainlessv0.Int(int64)`, etc.
+Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, `stainless.String(string)`, `stainless.Int(int64)`, etc.
 
 Any `param.Opt[T]`, map, slice, struct or string enum uses the
 tag <code>\`json:"...,omitzero"\`</code>. Its zero value is considered omitted.
@@ -82,17 +82,17 @@ tag <code>\`json:"...,omitzero"\`</code>. Its zero value is considered omitted.
 The `param.IsOmitted(any)` function can confirm the presence of any `omitzero` field.
 
 ```go
-p := stainlessv0.ExampleParams{
-	ID:   "id_xxx",                  // required property
-	Name: stainlessv0.String("..."), // optional property
+p := stainless.ExampleParams{
+	ID:   "id_xxx",                // required property
+	Name: stainless.String("..."), // optional property
 
-	Point: stainlessv0.Point{
-		X: 0,                  // required field will serialize as 0
-		Y: stainlessv0.Int(1), // optional field will serialize as 1
+	Point: stainless.Point{
+		X: 0,                // required field will serialize as 0
+		Y: stainless.Int(1), // optional field will serialize as 1
 		// ... omitted non-required fields will not be serialized
 	},
 
-	Origin: stainlessv0.Origin{}, // the zero value of [Origin] is considered omitted
+	Origin: stainless.Origin{}, // the zero value of [Origin] is considered omitted
 }
 ```
 
@@ -121,7 +121,7 @@ p.SetExtraFields(map[string]any{
 })
 
 // Send a number instead of an object
-custom := param.Override[stainlessv0.FooParams](12)
+custom := param.Override[stainless.FooParams](12)
 ```
 
 ### Request unions
@@ -262,7 +262,7 @@ This library uses the functional options pattern. Functions defined in the
 requests. For example:
 
 ```go
-client := stainlessv0.NewClient(
+client := stainless.NewClient(
 	// Adds a header to every request made by the client
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
@@ -291,21 +291,21 @@ with additional helper methods like `.GetNextPage()`, e.g.:
 ### Errors
 
 When the API returns a non-success status code, we return an error with type
-`*stainlessv0.Error`. This contains the `StatusCode`, `*http.Request`, and
+`*stainless.Error`. This contains the `StatusCode`, `*http.Request`, and
 `*http.Response` values of the request, as well as the JSON of the error body
 (much like other response objects in the SDK).
 
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
-	Project: stainlessv0.String("project"),
-	Revision: stainlessv0.BuildNewParamsRevisionUnion{
-		OfString: stainlessv0.String("string"),
+_, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
+	Project: stainless.String("project"),
+	Revision: stainless.BuildNewParamsRevisionUnion{
+		OfString: stainless.String("string"),
 	},
 })
 if err != nil {
-	var apierr *stainlessv0.Error
+	var apierr *stainless.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
@@ -330,10 +330,10 @@ ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
 client.Builds.New(
 	ctx,
-	stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	},
 	// This sets the per-retry timeout
@@ -351,7 +351,7 @@ The file name and content-type can be customized by implementing `Name() string`
 string` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a
 file returned by `os.Open` will be sent with the file name on disk.
 
-We also provide a helper `stainlessv0.File(reader io.Reader, filename string, contentType string)`
+We also provide a helper `stainless.File(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
 
 ### Retries
@@ -364,17 +364,17 @@ You can use the `WithMaxRetries` option to configure or disable this:
 
 ```go
 // Configure the default for all requests:
-client := stainlessv0.NewClient(
+client := stainless.NewClient(
 	option.WithMaxRetries(0), // default is 2
 )
 
 // Override per-request:
 client.Builds.New(
 	context.TODO(),
-	stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	},
 	option.WithMaxRetries(5),
@@ -391,10 +391,10 @@ you need to examine response headers, status codes, or other details.
 var response *http.Response
 buildObject, err := client.Builds.New(
 	context.TODO(),
-	stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	},
 	option.WithResponseInto(&response),
@@ -443,7 +443,7 @@ or the `option.WithJSONSet()` methods.
 params := FooNewParams{
     ID:   "id_xxxx",
     Data: FooNewParamsData{
-        FirstName: stainlessv0.String("John"),
+        FirstName: stainless.String("John"),
     },
 }
 client.Foo.New(context.Background(), params, option.WithJSONSet("data.last_name", "Doe"))
@@ -478,7 +478,7 @@ func Logger(req *http.Request, next option.MiddlewareNext) (res *http.Response, 
     return res, err
 }
 
-client := stainlessv0.NewClient(
+client := stainless.NewClient(
 	option.WithMiddleware(Logger),
 )
 ```
