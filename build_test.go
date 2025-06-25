@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0_test
+package stainless_test
 
 import (
 	"context"
@@ -22,22 +22,22 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	_, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
-		AllowEmpty:    stainlessv0.Bool(true),
-		Branch:        stainlessv0.String("branch"),
-		CommitMessage: stainlessv0.String("commit_message"),
+		AllowEmpty:    stainless.Bool(true),
+		Branch:        stainless.String("branch"),
+		CommitMessage: stainless.String("commit_message"),
 		Targets:       []string{"node"},
 	})
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -54,13 +54,13 @@ func TestBuildGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Builds.Get(context.TODO(), "buildId")
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -77,21 +77,21 @@ func TestBuildListWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Builds.List(context.TODO(), stainlessv0.BuildListParams{
-		Project: stainlessv0.String("project"),
-		Branch:  stainlessv0.String("branch"),
-		Cursor:  stainlessv0.String("cursor"),
-		Limit:   stainlessv0.Float(1),
-		Revision: stainlessv0.BuildListParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	_, err := client.Builds.List(context.TODO(), stainless.BuildListParams{
+		Project: stainless.String("project"),
+		Branch:  stainless.String("branch"),
+		Cursor:  stainless.String("cursor"),
+		Limit:   stainless.Float(1),
+		Revision: stainless.BuildListParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -108,30 +108,30 @@ func TestBuildCompareWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Builds.Compare(context.TODO(), stainlessv0.BuildCompareParams{
-		Base: stainlessv0.BuildCompareParamsBase{
-			Revision: stainlessv0.BuildCompareParamsBaseRevisionUnion{
-				OfString: stainlessv0.String("string"),
+	_, err := client.Builds.Compare(context.TODO(), stainless.BuildCompareParams{
+		Base: stainless.BuildCompareParamsBase{
+			Revision: stainless.BuildCompareParamsBaseRevisionUnion{
+				OfString: stainless.String("string"),
 			},
-			Branch:        stainlessv0.String("branch"),
-			CommitMessage: stainlessv0.String("commit_message"),
+			Branch:        stainless.String("branch"),
+			CommitMessage: stainless.String("commit_message"),
 		},
-		Head: stainlessv0.BuildCompareParamsHead{
-			Revision: stainlessv0.BuildCompareParamsHeadRevisionUnion{
-				OfString: stainlessv0.String("string"),
+		Head: stainless.BuildCompareParamsHead{
+			Revision: stainless.BuildCompareParamsHeadRevisionUnion{
+				OfString: stainless.String("string"),
 			},
-			Branch:        stainlessv0.String("branch"),
-			CommitMessage: stainlessv0.String("commit_message"),
+			Branch:        stainless.String("branch"),
+			CommitMessage: stainless.String("commit_message"),
 		},
-		Project: stainlessv0.String("project"),
+		Project: stainless.String("project"),
 		Targets: []string{"node"},
 	})
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

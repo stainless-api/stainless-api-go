@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0_test
+package stainless_test
 
 import (
 	"context"
@@ -22,22 +22,22 @@ func TestBuildDiagnosticListWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Builds.Diagnostics.List(
 		context.TODO(),
 		"buildId",
-		stainlessv0.BuildDiagnosticListParams{
-			Cursor:   stainlessv0.String("cursor"),
-			Limit:    stainlessv0.Float(1),
-			Severity: stainlessv0.BuildDiagnosticListParamsSeverityFatal,
+		stainless.BuildDiagnosticListParams{
+			Cursor:   stainless.String("cursor"),
+			Limit:    stainless.Float(1),
+			Severity: stainless.BuildDiagnosticListParamsSeverityFatal,
 			Targets:  []string{"node"},
 		},
 	)
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

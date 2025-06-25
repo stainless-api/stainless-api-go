@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0
+package stainless
 
 import (
 	"github.com/stainless-api/stainless-api-go/internal/apierror"

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0_test
+package stainless_test
 
 import (
 	"context"
@@ -22,18 +22,18 @@ func TestBuildTargetOutputGetWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Builds.TargetOutputs.Get(context.TODO(), stainlessv0.BuildTargetOutputGetParams{
+	_, err := client.Builds.TargetOutputs.Get(context.TODO(), stainless.BuildTargetOutputGetParams{
 		BuildID: "build_id",
-		Target:  stainlessv0.BuildTargetOutputGetParamsTargetNode,
-		Type:    stainlessv0.BuildTargetOutputGetParamsTypeSource,
-		Output:  stainlessv0.BuildTargetOutputGetParamsOutputURL,
+		Target:  stainless.BuildTargetOutputGetParamsTargetNode,
+		Type:    stainless.BuildTargetOutputGetParamsTypeSource,
+		Output:  stainless.BuildTargetOutputGetParamsOutputURL,
 	})
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

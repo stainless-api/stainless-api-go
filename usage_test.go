@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0_test
+package stainless_test
 
 import (
 	"context"
@@ -20,14 +20,14 @@ func TestUsage(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	buildObject, err := client.Builds.New(context.TODO(), stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	buildObject, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if err != nil {

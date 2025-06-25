@@ -1,4 +1,4 @@
-package stainlessv0
+package stainless
 
 import (
 	"github.com/stainless-api/stainless-api-go/packages/param"

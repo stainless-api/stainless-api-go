@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0_test
+package stainless_test
 
 import (
 	"context"
@@ -25,7 +25,7 @@ func (t *closureTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 
 func TestUserAgentHeader(t *testing.T) {
 	var userAgent string
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
@@ -38,10 +38,10 @@ func TestUserAgentHeader(t *testing.T) {
 			},
 		}),
 	)
-	client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	client.Builds.New(context.Background(), stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if userAgent != fmt.Sprintf("Stainless/Go %s", internal.PackageVersion) {
@@ -51,7 +51,7 @@ func TestUserAgentHeader(t *testing.T) {
 
 func TestRetryAfter(t *testing.T) {
 	retryCountHeaders := make([]string, 0)
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
@@ -67,10 +67,10 @@ func TestRetryAfter(t *testing.T) {
 			},
 		}),
 	)
-	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	_, err := client.Builds.New(context.Background(), stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if err == nil {
@@ -90,7 +90,7 @@ func TestRetryAfter(t *testing.T) {
 
 func TestDeleteRetryCountHeader(t *testing.T) {
 	retryCountHeaders := make([]string, 0)
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
@@ -107,10 +107,10 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 		}),
 		option.WithHeaderDel("X-Stainless-Retry-Count"),
 	)
-	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	_, err := client.Builds.New(context.Background(), stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if err == nil {
@@ -125,7 +125,7 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 
 func TestOverwriteRetryCountHeader(t *testing.T) {
 	retryCountHeaders := make([]string, 0)
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
@@ -142,10 +142,10 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 		}),
 		option.WithHeader("X-Stainless-Retry-Count", "42"),
 	)
-	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	_, err := client.Builds.New(context.Background(), stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if err == nil {
@@ -160,7 +160,7 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 
 func TestRetryAfterMs(t *testing.T) {
 	attempts := 0
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
@@ -176,10 +176,10 @@ func TestRetryAfterMs(t *testing.T) {
 			},
 		}),
 	)
-	_, err := client.Builds.New(context.Background(), stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	_, err := client.Builds.New(context.Background(), stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if err == nil {
@@ -191,7 +191,7 @@ func TestRetryAfterMs(t *testing.T) {
 }
 
 func TestContextCancel(t *testing.T) {
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
@@ -204,10 +204,10 @@ func TestContextCancel(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithCancel(context.Background())
 	cancel()
-	_, err := client.Builds.New(cancelCtx, stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	_, err := client.Builds.New(cancelCtx, stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if err == nil {
@@ -216,7 +216,7 @@ func TestContextCancel(t *testing.T) {
 }
 
 func TestContextCancelDelay(t *testing.T) {
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
@@ -229,10 +229,10 @@ func TestContextCancelDelay(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithTimeout(context.Background(), 2*time.Millisecond)
 	defer cancel()
-	_, err := client.Builds.New(cancelCtx, stainlessv0.BuildNewParams{
-		Project: stainlessv0.String("project"),
-		Revision: stainlessv0.BuildNewParamsRevisionUnion{
-			OfString: stainlessv0.String("string"),
+	_, err := client.Builds.New(cancelCtx, stainless.BuildNewParams{
+		Project: stainless.String("project"),
+		Revision: stainless.BuildNewParamsRevisionUnion{
+			OfString: stainless.String("string"),
 		},
 	})
 	if err == nil {
@@ -249,7 +249,7 @@ func TestContextDeadline(t *testing.T) {
 	defer cancel()
 
 	go func() {
-		client := stainlessv0.NewClient(
+		client := stainless.NewClient(
 			option.WithAPIKey("My API Key"),
 			option.WithHTTPClient(&http.Client{
 				Transport: &closureTransport{
@@ -260,10 +260,10 @@ func TestContextDeadline(t *testing.T) {
 				},
 			}),
 		)
-		_, err := client.Builds.New(deadlineCtx, stainlessv0.BuildNewParams{
-			Project: stainlessv0.String("project"),
-			Revision: stainlessv0.BuildNewParamsRevisionUnion{
-				OfString: stainlessv0.String("string"),
+		_, err := client.Builds.New(deadlineCtx, stainless.BuildNewParams{
+			Project: stainless.String("project"),
+			Revision: stainless.BuildNewParamsRevisionUnion{
+				OfString: stainless.String("string"),
 			},
 		})
 		if err == nil {
