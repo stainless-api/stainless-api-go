@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0
+package stainless
 
 import (
 	"context"
@@ -282,10 +282,10 @@ func (BuildTargetCommitCompleted) implBuildTargetCommitUnion()  {}
 // Use the following switch statement to find the correct variant
 //
 //	switch variant := BuildTargetCommitUnion.AsAny().(type) {
-//	case stainlessv0.BuildTargetCommitNotStarted:
-//	case stainlessv0.BuildTargetCommitQueued:
-//	case stainlessv0.BuildTargetCommitInProgress:
-//	case stainlessv0.BuildTargetCommitCompleted:
+//	case stainless.BuildTargetCommitNotStarted:
+//	case stainless.BuildTargetCommitQueued:
+//	case stainless.BuildTargetCommitInProgress:
+//	case stainless.BuildTargetCommitCompleted:
 //	default:
 //	  fmt.Errorf("no variant present")
 //	}
@@ -526,10 +526,10 @@ func (BuildTargetLintCompleted) implBuildTargetLintUnion()  {}
 // Use the following switch statement to find the correct variant
 //
 //	switch variant := BuildTargetLintUnion.AsAny().(type) {
-//	case stainlessv0.BuildTargetLintNotStarted:
-//	case stainlessv0.BuildTargetLintQueued:
-//	case stainlessv0.BuildTargetLintInProgress:
-//	case stainlessv0.BuildTargetLintCompleted:
+//	case stainless.BuildTargetLintNotStarted:
+//	case stainless.BuildTargetLintQueued:
+//	case stainless.BuildTargetLintInProgress:
+//	case stainless.BuildTargetLintCompleted:
 //	default:
 //	  fmt.Errorf("no variant present")
 //	}
@@ -707,10 +707,10 @@ func (BuildTargetTestCompleted) implBuildTargetTestUnion()  {}
 // Use the following switch statement to find the correct variant
 //
 //	switch variant := BuildTargetTestUnion.AsAny().(type) {
-//	case stainlessv0.BuildTargetTestNotStarted:
-//	case stainlessv0.BuildTargetTestQueued:
-//	case stainlessv0.BuildTargetTestInProgress:
-//	case stainlessv0.BuildTargetTestCompleted:
+//	case stainless.BuildTargetTestNotStarted:
+//	case stainless.BuildTargetTestQueued:
+//	case stainless.BuildTargetTestInProgress:
+//	case stainless.BuildTargetTestCompleted:
 //	default:
 //	  fmt.Errorf("no variant present")
 //	}
@@ -873,10 +873,10 @@ func (BuildTargetBuildCompleted) implBuildTargetBuildUnion()  {}
 // Use the following switch statement to find the correct variant
 //
 //	switch variant := BuildTargetBuildUnion.AsAny().(type) {
-//	case stainlessv0.BuildTargetBuildNotStarted:
-//	case stainlessv0.BuildTargetBuildQueued:
-//	case stainlessv0.BuildTargetBuildInProgress:
-//	case stainlessv0.BuildTargetBuildCompleted:
+//	case stainless.BuildTargetBuildNotStarted:
+//	case stainless.BuildTargetBuildQueued:
+//	case stainless.BuildTargetBuildInProgress:
+//	case stainless.BuildTargetBuildCompleted:
 //	default:
 //	  fmt.Errorf("no variant present")
 //	}
@@ -1039,10 +1039,10 @@ func (BuildTargetUploadCompleted) implBuildTargetUploadUnion()  {}
 // Use the following switch statement to find the correct variant
 //
 //	switch variant := BuildTargetUploadUnion.AsAny().(type) {
-//	case stainlessv0.BuildTargetUploadNotStarted:
-//	case stainlessv0.BuildTargetUploadQueued:
-//	case stainlessv0.BuildTargetUploadInProgress:
-//	case stainlessv0.BuildTargetUploadCompleted:
+//	case stainless.BuildTargetUploadNotStarted:
+//	case stainless.BuildTargetUploadQueued:
+//	case stainless.BuildTargetUploadInProgress:
+//	case stainless.BuildTargetUploadCompleted:
 //	default:
 //	  fmt.Errorf("no variant present")
 //	}

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0_test
+package stainless_test
 
 import (
 	"context"
@@ -22,18 +22,18 @@ func TestProjectBranchNewWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Branches.New(context.TODO(), stainlessv0.ProjectBranchNewParams{
-		Project:    stainlessv0.String("project"),
+	_, err := client.Projects.Branches.New(context.TODO(), stainless.ProjectBranchNewParams{
+		Project:    stainless.String("project"),
 		Branch:     "branch",
 		BranchFrom: "branch_from",
-		Force:      stainlessv0.Bool(true),
+		Force:      stainless.Bool(true),
 	})
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -50,19 +50,19 @@ func TestProjectBranchGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Projects.Branches.Get(
 		context.TODO(),
 		"branch",
-		stainlessv0.ProjectBranchGetParams{
-			Project: stainlessv0.String("project"),
+		stainless.ProjectBranchGetParams{
+			Project: stainless.String("project"),
 		},
 	)
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

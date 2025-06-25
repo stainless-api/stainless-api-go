@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0_test
+package stainless_test
 
 import (
 	"context"
@@ -22,16 +22,16 @@ func TestProjectConfigGetWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Configs.Get(context.TODO(), stainlessv0.ProjectConfigGetParams{
-		Project: stainlessv0.String("project"),
-		Branch:  stainlessv0.String("branch"),
+	_, err := client.Projects.Configs.Get(context.TODO(), stainless.ProjectConfigGetParams{
+		Project: stainless.String("project"),
+		Branch:  stainless.String("branch"),
 	})
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -48,17 +48,17 @@ func TestProjectConfigGuessWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Projects.Configs.Guess(context.TODO(), stainlessv0.ProjectConfigGuessParams{
-		Project: stainlessv0.String("project"),
+	_, err := client.Projects.Configs.Guess(context.TODO(), stainless.ProjectConfigGuessParams{
+		Project: stainless.String("project"),
 		Spec:    "spec",
-		Branch:  stainlessv0.String("branch"),
+		Branch:  stainless.String("branch"),
 	})
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

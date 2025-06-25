@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package stainlessv0_test
+package stainless_test
 
 import (
 	"context"
@@ -22,13 +22,13 @@ func TestOrgGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Orgs.Get(context.TODO(), "org")
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -45,13 +45,13 @@ func TestOrgList(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := stainlessv0.NewClient(
+	client := stainless.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Orgs.List(context.TODO())
 	if err != nil {
-		var apierr *stainlessv0.Error
+		var apierr *stainless.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
