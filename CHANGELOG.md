@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.1 (2025-06-27)
+
+Full Changelog: [v0.11.0...v0.11.1](https://github.com/stainless-api/stainless-api-go/compare/v0.11.0...v0.11.1)
+
+### Bug Fixes
+
+* don't try to deserialize as json when ResponseBodyInto is []byte ([d0a74dc](https://github.com/stainless-api/stainless-api-go/commit/d0a74dc9a2e0f71203391e8ab0a0e1e8f5620a22))
+
 ## 0.11.0 (2025-06-25)
 
 Full Changelog: [v0.10.0...v0.11.0](https://github.com/stainless-api/stainless-api-go/compare/v0.10.0...v0.11.0)
