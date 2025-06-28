@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.2 (2025-06-28)
+
+Full Changelog: [v0.11.1...v0.11.2](https://github.com/stainless-api/stainless-api-go/compare/v0.11.1...v0.11.2)
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([5e98885](https://github.com/stainless-api/stainless-api-go/commit/5e9888559a0e3b4f3f9848ebda67cf9c642455ee))
+
 ## 0.11.1 (2025-06-27)
 
 Full Changelog: [v0.11.0...v0.11.1](https://github.com/stainless-api/stainless-api-go/compare/v0.11.0...v0.11.1)
