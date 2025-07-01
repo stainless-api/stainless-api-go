@@ -543,15 +543,15 @@ func (cfg *RequestConfig) Execute() (err error) {
 		return nil
 	}
 
-	switch dst := cfg.ResponseBodyInto.(type) {
 	// If the response happens to be a byte array, deserialize the body as-is.
+	switch dst := cfg.ResponseBodyInto.(type) {
 	case *[]byte:
 		*dst = contents
-	default:
-		err = json.NewDecoder(bytes.NewReader(contents)).Decode(cfg.ResponseBodyInto)
-		if err != nil {
-			return fmt.Errorf("error parsing response json: %w", err)
-		}
+	}
+
+	err = json.NewDecoder(bytes.NewReader(contents)).Decode(cfg.ResponseBodyInto)
+	if err != nil {
+		return fmt.Errorf("error parsing response json: %w", err)
 	}
 
 	return nil
