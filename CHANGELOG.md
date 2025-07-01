@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.12.0 (2025-07-01)
+
+Full Changelog: [v0.11.1...v0.12.0](https://github.com/stainless-api/stainless-api-go/compare/v0.11.1...v0.12.0)
+
+### Features
+
+* **api:** add staging environment ([1c6ea6f](https://github.com/stainless-api/stainless-api-go/commit/1c6ea6fe7574b8f2a7dfa355db543f6f920d6bbe))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([5e98885](https://github.com/stainless-api/stainless-api-go/commit/5e9888559a0e3b4f3f9848ebda67cf9c642455ee))
+
 ## 0.11.1 (2025-06-27)
 
 Full Changelog: [v0.11.0...v0.11.1](https://github.com/stainless-api/stainless-api-go/compare/v0.11.0...v0.11.1)
