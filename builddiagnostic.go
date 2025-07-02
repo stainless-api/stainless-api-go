@@ -9,12 +9,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // BuildDiagnosticService contains methods and other services that help with
@@ -37,36 +36,33 @@ func NewBuildDiagnosticService(opts ...option.RequestOption) (r BuildDiagnosticS
 }
 
 // Get diagnostics for a build
-func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) (res *BuildDiagnosticListResponse, err error) {
+func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) (res *pagination.List[BuildDiagnosticListResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if buildID == "" {
 		err = errors.New("missing required buildId parameter")
 		return
 	}
 	path := fmt.Sprintf("v0/builds/%s/diagnostics", buildID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type BuildDiagnosticListResponse struct {
-	Data       []any  `json:"data,required"`
-	HasMore    bool   `json:"has_more,required"`
-	NextCursor string `json:"next_cursor"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Data        respjson.Field
-		HasMore     respjson.Field
-		NextCursor  respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
+// Get diagnostics for a build
+func (r *BuildDiagnosticService) ListAutoPaging(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) *pagination.ListAutoPager[BuildDiagnosticListResponse] {
+	return pagination.NewListAutoPager(r.List(ctx, buildID, query, opts...))
 }
 
-// Returns the unmodified JSON received from the API
-func (r BuildDiagnosticListResponse) RawJSON() string { return r.JSON.raw }
-func (r *BuildDiagnosticListResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
+type BuildDiagnosticListResponse = any
 
 type BuildDiagnosticListParams struct {
 	// Pagination cursor from a previous response
