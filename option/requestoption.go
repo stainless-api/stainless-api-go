@@ -265,13 +265,6 @@ func WithEnvironmentProduction() RequestOption {
 	return requestconfig.WithDefaultBaseURL("https://api.stainless.com/")
 }
 
-// WithEnvironmentStaging returns a RequestOption that sets the current
-// environment to be the "staging" environment. An environment specifies which base URL
-// to use by default.
-func WithEnvironmentStaging() RequestOption {
-	return requestconfig.WithDefaultBaseURL("https://staging.stainless.com/")
-}
-
 // WithAPIKey returns a RequestOption that sets the client setting "api_key".
 func WithAPIKey(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
