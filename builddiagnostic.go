@@ -67,7 +67,7 @@ type BuildDiagnosticListResponse = any
 type BuildDiagnosticListParams struct {
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
-	// Maximum number of diagnostics to return, defaults to 10 (maximum: 100)
+	// Maximum number of diagnostics to return, defaults to 100 (maximum: 100)
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
 	// Includes the given severity and above (fatal > error > warning > note).
 	//
