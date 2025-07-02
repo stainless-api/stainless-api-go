@@ -42,9 +42,6 @@ func (r *List[T]) UnmarshalJSON(data []byte) error {
 // there is no next page, this function will return a 'nil' for the page value, but
 // will not return an error
 func (r *List[T]) GetNextPage() (res *List[T], err error) {
-	if len(r.Data) == 0 {
-		return nil, nil
-	}
 	next := r.NextCursor
 	if len(next) == 0 {
 		return nil, nil
