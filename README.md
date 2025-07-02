@@ -51,7 +51,6 @@ import (
 func main() {
 	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_API_KEY")
-		option.WithEnvironmentStaging(), // defaults to option.WithEnvironmentProduction()
 	)
 	buildObject, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
 		Project: stainless.String("project"),

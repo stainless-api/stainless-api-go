@@ -13,7 +13,6 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
-	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
@@ -83,27 +82,12 @@ func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams,
 	return
 }
 
-// List projects in an organization, from oldest to newest
-func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *pagination.List[ProjectListResponse], err error) {
-	var raw *http.Response
+// List projects in an organization
+func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *ProjectListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "v0/projects"
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// List projects in an organization, from oldest to newest
-func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) *pagination.ListAutoPager[ProjectListResponse] {
-	return pagination.NewListAutoPager(r.List(ctx, query, opts...))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return
 }
 
 type ProjectNewResponse struct {
@@ -212,12 +196,32 @@ const (
 )
 
 type ProjectListResponse struct {
+	Data       []ProjectListResponseData `json:"data,required"`
+	HasMore    bool                      `json:"has_more,required"`
+	NextCursor string                    `json:"next_cursor"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Data        respjson.Field
+		HasMore     respjson.Field
+		NextCursor  respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectListResponse) RawJSON() string { return r.JSON.raw }
+func (r *ProjectListResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectListResponseData struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object ProjectListResponseObject `json:"object,required"`
-	Org    string                    `json:"org,required"`
-	Slug   string                    `json:"slug,required"`
+	Object string `json:"object,required"`
+	Org    string `json:"org,required"`
+	Slug   string `json:"slug,required"`
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp".
 	Targets []string `json:"targets,required"`
@@ -235,16 +239,10 @@ type ProjectListResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r ProjectListResponse) RawJSON() string { return r.JSON.raw }
-func (r *ProjectListResponse) UnmarshalJSON(data []byte) error {
+func (r ProjectListResponseData) RawJSON() string { return r.JSON.raw }
+func (r *ProjectListResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type ProjectListResponseObject string
-
-const (
-	ProjectListResponseObjectProject ProjectListResponseObject = "project"
-)
 
 type ProjectNewParams struct {
 	// Human-readable project name
