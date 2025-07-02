@@ -14,6 +14,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
 	"github.com/stainless-api/stainless-api-go/shared/constant"
@@ -68,16 +69,31 @@ func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.R
 }
 
 // List builds for a project
-func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...option.RequestOption) (res *BuildListResponse, err error) {
+func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...option.RequestOption) (res *pagination.List[BuildObject], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return
 	}
 	requestconfig.UseDefaultParam(&query.Project, precfg.Project)
 	path := "v0/builds"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List builds for a project
+func (r *BuildService) ListAutoPaging(ctx context.Context, query BuildListParams, opts ...option.RequestOption) *pagination.ListAutoPager[BuildObject] {
+	return pagination.NewListAutoPager(r.List(ctx, query, opts...))
 }
 
 // Creates two builds whose outputs can be compared directly
@@ -1169,26 +1185,6 @@ type BuildTargetUploadCompletedCompleted struct {
 // Returns the unmodified JSON received from the API
 func (r BuildTargetUploadCompletedCompleted) RawJSON() string { return r.JSON.raw }
 func (r *BuildTargetUploadCompletedCompleted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildListResponse struct {
-	Data       []BuildObject `json:"data,required"`
-	HasMore    bool          `json:"has_more,required"`
-	NextCursor string        `json:"next_cursor"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Data        respjson.Field
-		HasMore     respjson.Field
-		NextCursor  respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildListResponse) RawJSON() string { return r.JSON.raw }
-func (r *BuildListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
