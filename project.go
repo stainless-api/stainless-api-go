@@ -82,7 +82,7 @@ func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams,
 	return
 }
 
-// List projects in an organization
+// List projects in an organization, from oldest to newest
 func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *ProjectListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/projects"
