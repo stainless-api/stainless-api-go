@@ -29,6 +29,7 @@ func TestProjectConfigGetWithOptionalParams(t *testing.T) {
 	_, err := client.Projects.Configs.Get(context.TODO(), stainless.ProjectConfigGetParams{
 		Project: stainless.String("project"),
 		Branch:  stainless.String("branch"),
+		Include: stainless.String("include"),
 	})
 	if err != nil {
 		var apierr *stainless.Error

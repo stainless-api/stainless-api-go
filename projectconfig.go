@@ -112,7 +112,8 @@ type ProjectConfigGetParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
 	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
 	// Branch name, defaults to "main"
-	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
+	Branch  param.Opt[string] `query:"branch,omitzero" json:"-"`
+	Include param.Opt[string] `query:"include,omitzero" json:"-"`
 	paramObj
 }
 

@@ -24,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/stainless-api/stainless-api-go@v0.13.0'
+go get -u 'github.com/stainless-api/stainless-api-go@v0.14.0'
 ```
 
 <!-- x-release-please-end -->
@@ -51,7 +51,6 @@ import (
 func main() {
 	client := stainless.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_API_KEY")
-		option.WithEnvironmentStaging(), // defaults to option.WithEnvironmentProduction()
 	)
 	buildObject, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
 		Project: stainless.String("project"),
