@@ -50,6 +50,10 @@ type BuildTargetOutputGetResponseUnion struct {
 	// This field is from variant [BuildTargetOutputGetResponseObject].
 	Output string `json:"output"`
 	// This field is from variant [BuildTargetOutputGetResponseObject].
+	Target string `json:"target"`
+	// This field is from variant [BuildTargetOutputGetResponseObject].
+	Type BuildTargetOutputGetResponseObjectType `json:"type"`
+	// This field is from variant [BuildTargetOutputGetResponseObject].
 	URL string `json:"url"`
 	// This field is from variant [BuildTargetOutputGetResponseObject].
 	Token string `json:"token"`
@@ -57,6 +61,8 @@ type BuildTargetOutputGetResponseUnion struct {
 	Ref  string `json:"ref"`
 	JSON struct {
 		Output respjson.Field
+		Target respjson.Field
+		Type   respjson.Field
 		URL    respjson.Field
 		Token  respjson.Field
 		Ref    respjson.Field
@@ -84,11 +90,18 @@ func (r *BuildTargetOutputGetResponseUnion) UnmarshalJSON(data []byte) error {
 type BuildTargetOutputGetResponseObject struct {
 	// Any of "url".
 	Output string `json:"output,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Target string `json:"target,required"`
+	// Any of "source", "dist", "wheel".
+	Type BuildTargetOutputGetResponseObjectType `json:"type,required"`
 	// URL for direct download
 	URL string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Output      respjson.Field
+		Target      respjson.Field
+		Type        respjson.Field
 		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
@@ -101,6 +114,22 @@ func (r *BuildTargetOutputGetResponseObject) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type BuildTargetOutputGetResponseObjectType string
+
+const (
+	BuildTargetOutputGetResponseObjectTypeSource BuildTargetOutputGetResponseObjectType = "source"
+	BuildTargetOutputGetResponseObjectTypeDist   BuildTargetOutputGetResponseObjectType = "dist"
+	BuildTargetOutputGetResponseObjectTypeWheel  BuildTargetOutputGetResponseObjectType = "wheel"
+)
+
+type BuildTargetOutputGetResponseType string
+
+const (
+	BuildTargetOutputGetResponseTypeSource BuildTargetOutputGetResponseType = "source"
+	BuildTargetOutputGetResponseTypeDist   BuildTargetOutputGetResponseType = "dist"
+	BuildTargetOutputGetResponseTypeWheel  BuildTargetOutputGetResponseType = "wheel"
+)
+
 type BuildTargetOutputGetParams struct {
 	// Build ID
 	BuildID string `query:"build_id,required" json:"-"`
@@ -109,9 +138,7 @@ type BuildTargetOutputGetParams struct {
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp".
 	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero,required" json:"-"`
-	// Type of output to download: source code
-	//
-	// Any of "source".
+	// Any of "source", "dist", "wheel".
 	Type BuildTargetOutputGetParamsType `query:"type,omitzero,required" json:"-"`
 	// Output format: url (download URL) or git (temporary access token)
 	//
@@ -146,11 +173,12 @@ const (
 	BuildTargetOutputGetParamsTargetCsharp     BuildTargetOutputGetParamsTarget = "csharp"
 )
 
-// Type of output to download: source code
 type BuildTargetOutputGetParamsType string
 
 const (
 	BuildTargetOutputGetParamsTypeSource BuildTargetOutputGetParamsType = "source"
+	BuildTargetOutputGetParamsTypeDist   BuildTargetOutputGetParamsType = "dist"
+	BuildTargetOutputGetParamsTypeWheel  BuildTargetOutputGetParamsType = "wheel"
 )
 
 // Output format: url (download URL) or git (temporary access token)
