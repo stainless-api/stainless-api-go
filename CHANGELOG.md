@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.14.0 (2025-07-03)
+
+Full Changelog: [v0.13.0...v0.14.0](https://github.com/stainless-api/stainless-api-go/compare/v0.13.0...v0.14.0)
+
+### Features
+
+* add multipart form support to HAR snippets ([09c9a8e](https://github.com/stainless-api/stainless-api-go/commit/09c9a8e5a89a6a7b5639de54c48075763e798367))
+* **api:** sort org projects by creation time ([cecd107](https://github.com/stainless-api/stainless-api-go/commit/cecd107c7aab5b6ae04df7e549ef67ba609e5ea8))
+* make build api return documented specs as urls ([25d6ed2](https://github.com/stainless-api/stainless-api-go/commit/25d6ed2d39037a91112a7bab4bc8d64c1edd396f))
+
+
+### Chores
+
+* **internal:** codegen related update ([7d8071b](https://github.com/stainless-api/stainless-api-go/commit/7d8071b8a38abff4b8a5c64d8970dbd5f36bf9e4))
+
 ## 0.13.0 (2025-07-02)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/stainless-api/stainless-api-go/compare/v0.12.0...v0.13.0)
