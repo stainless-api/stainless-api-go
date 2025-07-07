@@ -649,9 +649,11 @@ type BuildTargetLintCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
+	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -830,9 +832,11 @@ type BuildTargetTestCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
+	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -996,9 +1000,11 @@ type BuildTargetBuildCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
+	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -1162,9 +1168,11 @@ type BuildTargetUploadCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
+	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
