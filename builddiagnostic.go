@@ -49,9 +49,9 @@ func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query
 }
 
 type BuildDiagnosticListResponse struct {
-	Data       []any  `json:"data,required"`
-	HasMore    bool   `json:"has_more,required"`
-	NextCursor string `json:"next_cursor"`
+	Data       []BuildDiagnosticListResponseData `json:"data,required"`
+	HasMore    bool                              `json:"has_more,required"`
+	NextCursor string                            `json:"next_cursor"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data        respjson.Field
@@ -65,6 +65,33 @@ type BuildDiagnosticListResponse struct {
 // Returns the unmodified JSON received from the API
 func (r BuildDiagnosticListResponse) RawJSON() string { return r.JSON.raw }
 func (r *BuildDiagnosticListResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildDiagnosticListResponseData struct {
+	Code    string `json:"code,required"`
+	Ignored bool   `json:"ignored,required"`
+	// Any of "fatal", "error", "warning", "note".
+	Level     string `json:"level,required"`
+	Message   string `json:"message,required"`
+	ConfigRef string `json:"config_ref"`
+	OasRef    string `json:"oas_ref"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Code        respjson.Field
+		Ignored     respjson.Field
+		Level       respjson.Field
+		Message     respjson.Field
+		ConfigRef   respjson.Field
+		OasRef      respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildDiagnosticListResponseData) RawJSON() string { return r.JSON.raw }
+func (r *BuildDiagnosticListResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
