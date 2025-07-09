@@ -9,13 +9,11 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
-	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // BuildDiagnosticService contains methods and other services that help with
@@ -64,41 +62,7 @@ func (r *BuildDiagnosticService) ListAutoPaging(ctx context.Context, buildID str
 	return pagination.NewPageAutoPager(r.List(ctx, buildID, query, opts...))
 }
 
-type BuildDiagnosticListResponse struct {
-	Code    string `json:"code,required"`
-	Ignored bool   `json:"ignored,required"`
-	// Any of "fatal", "error", "warning", "note".
-	Level     BuildDiagnosticListResponseLevel `json:"level,required"`
-	Message   string                           `json:"message,required"`
-	ConfigRef string                           `json:"config_ref"`
-	OasRef    string                           `json:"oas_ref"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Code        respjson.Field
-		Ignored     respjson.Field
-		Level       respjson.Field
-		Message     respjson.Field
-		ConfigRef   respjson.Field
-		OasRef      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildDiagnosticListResponse) RawJSON() string { return r.JSON.raw }
-func (r *BuildDiagnosticListResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildDiagnosticListResponseLevel string
-
-const (
-	BuildDiagnosticListResponseLevelFatal   BuildDiagnosticListResponseLevel = "fatal"
-	BuildDiagnosticListResponseLevelError   BuildDiagnosticListResponseLevel = "error"
-	BuildDiagnosticListResponseLevelWarning BuildDiagnosticListResponseLevel = "warning"
-	BuildDiagnosticListResponseLevelNote    BuildDiagnosticListResponseLevel = "note"
-)
+type BuildDiagnosticListResponse = any
 
 type BuildDiagnosticListParams struct {
 	// Pagination cursor from a previous response
