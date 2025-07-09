@@ -83,7 +83,7 @@ func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams,
 	return
 }
 
-// List projects in an organization
+// List projects in an organization, from oldest to newest
 func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *pagination.Page[ProjectListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -101,7 +101,7 @@ func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts
 	return res, nil
 }
 
-// List projects in an organization
+// List projects in an organization, from oldest to newest
 func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) *pagination.PageAutoPager[ProjectListResponse] {
 	return pagination.NewPageAutoPager(r.List(ctx, query, opts...))
 }
