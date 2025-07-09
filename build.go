@@ -113,25 +113,21 @@ func (r *BuildService) Compare(ctx context.Context, body BuildCompareParams, opt
 type BuildObject struct {
 	ID             string                         `json:"id,required"`
 	ConfigCommit   string                         `json:"config_commit,required"`
-	CreatedAt      time.Time                      `json:"created_at,required" format:"date-time"`
 	DocumentedSpec BuildObjectDocumentedSpecUnion `json:"documented_spec,required"`
 	// Any of "build".
-	Object    BuildObjectObject  `json:"object,required"`
-	Org       string             `json:"org,required"`
-	Project   string             `json:"project,required"`
-	Targets   BuildObjectTargets `json:"targets,required"`
-	UpdatedAt time.Time          `json:"updated_at,required" format:"date-time"`
+	Object  BuildObjectObject  `json:"object,required"`
+	Org     string             `json:"org,required"`
+	Project string             `json:"project,required"`
+	Targets BuildObjectTargets `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID             respjson.Field
 		ConfigCommit   respjson.Field
-		CreatedAt      respjson.Field
 		DocumentedSpec respjson.Field
 		Object         respjson.Field
 		Org            respjson.Field
 		Project        respjson.Field
 		Targets        respjson.Field
-		UpdatedAt      respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
 	} `json:"-"`
@@ -153,10 +149,13 @@ type BuildObjectDocumentedSpecUnion struct {
 	// This field is from variant [BuildObjectDocumentedSpecObject].
 	Type string `json:"type"`
 	// This field is from variant [BuildObjectDocumentedSpecObject].
+	Expires time.Time `json:"expires"`
+	// This field is from variant [BuildObjectDocumentedSpecObject].
 	URL  string `json:"url"`
 	JSON struct {
 		Content respjson.Field
 		Type    respjson.Field
+		Expires respjson.Field
 		URL     respjson.Field
 		raw     string
 	} `json:"-"`
@@ -666,9 +665,11 @@ type BuildTargetLintCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
+	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -847,9 +848,11 @@ type BuildTargetTestCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
+	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -1013,9 +1016,11 @@ type BuildTargetBuildCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
+	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -1179,9 +1184,11 @@ type BuildTargetUploadCompletedCompleted struct {
 	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
 	Conclusion string `json:"conclusion,required"`
+	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
