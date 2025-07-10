@@ -1,3 +1,7 @@
+# Shared Params Types
+
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared">shared</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared#FileInputUnionParam">FileInputUnionParam</a>
+
 # Projects
 
 Response Types:
