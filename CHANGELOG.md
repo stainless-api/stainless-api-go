@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.14.0 (2025-07-10)
+
+Full Changelog: [v0.13.0...v0.14.0](https://github.com/stainless-api/stainless-api-go/compare/v0.13.0...v0.14.0)
+
+### Features
+
+* add multipart form support to HAR snippets ([09c9a8e](https://github.com/stainless-api/stainless-api-go/commit/09c9a8e5a89a6a7b5639de54c48075763e798367))
+* add timestamp to builds api ([75222f1](https://github.com/stainless-api/stainless-api-go/commit/75222f1547ad1db9f3fae08e4ca86156deb1b8dd))
+* **api:** manual updates ([25fde82](https://github.com/stainless-api/stainless-api-go/commit/25fde826868b5ce81733a70836ea4f2ce3a44340))
+* **api:** punch v0 api for sdk previews ([29255a6](https://github.com/stainless-api/stainless-api-go/commit/29255a664612d33640c159ab73efdbd46c7901d9))
+* **api:** sort org projects by creation time ([cecd107](https://github.com/stainless-api/stainless-api-go/commit/cecd107c7aab5b6ae04df7e549ef67ba609e5ea8))
+* **client:** expand max streaming buffer size ([3b60e71](https://github.com/stainless-api/stainless-api-go/commit/3b60e717a2cbcbdf9164c68862c77c1b7cfcc8ed))
+* make build api return documented specs as urls ([25d6ed2](https://github.com/stainless-api/stainless-api-go/commit/25d6ed2d39037a91112a7bab4bc8d64c1edd396f))
+
+
+### Chores
+
+* **internal:** codegen related update ([7d8071b](https://github.com/stainless-api/stainless-api-go/commit/7d8071b8a38abff4b8a5c64d8970dbd5f36bf9e4))
+* **internal:** fix lint script for tests ([f24a87a](https://github.com/stainless-api/stainless-api-go/commit/f24a87a521ac3a05365fefd8587f6064253e79c6))
+* lint tests ([987bdff](https://github.com/stainless-api/stainless-api-go/commit/987bdffc5b0a464b38e71043ef5b9140760ac1a3))
+* move sdkjson generation api out of v0 scope ([5b576f2](https://github.com/stainless-api/stainless-api-go/commit/5b576f24c22bb068e5771340b08a34704c4a5fde))
+
 ## 0.13.0 (2025-07-02)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/stainless-api/stainless-api-go/compare/v0.12.0...v0.13.0)
