@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.15.0 (2025-07-11)
+
+Full Changelog: [v0.14.0...v0.15.0](https://github.com/stainless-api/stainless-api-go/compare/v0.14.0...v0.15.0)
+
+### Features
+
+* **api:** add FileInput model ([3f328c6](https://github.com/stainless-api/stainless-api-go/commit/3f328c62648e1707b059b1b7de69219a1f665a10))
+
+
+### Chores
+
+* lint tests in subpackages ([cb303b3](https://github.com/stainless-api/stainless-api-go/commit/cb303b3e708719c00ea6b46db69d7bf08f7556c5))
+
 ## 0.14.0 (2025-07-10)
 
 Full Changelog: [v0.13.0...v0.14.0](https://github.com/stainless-api/stainless-api-go/compare/v0.13.0...v0.14.0)

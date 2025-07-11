@@ -5,6 +5,7 @@ package stainless
 import (
 	"github.com/stainless-api/stainless-api-go/internal/apierror"
 	"github.com/stainless-api/stainless-api-go/packages/param"
+	"github.com/stainless-api/stainless-api-go/shared"
 )
 
 // aliased to make [param.APIUnion] private when embedding
@@ -14,3 +15,12 @@ type paramUnion = param.APIUnion
 type paramObj = param.APIObject
 
 type Error = apierror.Error
+
+// This is an alias to an internal type.
+type FileInputUnionParam = shared.FileInputUnionParam
+
+// This is an alias to an internal type.
+type FileInputContentParam = shared.FileInputContentParam
+
+// This is an alias to an internal type.
+type FileInputURLParam = shared.FileInputURLParam

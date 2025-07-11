@@ -18,6 +18,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
+	"github.com/stainless-api/stainless-api-go/shared"
 	"github.com/stainless-api/stainless-api-go/shared/constant"
 )
 
@@ -113,21 +114,25 @@ func (r *BuildService) Compare(ctx context.Context, body BuildCompareParams, opt
 type BuildObject struct {
 	ID             string                         `json:"id,required"`
 	ConfigCommit   string                         `json:"config_commit,required"`
+	CreatedAt      time.Time                      `json:"created_at,required" format:"date-time"`
 	DocumentedSpec BuildObjectDocumentedSpecUnion `json:"documented_spec,required"`
 	// Any of "build".
-	Object  BuildObjectObject  `json:"object,required"`
-	Org     string             `json:"org,required"`
-	Project string             `json:"project,required"`
-	Targets BuildObjectTargets `json:"targets,required"`
+	Object    BuildObjectObject  `json:"object,required"`
+	Org       string             `json:"org,required"`
+	Project   string             `json:"project,required"`
+	Targets   BuildObjectTargets `json:"targets,required"`
+	UpdatedAt time.Time          `json:"updated_at,required" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID             respjson.Field
 		ConfigCommit   respjson.Field
+		CreatedAt      respjson.Field
 		DocumentedSpec respjson.Field
 		Object         respjson.Field
 		Org            respjson.Field
 		Project        respjson.Field
 		Targets        respjson.Field
+		UpdatedAt      respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
 	} `json:"-"`
@@ -1252,13 +1257,13 @@ func (r *BuildNewParams) UnmarshalJSON(data []byte) error {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildNewParamsRevisionUnion struct {
-	OfString                  param.Opt[string]                             `json:",omitzero,inline"`
-	OfBuildNewsRevisionMapMap map[string]BuildNewParamsRevisionMapItemUnion `json:",omitzero,inline"`
+	OfString       param.Opt[string]                     `json:",omitzero,inline"`
+	OfFileInputMap map[string]shared.FileInputUnionParam `json:",omitzero,inline"`
 	paramUnion
 }
 
 func (u BuildNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfString, u.OfBuildNewsRevisionMapMap)
+	return param.MarshalUnion(u, u.OfString, u.OfFileInputMap)
 }
 func (u *BuildNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
@@ -1267,65 +1272,10 @@ func (u *BuildNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
 func (u *BuildNewParamsRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildNewsRevisionMapMap) {
-		return &u.OfBuildNewsRevisionMapMap
+	} else if !param.IsOmitted(u.OfFileInputMap) {
+		return &u.OfFileInputMap
 	}
 	return nil
-}
-
-// Only one field can be non-zero.
-//
-// Use [param.IsOmitted] to confirm if a field is set.
-type BuildNewParamsRevisionMapItemUnion struct {
-	OfBuildNewsRevisionMapItemContent *BuildNewParamsRevisionMapItemContent `json:",omitzero,inline"`
-	OfBuildNewsRevisionMapItemURL     *BuildNewParamsRevisionMapItemURL     `json:",omitzero,inline"`
-	paramUnion
-}
-
-func (u BuildNewParamsRevisionMapItemUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfBuildNewsRevisionMapItemContent, u.OfBuildNewsRevisionMapItemURL)
-}
-func (u *BuildNewParamsRevisionMapItemUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, u)
-}
-
-func (u *BuildNewParamsRevisionMapItemUnion) asAny() any {
-	if !param.IsOmitted(u.OfBuildNewsRevisionMapItemContent) {
-		return u.OfBuildNewsRevisionMapItemContent
-	} else if !param.IsOmitted(u.OfBuildNewsRevisionMapItemURL) {
-		return u.OfBuildNewsRevisionMapItemURL
-	}
-	return nil
-}
-
-// The property Content is required.
-type BuildNewParamsRevisionMapItemContent struct {
-	// File content
-	Content string `json:"content,required"`
-	paramObj
-}
-
-func (r BuildNewParamsRevisionMapItemContent) MarshalJSON() (data []byte, err error) {
-	type shadow BuildNewParamsRevisionMapItemContent
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *BuildNewParamsRevisionMapItemContent) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The property URL is required.
-type BuildNewParamsRevisionMapItemURL struct {
-	// URL to fetch file content from
-	URL string `json:"url,required"`
-	paramObj
-}
-
-func (r BuildNewParamsRevisionMapItemURL) MarshalJSON() (data []byte, err error) {
-	type shadow BuildNewParamsRevisionMapItemURL
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *BuildNewParamsRevisionMapItemURL) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type BuildListParams struct {
@@ -1436,13 +1386,13 @@ func (r *BuildCompareParamsBase) UnmarshalJSON(data []byte) error {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildCompareParamsBaseRevisionUnion struct {
-	OfString                          param.Opt[string]                                     `json:",omitzero,inline"`
-	OfBuildComparesBaseRevisionMapMap map[string]BuildCompareParamsBaseRevisionMapItemUnion `json:",omitzero,inline"`
+	OfString       param.Opt[string]                     `json:",omitzero,inline"`
+	OfFileInputMap map[string]shared.FileInputUnionParam `json:",omitzero,inline"`
 	paramUnion
 }
 
 func (u BuildCompareParamsBaseRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfString, u.OfBuildComparesBaseRevisionMapMap)
+	return param.MarshalUnion(u, u.OfString, u.OfFileInputMap)
 }
 func (u *BuildCompareParamsBaseRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
@@ -1451,65 +1401,10 @@ func (u *BuildCompareParamsBaseRevisionUnion) UnmarshalJSON(data []byte) error {
 func (u *BuildCompareParamsBaseRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildComparesBaseRevisionMapMap) {
-		return &u.OfBuildComparesBaseRevisionMapMap
+	} else if !param.IsOmitted(u.OfFileInputMap) {
+		return &u.OfFileInputMap
 	}
 	return nil
-}
-
-// Only one field can be non-zero.
-//
-// Use [param.IsOmitted] to confirm if a field is set.
-type BuildCompareParamsBaseRevisionMapItemUnion struct {
-	OfBuildComparesBaseRevisionMapItemContent *BuildCompareParamsBaseRevisionMapItemContent `json:",omitzero,inline"`
-	OfBuildComparesBaseRevisionMapItemURL     *BuildCompareParamsBaseRevisionMapItemURL     `json:",omitzero,inline"`
-	paramUnion
-}
-
-func (u BuildCompareParamsBaseRevisionMapItemUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfBuildComparesBaseRevisionMapItemContent, u.OfBuildComparesBaseRevisionMapItemURL)
-}
-func (u *BuildCompareParamsBaseRevisionMapItemUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, u)
-}
-
-func (u *BuildCompareParamsBaseRevisionMapItemUnion) asAny() any {
-	if !param.IsOmitted(u.OfBuildComparesBaseRevisionMapItemContent) {
-		return u.OfBuildComparesBaseRevisionMapItemContent
-	} else if !param.IsOmitted(u.OfBuildComparesBaseRevisionMapItemURL) {
-		return u.OfBuildComparesBaseRevisionMapItemURL
-	}
-	return nil
-}
-
-// The property Content is required.
-type BuildCompareParamsBaseRevisionMapItemContent struct {
-	// File content
-	Content string `json:"content,required"`
-	paramObj
-}
-
-func (r BuildCompareParamsBaseRevisionMapItemContent) MarshalJSON() (data []byte, err error) {
-	type shadow BuildCompareParamsBaseRevisionMapItemContent
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *BuildCompareParamsBaseRevisionMapItemContent) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The property URL is required.
-type BuildCompareParamsBaseRevisionMapItemURL struct {
-	// URL to fetch file content from
-	URL string `json:"url,required"`
-	paramObj
-}
-
-func (r BuildCompareParamsBaseRevisionMapItemURL) MarshalJSON() (data []byte, err error) {
-	type shadow BuildCompareParamsBaseRevisionMapItemURL
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *BuildCompareParamsBaseRevisionMapItemURL) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 // Parameters for the head build
@@ -1538,13 +1433,13 @@ func (r *BuildCompareParamsHead) UnmarshalJSON(data []byte) error {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildCompareParamsHeadRevisionUnion struct {
-	OfString                          param.Opt[string]                                     `json:",omitzero,inline"`
-	OfBuildComparesHeadRevisionMapMap map[string]BuildCompareParamsHeadRevisionMapItemUnion `json:",omitzero,inline"`
+	OfString       param.Opt[string]                     `json:",omitzero,inline"`
+	OfFileInputMap map[string]shared.FileInputUnionParam `json:",omitzero,inline"`
 	paramUnion
 }
 
 func (u BuildCompareParamsHeadRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfString, u.OfBuildComparesHeadRevisionMapMap)
+	return param.MarshalUnion(u, u.OfString, u.OfFileInputMap)
 }
 func (u *BuildCompareParamsHeadRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
@@ -1553,63 +1448,8 @@ func (u *BuildCompareParamsHeadRevisionUnion) UnmarshalJSON(data []byte) error {
 func (u *BuildCompareParamsHeadRevisionUnion) asAny() any {
 	if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
-	} else if !param.IsOmitted(u.OfBuildComparesHeadRevisionMapMap) {
-		return &u.OfBuildComparesHeadRevisionMapMap
+	} else if !param.IsOmitted(u.OfFileInputMap) {
+		return &u.OfFileInputMap
 	}
 	return nil
-}
-
-// Only one field can be non-zero.
-//
-// Use [param.IsOmitted] to confirm if a field is set.
-type BuildCompareParamsHeadRevisionMapItemUnion struct {
-	OfBuildComparesHeadRevisionMapItemContent *BuildCompareParamsHeadRevisionMapItemContent `json:",omitzero,inline"`
-	OfBuildComparesHeadRevisionMapItemURL     *BuildCompareParamsHeadRevisionMapItemURL     `json:",omitzero,inline"`
-	paramUnion
-}
-
-func (u BuildCompareParamsHeadRevisionMapItemUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfBuildComparesHeadRevisionMapItemContent, u.OfBuildComparesHeadRevisionMapItemURL)
-}
-func (u *BuildCompareParamsHeadRevisionMapItemUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, u)
-}
-
-func (u *BuildCompareParamsHeadRevisionMapItemUnion) asAny() any {
-	if !param.IsOmitted(u.OfBuildComparesHeadRevisionMapItemContent) {
-		return u.OfBuildComparesHeadRevisionMapItemContent
-	} else if !param.IsOmitted(u.OfBuildComparesHeadRevisionMapItemURL) {
-		return u.OfBuildComparesHeadRevisionMapItemURL
-	}
-	return nil
-}
-
-// The property Content is required.
-type BuildCompareParamsHeadRevisionMapItemContent struct {
-	// File content
-	Content string `json:"content,required"`
-	paramObj
-}
-
-func (r BuildCompareParamsHeadRevisionMapItemContent) MarshalJSON() (data []byte, err error) {
-	type shadow BuildCompareParamsHeadRevisionMapItemContent
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *BuildCompareParamsHeadRevisionMapItemContent) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The property URL is required.
-type BuildCompareParamsHeadRevisionMapItemURL struct {
-	// URL to fetch file content from
-	URL string `json:"url,required"`
-	paramObj
-}
-
-func (r BuildCompareParamsHeadRevisionMapItemURL) MarshalJSON() (data []byte, err error) {
-	type shadow BuildCompareParamsHeadRevisionMapItemURL
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *BuildCompareParamsHeadRevisionMapItemURL) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
 }

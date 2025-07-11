@@ -11,6 +11,7 @@ import (
 	"github.com/stainless-api/stainless-api-go"
 	"github.com/stainless-api/stainless-api-go/internal/testutil"
 	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-api/stainless-api-go/shared"
 )
 
 func TestProjectNew(t *testing.T) {
@@ -29,9 +30,9 @@ func TestProjectNew(t *testing.T) {
 	_, err := client.Projects.New(context.TODO(), stainless.ProjectNewParams{
 		DisplayName: "display_name",
 		Org:         "org",
-		Revision: map[string]stainless.ProjectNewParamsRevisionUnion{
+		Revision: map[string]shared.FileInputUnionParam{
 			"foo": {
-				OfProjectNewsRevisionContent: &stainless.ProjectNewParamsRevisionContent{
+				OfFileInputContent: &shared.FileInputContentParam{
 					Content: "content",
 				},
 			},

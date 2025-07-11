@@ -16,6 +16,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
+	"github.com/stainless-api/stainless-api-go/shared"
 )
 
 // ProjectService contains methods and other services that help with interacting
@@ -252,7 +253,7 @@ type ProjectNewParams struct {
 	// Organization name
 	Org string `json:"org,required"`
 	// File contents to commit
-	Revision map[string]ProjectNewParamsRevisionUnion `json:"revision,omitzero,required"`
+	Revision map[string]shared.FileInputUnionParam `json:"revision,omitzero,required"`
 	// Project name/slug
 	Slug string `json:"slug,required"`
 	// Targets to generate for
@@ -268,61 +269,6 @@ func (r ProjectNewParams) MarshalJSON() (data []byte, err error) {
 	return param.MarshalObject(r, (*shadow)(&r))
 }
 func (r *ProjectNewParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Only one field can be non-zero.
-//
-// Use [param.IsOmitted] to confirm if a field is set.
-type ProjectNewParamsRevisionUnion struct {
-	OfProjectNewsRevisionContent *ProjectNewParamsRevisionContent `json:",omitzero,inline"`
-	OfProjectNewsRevisionURL     *ProjectNewParamsRevisionURL     `json:",omitzero,inline"`
-	paramUnion
-}
-
-func (u ProjectNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfProjectNewsRevisionContent, u.OfProjectNewsRevisionURL)
-}
-func (u *ProjectNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, u)
-}
-
-func (u *ProjectNewParamsRevisionUnion) asAny() any {
-	if !param.IsOmitted(u.OfProjectNewsRevisionContent) {
-		return u.OfProjectNewsRevisionContent
-	} else if !param.IsOmitted(u.OfProjectNewsRevisionURL) {
-		return u.OfProjectNewsRevisionURL
-	}
-	return nil
-}
-
-// The property Content is required.
-type ProjectNewParamsRevisionContent struct {
-	// File content
-	Content string `json:"content,required"`
-	paramObj
-}
-
-func (r ProjectNewParamsRevisionContent) MarshalJSON() (data []byte, err error) {
-	type shadow ProjectNewParamsRevisionContent
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *ProjectNewParamsRevisionContent) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The property URL is required.
-type ProjectNewParamsRevisionURL struct {
-	// URL to fetch file content from
-	URL string `json:"url,required"`
-	paramObj
-}
-
-func (r ProjectNewParamsRevisionURL) MarshalJSON() (data []byte, err error) {
-	type shadow ProjectNewParamsRevisionURL
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *ProjectNewParamsRevisionURL) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
