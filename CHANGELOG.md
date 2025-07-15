@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.16.0 (2025-07-15)
+
+Full Changelog: [v0.15.0...v0.16.0](https://github.com/stainless-api/stainless-api-go/compare/v0.15.0...v0.16.0)
+
+### Features
+
+* **api:** add staging environment ([bcc9962](https://github.com/stainless-api/stainless-api-go/commit/bcc9962425abe0115ba166dcc27e4b159af7cdc8))
+
+
+### Documentation
+
+* add pagination segment ([d3155aa](https://github.com/stainless-api/stainless-api-go/commit/d3155aa7cc5bc12df6ca9e7f5345dee2db36db9c))
+
 ## 0.15.0 (2025-07-11)
 
 Full Changelog: [v0.14.0...v0.15.0](https://github.com/stainless-api/stainless-api-go/compare/v0.14.0...v0.15.0)
