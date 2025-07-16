@@ -2,10 +2,6 @@
 
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared">shared</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared#FileInputUnionParam">FileInputUnionParam</a>
 
-# Shared Response Types
-
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared">shared</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared#Commit">Commit</a>
-
 # Projects
 
 Response Types:
@@ -48,7 +44,6 @@ Response Types:
 
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildObject">BuildObject</a>
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildTarget">BuildTarget</a>
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#CheckStepUnion">CheckStepUnion</a>
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildCompareResponse">BuildCompareResponse</a>
 
 Methods:
