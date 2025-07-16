@@ -1238,10 +1238,7 @@ type BuildNewParams struct {
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
 	// Optional list of SDK targets to build. If not specified, all configured targets
 	// will be built.
-	//
-	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli", "php", "csharp".
-	Targets []string `json:"targets,omitzero"`
+	Targets []Target `json:"targets,omitzero"`
 	paramObj
 }
 
@@ -1345,10 +1342,7 @@ type BuildCompareParams struct {
 	Head BuildCompareParamsHead `json:"head,omitzero,required"`
 	// Optional list of SDK targets to build. If not specified, all configured targets
 	// will be built.
-	//
-	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli", "php", "csharp".
-	Targets []string `json:"targets,omitzero"`
+	Targets []Target `json:"targets,omitzero"`
 	paramObj
 }
 

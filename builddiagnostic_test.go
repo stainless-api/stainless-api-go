@@ -33,7 +33,7 @@ func TestBuildDiagnosticListWithOptionalParams(t *testing.T) {
 			Cursor:   stainless.String("cursor"),
 			Limit:    stainless.Float(1),
 			Severity: stainless.BuildDiagnosticListParamsSeverityFatal,
-			Targets:  []string{"node"},
+			Targets:  []stainless.Target{stainless.TargetNode},
 		},
 	)
 	if err != nil {
