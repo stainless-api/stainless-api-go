@@ -54,7 +54,7 @@ func main() {
 		option.WithEnvironmentStaging(), // defaults to option.WithEnvironmentProduction()
 	)
 	buildObject, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("example"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
 			OfString: stainless.String("string"),
 		},
@@ -288,7 +288,7 @@ You can use `.ListAutoPaging()` methods to iterate through items across all page
 
 ```go
 iter := client.Builds.ListAutoPaging(context.TODO(), stainless.BuildListParams{
-	Project: stainless.String("project"),
+	Project: stainless.String("example"),
 })
 // Automatically fetches more pages as needed.
 for iter.Next() {
@@ -305,7 +305,7 @@ with additional helper methods like `.GetNextPage()`, e.g.:
 
 ```go
 page, err := client.Builds.List(context.TODO(), stainless.BuildListParams{
-	Project: stainless.String("project"),
+	Project: stainless.String("example"),
 })
 for page != nil {
 	for _, build := range page.Data {
@@ -329,7 +329,7 @@ To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
 _, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
-	Project: stainless.String("project"),
+	Project: stainless.String("example"),
 	Revision: stainless.BuildNewParamsRevisionUnion{
 		OfString: stainless.String("string"),
 	},
@@ -361,7 +361,7 @@ defer cancel()
 client.Builds.New(
 	ctx,
 	stainless.BuildNewParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("example"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
 			OfString: stainless.String("string"),
 		},
@@ -402,7 +402,7 @@ client := stainless.NewClient(
 client.Builds.New(
 	context.TODO(),
 	stainless.BuildNewParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("example"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
 			OfString: stainless.String("string"),
 		},
@@ -422,7 +422,7 @@ var response *http.Response
 buildObject, err := client.Builds.New(
 	context.TODO(),
 	stainless.BuildNewParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("example"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
 			OfString: stainless.String("string"),
 		},

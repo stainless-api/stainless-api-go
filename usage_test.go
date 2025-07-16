@@ -25,7 +25,7 @@ func TestUsage(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	buildObject, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("example"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
 			OfString: stainless.String("string"),
 		},

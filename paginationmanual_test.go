@@ -25,7 +25,7 @@ func TestManualPagination(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	page, err := client.Builds.List(context.TODO(), stainless.BuildListParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("example"),
 	})
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
