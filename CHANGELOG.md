@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.17.0 (2025-07-16)
+
+Full Changelog: [v0.16.0...v0.17.0](https://github.com/stainless-api/stainless-api-go/compare/v0.16.0...v0.17.0)
+
+### Features
+
+* **api:** add models ([d27947c](https://github.com/stainless-api/stainless-api-go/commit/d27947ce15163fa975363732b4d761850e28e237))
+* **api:** add more models ([381c8b7](https://github.com/stainless-api/stainless-api-go/commit/381c8b79574881eaf8041a98b7fdc1a590d22b0d))
+
 ## 0.16.0 (2025-07-15)
 
 Full Changelog: [v0.15.0...v0.16.0](https://github.com/stainless-api/stainless-api-go/compare/v0.15.0...v0.16.0)
