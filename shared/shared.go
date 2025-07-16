@@ -5,6 +5,7 @@ package shared
 import (
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/packages/param"
+	"github.com/stainless-api/stainless-api-go/packages/respjson"
 )
 
 // aliased to make [param.APIUnion] private when embedding
@@ -12,6 +13,44 @@ type paramUnion = param.APIUnion
 
 // aliased to make [param.APIObject] private when embedding
 type paramObj = param.APIObject
+
+type Commit struct {
+	Repo CommitRepo `json:"repo,required"`
+	Sha  string     `json:"sha,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Repo        respjson.Field
+		Sha         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r Commit) RawJSON() string { return r.JSON.raw }
+func (r *Commit) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CommitRepo struct {
+	Branch string `json:"branch,required"`
+	Name   string `json:"name,required"`
+	Owner  string `json:"owner,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Branch      respjson.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CommitRepo) RawJSON() string { return r.JSON.raw }
+func (r *CommitRepo) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 func FileInputParamOfFileInputContent(content string) FileInputUnionParam {
 	var variant FileInputContentParam
