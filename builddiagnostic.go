@@ -64,6 +64,22 @@ func (r *BuildDiagnosticService) ListAutoPaging(ctx context.Context, buildID str
 	return pagination.NewPageAutoPager(r.List(ctx, buildID, query, opts...))
 }
 
+type Target string
+
+const (
+	TargetNode       Target = "node"
+	TargetTypescript Target = "typescript"
+	TargetPython     Target = "python"
+	TargetGo         Target = "go"
+	TargetJava       Target = "java"
+	TargetKotlin     Target = "kotlin"
+	TargetRuby       Target = "ruby"
+	TargetTerraform  Target = "terraform"
+	TargetCli        Target = "cli"
+	TargetPhp        Target = "php"
+	TargetCsharp     Target = "csharp"
+)
+
 type BuildDiagnosticListResponse struct {
 	Code    string `json:"code,required"`
 	Ignored bool   `json:"ignored,required"`
@@ -110,10 +126,7 @@ type BuildDiagnosticListParams struct {
 	// Any of "fatal", "error", "warning", "note".
 	Severity BuildDiagnosticListParamsSeverity `query:"severity,omitzero" json:"-"`
 	// Optional list of language targets to filter diagnostics by
-	//
-	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli", "php", "csharp".
-	Targets []string `query:"targets,omitzero" json:"-"`
+	Targets []Target `query:"targets,omitzero" json:"-"`
 	paramObj
 }
 
