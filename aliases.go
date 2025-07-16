@@ -17,6 +17,12 @@ type paramObj = param.APIObject
 type Error = apierror.Error
 
 // This is an alias to an internal type.
+type Commit = shared.Commit
+
+// This is an alias to an internal type.
+type CommitRepo = shared.CommitRepo
+
+// This is an alias to an internal type.
 type FileInputUnionParam = shared.FileInputUnionParam
 
 // This is an alias to an internal type.
