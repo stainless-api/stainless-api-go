@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.18.0 (2025-07-16)
+
+Full Changelog: [v0.17.0...v0.18.0](https://github.com/stainless-api/stainless-api-go/compare/v0.17.0...v0.18.0)
+
+### Features
+
+* **api:** add check step model ([c1a5041](https://github.com/stainless-api/stainless-api-go/commit/c1a5041be3c8b435c9c44ed2f18899b0f0bdd633))
+* **api:** manual updates ([c50c1eb](https://github.com/stainless-api/stainless-api-go/commit/c50c1eb7a2a69e4c0fea579d03a88574787b17e5))
+
+
+### Bug Fixes
+
+* **api:** catch more errors ([07669c2](https://github.com/stainless-api/stainless-api-go/commit/07669c2574d223a7fbab8d1ded39583ef83bb600))
+
 ## 0.17.0 (2025-07-16)
 
 Full Changelog: [v0.16.0...v0.17.0](https://github.com/stainless-api/stainless-api-go/compare/v0.16.0...v0.17.0)
