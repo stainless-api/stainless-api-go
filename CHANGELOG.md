@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.19.0 (2025-07-22)
+
+Full Changelog: [v0.18.0...v0.19.0](https://github.com/stainless-api/stainless-api-go/compare/v0.18.0...v0.19.0)
+
+### Features
+
+* **api:** manual updates ([215687b](https://github.com/stainless-api/stainless-api-go/commit/215687b301be4f88131991253ced79b05339b5dc))
+* **api:** manual updates ([78fb3cd](https://github.com/stainless-api/stainless-api-go/commit/78fb3cd9f5da07e2009d6ae907a8440fc0f5d21c))
+* **C#, PHP:** codegen stats ([4e6b6cb](https://github.com/stainless-api/stainless-api-go/commit/4e6b6cb7b35bdc2be77bda8b0d1398e93eb4a18f))
+* Codegen(php): unset optional parameters in constructor ([528c42e](https://github.com/stainless-api/stainless-api-go/commit/528c42e61048675b74bccc8a9cc8dc9a009242a3))
+* php: generate stub union classes with discrimminator info ([b0e7a07](https://github.com/stainless-api/stainless-api-go/commit/b0e7a072ef26808c08c4ac85c99cf1bc69eaa367))
+* productionize repo caching ([ac5ee46](https://github.com/stainless-api/stainless-api-go/commit/ac5ee4659754aa9bab3130ef46e980b0053680fd))
+
+
+### Bug Fixes
+
+* **java:** ensure error handling always occurs ([e1b68f4](https://github.com/stainless-api/stainless-api-go/commit/e1b68f4793f113037c15f1f775806484d6c157ad))
+
 ## 0.18.0 (2025-07-16)
 
 Full Changelog: [v0.17.0...v0.18.0](https://github.com/stainless-api/stainless-api-go/compare/v0.17.0...v0.18.0)
