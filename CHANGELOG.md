@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.20.0 (2025-07-22)
+
+Full Changelog: [v0.19.0...v0.20.0](https://github.com/stainless-api/stainless-api-go/compare/v0.19.0...v0.20.0)
+
+### Features
+
+* **api:** manual updates ([923dfc4](https://github.com/stainless-api/stainless-api-go/commit/923dfc46b9186fae61daf46ae00ce86a13d6268a))
+
+
+### Bug Fixes
+
+* **client:** process custom base url ahead of time ([bf7d410](https://github.com/stainless-api/stainless-api-go/commit/bf7d4103fff28ada66b3e9b4502eca993b82d344))
+
 ## 0.19.0 (2025-07-22)
 
 Full Changelog: [v0.18.0...v0.19.0](https://github.com/stainless-api/stainless-api-go/compare/v0.18.0...v0.19.0)
