@@ -43,7 +43,7 @@ func NewProjectService(opts ...option.RequestOption) (r ProjectService) {
 }
 
 // Create a new project
-func (r *ProjectService) New(ctx context.Context, body ProjectNewParams, opts ...option.RequestOption) (res *Project, err error) {
+func (r *ProjectService) New(ctx context.Context, body ProjectNewParams, opts ...option.RequestOption) (res *ProjectNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/projects"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -51,7 +51,7 @@ func (r *ProjectService) New(ctx context.Context, body ProjectNewParams, opts ..
 }
 
 // Retrieve a project by name
-func (r *ProjectService) Get(ctx context.Context, query ProjectGetParams, opts ...option.RequestOption) (res *Project, err error) {
+func (r *ProjectService) Get(ctx context.Context, query ProjectGetParams, opts ...option.RequestOption) (res *ProjectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
@@ -68,7 +68,7 @@ func (r *ProjectService) Get(ctx context.Context, query ProjectGetParams, opts .
 }
 
 // Update a project's properties
-func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams, opts ...option.RequestOption) (res *Project, err error) {
+func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams, opts ...option.RequestOption) (res *ProjectUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
@@ -85,7 +85,7 @@ func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams,
 }
 
 // List projects in an organization, from oldest to newest
-func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *pagination.Page[Project], err error) {
+func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *pagination.Page[ProjectListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -103,18 +103,20 @@ func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts
 }
 
 // List projects in an organization, from oldest to newest
-func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) *pagination.PageAutoPager[Project] {
+func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) *pagination.PageAutoPager[ProjectListResponse] {
 	return pagination.NewPageAutoPager(r.List(ctx, query, opts...))
 }
 
-type Project struct {
+type ProjectNewResponse struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object  ProjectObject `json:"object,required"`
-	Org     string        `json:"org,required"`
-	Slug    string        `json:"slug,required"`
-	Targets []Target      `json:"targets,required"`
+	Object ProjectNewResponseObject `json:"object,required"`
+	Org    string                   `json:"org,required"`
+	Slug   string                   `json:"slug,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ConfigRepo  respjson.Field
@@ -129,15 +131,120 @@ type Project struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r Project) RawJSON() string { return r.JSON.raw }
-func (r *Project) UnmarshalJSON(data []byte) error {
+func (r ProjectNewResponse) RawJSON() string { return r.JSON.raw }
+func (r *ProjectNewResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProjectObject string
+type ProjectNewResponseObject string
 
 const (
-	ProjectObjectProject ProjectObject = "project"
+	ProjectNewResponseObjectProject ProjectNewResponseObject = "project"
+)
+
+type ProjectGetResponse struct {
+	ConfigRepo  string `json:"config_repo,required"`
+	DisplayName string `json:"display_name,required"`
+	// Any of "project".
+	Object ProjectGetResponseObject `json:"object,required"`
+	Org    string                   `json:"org,required"`
+	Slug   string                   `json:"slug,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		Targets     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectGetResponse) RawJSON() string { return r.JSON.raw }
+func (r *ProjectGetResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectGetResponseObject string
+
+const (
+	ProjectGetResponseObjectProject ProjectGetResponseObject = "project"
+)
+
+type ProjectUpdateResponse struct {
+	ConfigRepo  string `json:"config_repo,required"`
+	DisplayName string `json:"display_name,required"`
+	// Any of "project".
+	Object ProjectUpdateResponseObject `json:"object,required"`
+	Org    string                      `json:"org,required"`
+	Slug   string                      `json:"slug,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		Targets     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectUpdateResponse) RawJSON() string { return r.JSON.raw }
+func (r *ProjectUpdateResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectUpdateResponseObject string
+
+const (
+	ProjectUpdateResponseObjectProject ProjectUpdateResponseObject = "project"
+)
+
+type ProjectListResponse struct {
+	ConfigRepo  string `json:"config_repo,required"`
+	DisplayName string `json:"display_name,required"`
+	// Any of "project".
+	Object ProjectListResponseObject `json:"object,required"`
+	Org    string                    `json:"org,required"`
+	Slug   string                    `json:"slug,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ConfigRepo  respjson.Field
+		DisplayName respjson.Field
+		Object      respjson.Field
+		Org         respjson.Field
+		Slug        respjson.Field
+		Targets     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectListResponse) RawJSON() string { return r.JSON.raw }
+func (r *ProjectListResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectListResponseObject string
+
+const (
+	ProjectListResponseObjectProject ProjectListResponseObject = "project"
 )
 
 type ProjectNewParams struct {
@@ -150,7 +257,10 @@ type ProjectNewParams struct {
 	// Project name/slug
 	Slug string `json:"slug,required"`
 	// Targets to generate for
-	Targets []Target `json:"targets,omitzero,required"`
+	//
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Targets []string `json:"targets,omitzero,required"`
 	paramObj
 }
 
