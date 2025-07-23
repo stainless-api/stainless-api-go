@@ -50,7 +50,7 @@ type BuildTargetOutputGetResponseUnion struct {
 	// This field is from variant [BuildTargetOutputGetResponseObject].
 	Output string `json:"output"`
 	// This field is from variant [BuildTargetOutputGetResponseObject].
-	Target Target `json:"target"`
+	Target string `json:"target"`
 	// This field is from variant [BuildTargetOutputGetResponseObject].
 	Type BuildTargetOutputGetResponseObjectType `json:"type"`
 	// This field is from variant [BuildTargetOutputGetResponseObject].
@@ -92,7 +92,7 @@ type BuildTargetOutputGetResponseObject struct {
 	Output string `json:"output,required"`
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp".
-	Target Target `json:"target,required"`
+	Target string `json:"target,required"`
 	// Any of "source", "dist", "wheel".
 	Type BuildTargetOutputGetResponseObjectType `json:"type,required"`
 	// URL for direct download

@@ -2,33 +2,36 @@
 
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared">shared</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared#FileInputUnionParam">FileInputUnionParam</a>
 
-# Shared Response Types
-
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared">shared</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared#Commit">Commit</a>
-
 # Projects
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Project">Project</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectNewResponse">ProjectNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectGetResponse">ProjectGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectUpdateResponse">ProjectUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectListResponse">ProjectListResponse</a>
 
 Methods:
 
-- <code title="post /v0/projects">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectNewParams">ProjectNewParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Project">Project</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /v0/projects/{project}">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectGetParams">ProjectGetParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Project">Project</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="patch /v0/projects/{project}">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectUpdateParams">ProjectUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Project">Project</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /v0/projects">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectListParams">ProjectListParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination#Page">Page</a>[<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Project">Project</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /v0/projects">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectNewParams">ProjectNewParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectNewResponse">ProjectNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v0/projects/{project}">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectGetParams">ProjectGetParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectGetResponse">ProjectGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /v0/projects/{project}">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectUpdateParams">ProjectUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectUpdateResponse">ProjectUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v0/projects">client.Projects.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectListParams">ProjectListParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination#Page">Page</a>[<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectListResponse">ProjectListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Branches
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranch">ProjectBranch</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchListResponse">ProjectBranchListResponse</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchDeleteResponse">ProjectBranchDeleteResponse</a>
 
 Methods:
 
 - <code title="post /v0/projects/{project}/branches">client.Projects.Branches.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchNewParams">ProjectBranchNewParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranch">ProjectBranch</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v0/projects/{project}/branches/{branch}">client.Projects.Branches.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, branch <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchGetParams">ProjectBranchGetParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranch">ProjectBranch</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v0/projects/{project}/branches">client.Projects.Branches.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchListParams">ProjectBranchListParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination#Page">Page</a>[<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchListResponse">ProjectBranchListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /v0/projects/{project}/branches/{branch}">client.Projects.Branches.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, branch <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchDeleteParams">ProjectBranchDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#ProjectBranchDeleteResponse">ProjectBranchDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Configs
 
@@ -48,7 +51,6 @@ Response Types:
 
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildObject">BuildObject</a>
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildTarget">BuildTarget</a>
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#CheckStepUnion">CheckStepUnion</a>
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildCompareResponse">BuildCompareResponse</a>
 
 Methods:
@@ -60,13 +62,8 @@ Methods:
 
 ## Diagnostics
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Target">Target</a>
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Target">Target</a>
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnosticListResponse">BuildDiagnosticListResponse</a>
 
 Methods:
@@ -87,10 +84,10 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Org">Org</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgGetResponse">OrgGetResponse</a>
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgListResponse">OrgListResponse</a>
 
 Methods:
 
-- <code title="get /v0/orgs/{org}">client.Orgs.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, org <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Org">Org</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v0/orgs/{org}">client.Orgs.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, org <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgGetResponse">OrgGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /v0/orgs">client.Orgs.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#OrgListResponse">OrgListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
