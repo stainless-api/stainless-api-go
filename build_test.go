@@ -34,7 +34,7 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 		AllowEmpty:    stainless.Bool(true),
 		Branch:        stainless.String("branch"),
 		CommitMessage: stainless.String("commit_message"),
-		Targets:       []stainless.Target{stainless.TargetNode},
+		Targets:       []string{"node"},
 	})
 	if err != nil {
 		var apierr *stainless.Error
@@ -128,7 +128,7 @@ func TestBuildCompareWithOptionalParams(t *testing.T) {
 			CommitMessage: stainless.String("commit_message"),
 		},
 		Project: stainless.String("project"),
-		Targets: []stainless.Target{stainless.TargetNode},
+		Targets: []string{"node"},
 	})
 	if err != nil {
 		var apierr *stainless.Error
