@@ -34,7 +34,7 @@ func NewOrgService(opts ...option.RequestOption) (r OrgService) {
 }
 
 // Retrieve an organization by name
-func (r *OrgService) Get(ctx context.Context, org string, opts ...option.RequestOption) (res *OrgGetResponse, err error) {
+func (r *OrgService) Get(ctx context.Context, org string, opts ...option.RequestOption) (res *Org, err error) {
 	opts = append(r.Options[:], opts...)
 	if org == "" {
 		err = errors.New("missing required org parameter")
@@ -53,11 +53,11 @@ func (r *OrgService) List(ctx context.Context, opts ...option.RequestOption) (re
 	return
 }
 
-type OrgGetResponse struct {
+type Org struct {
 	DisplayName string `json:"display_name,required"`
 	// Any of "org".
-	Object OrgGetResponseObject `json:"object,required"`
-	Slug   string               `json:"slug,required"`
+	Object OrgObject `json:"object,required"`
+	Slug   string    `json:"slug,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		DisplayName respjson.Field
@@ -69,21 +69,21 @@ type OrgGetResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrgGetResponse) RawJSON() string { return r.JSON.raw }
-func (r *OrgGetResponse) UnmarshalJSON(data []byte) error {
+func (r Org) RawJSON() string { return r.JSON.raw }
+func (r *Org) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OrgGetResponseObject string
+type OrgObject string
 
 const (
-	OrgGetResponseObjectOrg OrgGetResponseObject = "org"
+	OrgObjectOrg OrgObject = "org"
 )
 
 type OrgListResponse struct {
-	Data       []OrgListResponseData `json:"data,required"`
-	HasMore    bool                  `json:"has_more,required"`
-	NextCursor string                `json:"next_cursor"`
+	Data       []Org  `json:"data,required"`
+	HasMore    bool   `json:"has_more,required"`
+	NextCursor string `json:"next_cursor"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data        respjson.Field
@@ -97,26 +97,5 @@ type OrgListResponse struct {
 // Returns the unmodified JSON received from the API
 func (r OrgListResponse) RawJSON() string { return r.JSON.raw }
 func (r *OrgListResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type OrgListResponseData struct {
-	DisplayName string `json:"display_name,required"`
-	// Any of "org".
-	Object string `json:"object,required"`
-	Slug   string `json:"slug,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		DisplayName respjson.Field
-		Object      respjson.Field
-		Slug        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r OrgListResponseData) RawJSON() string { return r.JSON.raw }
-func (r *OrgListResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
