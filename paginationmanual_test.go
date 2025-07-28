@@ -4,7 +4,6 @@ package stainless_test
 
 import (
 	"context"
-	"errors"
 	"os"
 	"testing"
 
@@ -13,8 +12,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/option"
 )
 
-func TestBuildDiagnosticListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+func TestManualPagination(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,21 +24,23 @@ func TestBuildDiagnosticListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Builds.Diagnostics.List(
-		context.TODO(),
-		"buildId",
-		stainless.BuildDiagnosticListParams{
-			Cursor:   stainless.String("cursor"),
-			Limit:    stainless.Float(1),
-			Severity: stainless.BuildDiagnosticListParamsSeverityFatal,
-			Targets:  []stainless.Target{stainless.TargetNode},
-		},
-	)
+	page, err := client.Builds.List(context.TODO(), stainless.BuildListParams{
+		Project: stainless.String("project"),
+	})
 	if err != nil {
-		var apierr *stainless.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
 		t.Fatalf("err should be nil: %s", err.Error())
+	}
+	for _, build := range page.Data {
+		t.Logf("%+v\n", build.ID)
+	}
+	// Prism mock isn't going to give us real pagination
+	page, err = page.GetNextPage()
+	if err != nil {
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+	if page != nil {
+		for _, build := range page.Data {
+			t.Logf("%+v\n", build.ID)
+		}
 	}
 }
