@@ -246,14 +246,14 @@ func (r *BuildObjectTargets) UnmarshalJSON(data []byte) error {
 
 type BuildTarget struct {
 	Commit BuildTargetCommitUnion `json:"commit,required"`
-	Lint   BuildTargetLintUnion   `json:"lint,required"`
+	Lint   CheckStepUnion         `json:"lint,required"`
 	// Any of "build_target".
 	Object BuildTargetObject `json:"object,required"`
 	// Any of "not_started", "codegen", "postgen", "completed".
-	Status BuildTargetStatus      `json:"status,required"`
-	Test   BuildTargetTestUnion   `json:"test,required"`
-	Build  BuildTargetBuildUnion  `json:"build"`
-	Upload BuildTargetUploadUnion `json:"upload"`
+	Status BuildTargetStatus `json:"status,required"`
+	Test   CheckStepUnion    `json:"test,required"`
+	Build  CheckStepUnion    `json:"build"`
+	Upload CheckStepUnion    `json:"upload"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Commit      respjson.Field
@@ -422,10 +422,10 @@ func (r *BuildTargetCommitCompleted) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetCommitCompletedCompleted struct {
-	Commit BuildTargetCommitCompletedCompletedCommit `json:"commit,required"`
-	// Any of "success", "failure", "skipped", "cancelled", "action_required",
-	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
-	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
+	Commit shared.Commit `json:"commit,required"`
+	// Any of "error", "warning", "note", "success", "merge_conflict",
+	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
+	// "timed_out", "noop", "version_bump".
 	Conclusion      string                                             `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -441,44 +441,6 @@ type BuildTargetCommitCompletedCompleted struct {
 // Returns the unmodified JSON received from the API
 func (r BuildTargetCommitCompletedCompleted) RawJSON() string { return r.JSON.raw }
 func (r *BuildTargetCommitCompletedCompleted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetCommitCompletedCompletedCommit struct {
-	Repo BuildTargetCommitCompletedCompletedCommitRepo `json:"repo,required"`
-	Sha  string                                        `json:"sha,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Repo        respjson.Field
-		Sha         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetCommitCompletedCompletedCommit) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetCommitCompletedCompletedCommit) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetCommitCompletedCompletedCommitRepo struct {
-	Branch string `json:"branch,required"`
-	Name   string `json:"name,required"`
-	Owner  string `json:"owner,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Branch      respjson.Field
-		Name        respjson.Field
-		Owner       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetCommitCompletedCompletedCommitRepo) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetCommitCompletedCompletedCommitRepo) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -518,174 +480,6 @@ func (r *BuildTargetCommitCompletedCompletedMergeConflictPrRepo) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// BuildTargetLintUnion contains all possible properties and values from
-// [BuildTargetLintNotStarted], [BuildTargetLintQueued],
-// [BuildTargetLintInProgress], [BuildTargetLintCompleted].
-//
-// Use the [BuildTargetLintUnion.AsAny] method to switch on the variant.
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-type BuildTargetLintUnion struct {
-	// Any of "not_started", "queued", "in_progress", "completed".
-	Status string `json:"status"`
-	// This field is from variant [BuildTargetLintCompleted].
-	Completed BuildTargetLintCompletedCompleted `json:"completed"`
-	JSON      struct {
-		Status    respjson.Field
-		Completed respjson.Field
-		raw       string
-	} `json:"-"`
-}
-
-// anyBuildTargetLint is implemented by each variant of [BuildTargetLintUnion] to
-// add type safety for the return type of [BuildTargetLintUnion.AsAny]
-type anyBuildTargetLint interface {
-	implBuildTargetLintUnion()
-}
-
-func (BuildTargetLintNotStarted) implBuildTargetLintUnion() {}
-func (BuildTargetLintQueued) implBuildTargetLintUnion()     {}
-func (BuildTargetLintInProgress) implBuildTargetLintUnion() {}
-func (BuildTargetLintCompleted) implBuildTargetLintUnion()  {}
-
-// Use the following switch statement to find the correct variant
-//
-//	switch variant := BuildTargetLintUnion.AsAny().(type) {
-//	case stainless.BuildTargetLintNotStarted:
-//	case stainless.BuildTargetLintQueued:
-//	case stainless.BuildTargetLintInProgress:
-//	case stainless.BuildTargetLintCompleted:
-//	default:
-//	  fmt.Errorf("no variant present")
-//	}
-func (u BuildTargetLintUnion) AsAny() anyBuildTargetLint {
-	switch u.Status {
-	case "not_started":
-		return u.AsNotStarted()
-	case "queued":
-		return u.AsQueued()
-	case "in_progress":
-		return u.AsInProgress()
-	case "completed":
-		return u.AsCompleted()
-	}
-	return nil
-}
-
-func (u BuildTargetLintUnion) AsNotStarted() (v BuildTargetLintNotStarted) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetLintUnion) AsQueued() (v BuildTargetLintQueued) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetLintUnion) AsInProgress() (v BuildTargetLintInProgress) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetLintUnion) AsCompleted() (v BuildTargetLintCompleted) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u BuildTargetLintUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *BuildTargetLintUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetLintNotStarted struct {
-	Status constant.NotStarted `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetLintNotStarted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetLintNotStarted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetLintQueued struct {
-	Status constant.Queued `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetLintQueued) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetLintQueued) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetLintInProgress struct {
-	Status constant.InProgress `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetLintInProgress) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetLintInProgress) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetLintCompleted struct {
-	Completed BuildTargetLintCompletedCompleted `json:"completed,required"`
-	Status    constant.Completed                `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Completed   respjson.Field
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetLintCompleted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetLintCompleted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetLintCompletedCompleted struct {
-	// Any of "success", "failure", "skipped", "cancelled", "action_required",
-	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
-	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
-	Conclusion string `json:"conclusion,required"`
-	URL        string `json:"url,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Conclusion  respjson.Field
-		URL         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetLintCompletedCompleted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetLintCompletedCompleted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type BuildTargetObject string
 
 const (
@@ -701,18 +495,14 @@ const (
 	BuildTargetStatusCompleted  BuildTargetStatus = "completed"
 )
 
-// BuildTargetTestUnion contains all possible properties and values from
-// [BuildTargetTestNotStarted], [BuildTargetTestQueued],
-// [BuildTargetTestInProgress], [BuildTargetTestCompleted].
-//
-// Use the [BuildTargetTestUnion.AsAny] method to switch on the variant.
+// CheckStepUnion contains all possible properties and values from
+// [CheckStepStatus], [CheckStepStatus], [CheckStepStatus], [CheckStepObject].
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
-type BuildTargetTestUnion struct {
-	// Any of "not_started", "queued", "in_progress", "completed".
+type CheckStepUnion struct {
 	Status string `json:"status"`
-	// This field is from variant [BuildTargetTestCompleted].
-	Completed BuildTargetTestCompletedCompleted `json:"completed"`
+	// This field is from variant [CheckStepObject].
+	Completed CheckStepObjectCompleted `json:"completed"`
 	JSON      struct {
 		Status    respjson.Field
 		Completed respjson.Field
@@ -720,70 +510,36 @@ type BuildTargetTestUnion struct {
 	} `json:"-"`
 }
 
-// anyBuildTargetTest is implemented by each variant of [BuildTargetTestUnion] to
-// add type safety for the return type of [BuildTargetTestUnion.AsAny]
-type anyBuildTargetTest interface {
-	implBuildTargetTestUnion()
-}
-
-func (BuildTargetTestNotStarted) implBuildTargetTestUnion() {}
-func (BuildTargetTestQueued) implBuildTargetTestUnion()     {}
-func (BuildTargetTestInProgress) implBuildTargetTestUnion() {}
-func (BuildTargetTestCompleted) implBuildTargetTestUnion()  {}
-
-// Use the following switch statement to find the correct variant
-//
-//	switch variant := BuildTargetTestUnion.AsAny().(type) {
-//	case stainless.BuildTargetTestNotStarted:
-//	case stainless.BuildTargetTestQueued:
-//	case stainless.BuildTargetTestInProgress:
-//	case stainless.BuildTargetTestCompleted:
-//	default:
-//	  fmt.Errorf("no variant present")
-//	}
-func (u BuildTargetTestUnion) AsAny() anyBuildTargetTest {
-	switch u.Status {
-	case "not_started":
-		return u.AsNotStarted()
-	case "queued":
-		return u.AsQueued()
-	case "in_progress":
-		return u.AsInProgress()
-	case "completed":
-		return u.AsCompleted()
-	}
-	return nil
-}
-
-func (u BuildTargetTestUnion) AsNotStarted() (v BuildTargetTestNotStarted) {
+func (u CheckStepUnion) AsCheckStepStatus() (v CheckStepStatus) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
-func (u BuildTargetTestUnion) AsQueued() (v BuildTargetTestQueued) {
+func (u CheckStepUnion) AsVariant2() (v CheckStepStatus) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
-func (u BuildTargetTestUnion) AsInProgress() (v BuildTargetTestInProgress) {
+func (u CheckStepUnion) AsVariant3() (v CheckStepStatus) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
-func (u BuildTargetTestUnion) AsCompleted() (v BuildTargetTestCompleted) {
+func (u CheckStepUnion) AsCheckStepObject() (v CheckStepObject) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
 // Returns the unmodified JSON received from the API
-func (u BuildTargetTestUnion) RawJSON() string { return u.JSON.raw }
+func (u CheckStepUnion) RawJSON() string { return u.JSON.raw }
 
-func (r *BuildTargetTestUnion) UnmarshalJSON(data []byte) error {
+func (r *CheckStepUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetTestNotStarted struct {
-	Status constant.NotStarted `json:"status,required"`
+type CheckStepStatus struct {
+	// Any of "not_started".
+	Status string `json:"status,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -793,46 +549,15 @@ type BuildTargetTestNotStarted struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildTargetTestNotStarted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetTestNotStarted) UnmarshalJSON(data []byte) error {
+func (r CheckStepStatus) RawJSON() string { return r.JSON.raw }
+func (r *CheckStepStatus) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetTestQueued struct {
-	Status constant.Queued `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetTestQueued) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetTestQueued) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetTestInProgress struct {
-	Status constant.InProgress `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetTestInProgress) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetTestInProgress) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetTestCompleted struct {
-	Completed BuildTargetTestCompletedCompleted `json:"completed,required"`
-	Status    constant.Completed                `json:"status,required"`
+type CheckStepObject struct {
+	Completed CheckStepObjectCompleted `json:"completed,required"`
+	// Any of "completed".
+	Status string `json:"status,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Completed   respjson.Field
@@ -843,15 +568,14 @@ type BuildTargetTestCompleted struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildTargetTestCompleted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetTestCompleted) UnmarshalJSON(data []byte) error {
+func (r CheckStepObject) RawJSON() string { return r.JSON.raw }
+func (r *CheckStepObject) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetTestCompletedCompleted struct {
+type CheckStepObjectCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
-	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
-	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
+	// "neutral", "timed_out".
 	Conclusion string `json:"conclusion,required"`
 	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -864,344 +588,8 @@ type BuildTargetTestCompletedCompleted struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildTargetTestCompletedCompleted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetTestCompletedCompleted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// BuildTargetBuildUnion contains all possible properties and values from
-// [BuildTargetBuildNotStarted], [BuildTargetBuildQueued],
-// [BuildTargetBuildInProgress], [BuildTargetBuildCompleted].
-//
-// Use the [BuildTargetBuildUnion.AsAny] method to switch on the variant.
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-type BuildTargetBuildUnion struct {
-	// Any of "not_started", "queued", "in_progress", "completed".
-	Status string `json:"status"`
-	// This field is from variant [BuildTargetBuildCompleted].
-	Completed BuildTargetBuildCompletedCompleted `json:"completed"`
-	JSON      struct {
-		Status    respjson.Field
-		Completed respjson.Field
-		raw       string
-	} `json:"-"`
-}
-
-// anyBuildTargetBuild is implemented by each variant of [BuildTargetBuildUnion] to
-// add type safety for the return type of [BuildTargetBuildUnion.AsAny]
-type anyBuildTargetBuild interface {
-	implBuildTargetBuildUnion()
-}
-
-func (BuildTargetBuildNotStarted) implBuildTargetBuildUnion() {}
-func (BuildTargetBuildQueued) implBuildTargetBuildUnion()     {}
-func (BuildTargetBuildInProgress) implBuildTargetBuildUnion() {}
-func (BuildTargetBuildCompleted) implBuildTargetBuildUnion()  {}
-
-// Use the following switch statement to find the correct variant
-//
-//	switch variant := BuildTargetBuildUnion.AsAny().(type) {
-//	case stainless.BuildTargetBuildNotStarted:
-//	case stainless.BuildTargetBuildQueued:
-//	case stainless.BuildTargetBuildInProgress:
-//	case stainless.BuildTargetBuildCompleted:
-//	default:
-//	  fmt.Errorf("no variant present")
-//	}
-func (u BuildTargetBuildUnion) AsAny() anyBuildTargetBuild {
-	switch u.Status {
-	case "not_started":
-		return u.AsNotStarted()
-	case "queued":
-		return u.AsQueued()
-	case "in_progress":
-		return u.AsInProgress()
-	case "completed":
-		return u.AsCompleted()
-	}
-	return nil
-}
-
-func (u BuildTargetBuildUnion) AsNotStarted() (v BuildTargetBuildNotStarted) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetBuildUnion) AsQueued() (v BuildTargetBuildQueued) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetBuildUnion) AsInProgress() (v BuildTargetBuildInProgress) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetBuildUnion) AsCompleted() (v BuildTargetBuildCompleted) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u BuildTargetBuildUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *BuildTargetBuildUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetBuildNotStarted struct {
-	Status constant.NotStarted `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetBuildNotStarted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetBuildNotStarted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetBuildQueued struct {
-	Status constant.Queued `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetBuildQueued) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetBuildQueued) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetBuildInProgress struct {
-	Status constant.InProgress `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetBuildInProgress) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetBuildInProgress) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetBuildCompleted struct {
-	Completed BuildTargetBuildCompletedCompleted `json:"completed,required"`
-	Status    constant.Completed                 `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Completed   respjson.Field
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetBuildCompleted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetBuildCompleted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetBuildCompletedCompleted struct {
-	// Any of "success", "failure", "skipped", "cancelled", "action_required",
-	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
-	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
-	Conclusion string `json:"conclusion,required"`
-	URL        string `json:"url,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Conclusion  respjson.Field
-		URL         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetBuildCompletedCompleted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetBuildCompletedCompleted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// BuildTargetUploadUnion contains all possible properties and values from
-// [BuildTargetUploadNotStarted], [BuildTargetUploadQueued],
-// [BuildTargetUploadInProgress], [BuildTargetUploadCompleted].
-//
-// Use the [BuildTargetUploadUnion.AsAny] method to switch on the variant.
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-type BuildTargetUploadUnion struct {
-	// Any of "not_started", "queued", "in_progress", "completed".
-	Status string `json:"status"`
-	// This field is from variant [BuildTargetUploadCompleted].
-	Completed BuildTargetUploadCompletedCompleted `json:"completed"`
-	JSON      struct {
-		Status    respjson.Field
-		Completed respjson.Field
-		raw       string
-	} `json:"-"`
-}
-
-// anyBuildTargetUpload is implemented by each variant of [BuildTargetUploadUnion]
-// to add type safety for the return type of [BuildTargetUploadUnion.AsAny]
-type anyBuildTargetUpload interface {
-	implBuildTargetUploadUnion()
-}
-
-func (BuildTargetUploadNotStarted) implBuildTargetUploadUnion() {}
-func (BuildTargetUploadQueued) implBuildTargetUploadUnion()     {}
-func (BuildTargetUploadInProgress) implBuildTargetUploadUnion() {}
-func (BuildTargetUploadCompleted) implBuildTargetUploadUnion()  {}
-
-// Use the following switch statement to find the correct variant
-//
-//	switch variant := BuildTargetUploadUnion.AsAny().(type) {
-//	case stainless.BuildTargetUploadNotStarted:
-//	case stainless.BuildTargetUploadQueued:
-//	case stainless.BuildTargetUploadInProgress:
-//	case stainless.BuildTargetUploadCompleted:
-//	default:
-//	  fmt.Errorf("no variant present")
-//	}
-func (u BuildTargetUploadUnion) AsAny() anyBuildTargetUpload {
-	switch u.Status {
-	case "not_started":
-		return u.AsNotStarted()
-	case "queued":
-		return u.AsQueued()
-	case "in_progress":
-		return u.AsInProgress()
-	case "completed":
-		return u.AsCompleted()
-	}
-	return nil
-}
-
-func (u BuildTargetUploadUnion) AsNotStarted() (v BuildTargetUploadNotStarted) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetUploadUnion) AsQueued() (v BuildTargetUploadQueued) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetUploadUnion) AsInProgress() (v BuildTargetUploadInProgress) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u BuildTargetUploadUnion) AsCompleted() (v BuildTargetUploadCompleted) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u BuildTargetUploadUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *BuildTargetUploadUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetUploadNotStarted struct {
-	Status constant.NotStarted `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetUploadNotStarted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetUploadNotStarted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetUploadQueued struct {
-	Status constant.Queued `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetUploadQueued) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetUploadQueued) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetUploadInProgress struct {
-	Status constant.InProgress `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetUploadInProgress) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetUploadInProgress) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetUploadCompleted struct {
-	Completed BuildTargetUploadCompletedCompleted `json:"completed,required"`
-	Status    constant.Completed                  `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Completed   respjson.Field
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetUploadCompleted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetUploadCompleted) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type BuildTargetUploadCompletedCompleted struct {
-	// Any of "success", "failure", "skipped", "cancelled", "action_required",
-	// "neutral", "timed_out", "error", "warning", "note", "merge_conflict",
-	// "upstream_merge_conflict", "fatal", "payment_required", "noop", "version_bump".
-	Conclusion string `json:"conclusion,required"`
-	URL        string `json:"url,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Conclusion  respjson.Field
-		URL         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r BuildTargetUploadCompletedCompleted) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetUploadCompletedCompleted) UnmarshalJSON(data []byte) error {
+func (r CheckStepObjectCompleted) RawJSON() string { return r.JSON.raw }
+func (r *CheckStepObjectCompleted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

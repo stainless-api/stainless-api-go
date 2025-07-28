@@ -16,6 +16,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
+	"github.com/stainless-api/stainless-api-go/shared"
 )
 
 // ProjectBranchService contains methods and other services that help with
@@ -129,9 +130,9 @@ func (r *ProjectBranchService) Delete(ctx context.Context, branch string, body P
 }
 
 type ProjectBranch struct {
-	Branch       string                    `json:"branch,required"`
-	ConfigCommit ProjectBranchConfigCommit `json:"config_commit,required"`
-	LatestBuild  BuildObject               `json:"latest_build,required"`
+	Branch       string        `json:"branch,required"`
+	ConfigCommit shared.Commit `json:"config_commit,required"`
+	LatestBuild  BuildObject   `json:"latest_build,required"`
 	// Any of "project_branch".
 	Object  ProjectBranchObject `json:"object,required"`
 	Org     string              `json:"org,required"`
@@ -155,44 +156,6 @@ func (r *ProjectBranch) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ProjectBranchConfigCommit struct {
-	Repo ProjectBranchConfigCommitRepo `json:"repo,required"`
-	Sha  string                        `json:"sha,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Repo        respjson.Field
-		Sha         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ProjectBranchConfigCommit) RawJSON() string { return r.JSON.raw }
-func (r *ProjectBranchConfigCommit) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProjectBranchConfigCommitRepo struct {
-	Branch string `json:"branch,required"`
-	Name   string `json:"name,required"`
-	Owner  string `json:"owner,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Branch      respjson.Field
-		Name        respjson.Field
-		Owner       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ProjectBranchConfigCommitRepo) RawJSON() string { return r.JSON.raw }
-func (r *ProjectBranchConfigCommitRepo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type ProjectBranchObject string
 
 const (
@@ -200,9 +163,9 @@ const (
 )
 
 type ProjectBranchListResponse struct {
-	Branch        string                                `json:"branch,required"`
-	ConfigCommit  ProjectBranchListResponseConfigCommit `json:"config_commit,required"`
-	LatestBuildID string                                `json:"latest_build_id,required"`
+	Branch        string        `json:"branch,required"`
+	ConfigCommit  shared.Commit `json:"config_commit,required"`
+	LatestBuildID string        `json:"latest_build_id,required"`
 	// Any of "project_branch".
 	Object  ProjectBranchListResponseObject `json:"object,required"`
 	Org     string                          `json:"org,required"`
@@ -223,44 +186,6 @@ type ProjectBranchListResponse struct {
 // Returns the unmodified JSON received from the API
 func (r ProjectBranchListResponse) RawJSON() string { return r.JSON.raw }
 func (r *ProjectBranchListResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProjectBranchListResponseConfigCommit struct {
-	Repo ProjectBranchListResponseConfigCommitRepo `json:"repo,required"`
-	Sha  string                                    `json:"sha,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Repo        respjson.Field
-		Sha         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ProjectBranchListResponseConfigCommit) RawJSON() string { return r.JSON.raw }
-func (r *ProjectBranchListResponseConfigCommit) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProjectBranchListResponseConfigCommitRepo struct {
-	Branch string `json:"branch,required"`
-	Name   string `json:"name,required"`
-	Owner  string `json:"owner,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Branch      respjson.Field
-		Name        respjson.Field
-		Owner       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ProjectBranchListResponseConfigCommitRepo) RawJSON() string { return r.JSON.raw }
-func (r *ProjectBranchListResponseConfigCommitRepo) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
