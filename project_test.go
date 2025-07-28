@@ -38,7 +38,7 @@ func TestProjectNew(t *testing.T) {
 			},
 		},
 		Slug:    "slug",
-		Targets: []string{"node"},
+		Targets: []stainless.Target{stainless.TargetNode},
 	})
 	if err != nil {
 		var apierr *stainless.Error
