@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.21.0 (2025-07-28)
+
+Full Changelog: [v0.20.0...v0.21.0](https://github.com/stainless-api/stainless-api-go/compare/v0.20.0...v0.21.0)
+
+### Features
+
+* **api:** manual updates ([9cc77b6](https://github.com/stainless-api/stainless-api-go/commit/9cc77b674b2f3d808f2730762ec25c9b22dfeda4))
+* flesh out project branches endpoints ([a4db83e](https://github.com/stainless-api/stainless-api-go/commit/a4db83ec118ced2b0f940f66792f9dcefd371362))
+
 ## 0.20.0 (2025-07-22)
 
 Full Changelog: [v0.19.0...v0.20.0](https://github.com/stainless-api/stainless-api-go/compare/v0.19.0...v0.20.0)
