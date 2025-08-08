@@ -619,8 +619,8 @@ type BuildNewParams struct {
 	Revision BuildNewParamsRevisionUnion `json:"revision,omitzero,required"`
 	// Whether to allow empty commits (no changes). Defaults to false.
 	AllowEmpty param.Opt[bool] `json:"allow_empty,omitzero"`
-	// Optional branch to use. If not specified, defaults to "main". When using a
-	// branch name or merge command as revision, this must match or be omitted.
+	// The Stainless branch to use for the build. If not specified, the branch is
+	// inferred from the `revision`, and will 400 when that is not possible.
 	Branch param.Opt[string] `json:"branch,omitzero"`
 	// Optional commit message to use when creating a new commit.
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
