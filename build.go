@@ -496,13 +496,17 @@ const (
 )
 
 // CheckStepUnion contains all possible properties and values from
-// [CheckStepStatus], [CheckStepStatus], [CheckStepStatus], [CheckStepObject].
+// [CheckStepNotStarted], [CheckStepQueued], [CheckStepInProgress],
+// [CheckStepCompleted].
+//
+// Use the [CheckStepUnion.AsAny] method to switch on the variant.
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
 type CheckStepUnion struct {
+	// Any of "not_started", "queued", "in_progress", "completed".
 	Status string `json:"status"`
-	// This field is from variant [CheckStepObject].
-	Completed CheckStepObjectCompleted `json:"completed"`
+	// This field is from variant [CheckStepCompleted].
+	Completed CheckStepCompletedCompleted `json:"completed"`
 	JSON      struct {
 		Status    respjson.Field
 		Completed respjson.Field
@@ -510,22 +514,57 @@ type CheckStepUnion struct {
 	} `json:"-"`
 }
 
-func (u CheckStepUnion) AsCheckStepStatus() (v CheckStepStatus) {
+// anyCheckStep is implemented by each variant of [CheckStepUnion] to add type
+// safety for the return type of [CheckStepUnion.AsAny]
+type anyCheckStep interface {
+	implCheckStepUnion()
+}
+
+func (CheckStepNotStarted) implCheckStepUnion() {}
+func (CheckStepQueued) implCheckStepUnion()     {}
+func (CheckStepInProgress) implCheckStepUnion() {}
+func (CheckStepCompleted) implCheckStepUnion()  {}
+
+// Use the following switch statement to find the correct variant
+//
+//	switch variant := CheckStepUnion.AsAny().(type) {
+//	case stainless.CheckStepNotStarted:
+//	case stainless.CheckStepQueued:
+//	case stainless.CheckStepInProgress:
+//	case stainless.CheckStepCompleted:
+//	default:
+//	  fmt.Errorf("no variant present")
+//	}
+func (u CheckStepUnion) AsAny() anyCheckStep {
+	switch u.Status {
+	case "not_started":
+		return u.AsNotStarted()
+	case "queued":
+		return u.AsQueued()
+	case "in_progress":
+		return u.AsInProgress()
+	case "completed":
+		return u.AsCompleted()
+	}
+	return nil
+}
+
+func (u CheckStepUnion) AsNotStarted() (v CheckStepNotStarted) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
-func (u CheckStepUnion) AsVariant2() (v CheckStepStatus) {
+func (u CheckStepUnion) AsQueued() (v CheckStepQueued) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
-func (u CheckStepUnion) AsVariant3() (v CheckStepStatus) {
+func (u CheckStepUnion) AsInProgress() (v CheckStepInProgress) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
-func (u CheckStepUnion) AsCheckStepObject() (v CheckStepObject) {
+func (u CheckStepUnion) AsCompleted() (v CheckStepCompleted) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
@@ -537,9 +576,8 @@ func (r *CheckStepUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CheckStepStatus struct {
-	// Any of "not_started".
-	Status string `json:"status,required"`
+type CheckStepNotStarted struct {
+	Status constant.NotStarted `json:"status,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -549,15 +587,46 @@ type CheckStepStatus struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CheckStepStatus) RawJSON() string { return r.JSON.raw }
-func (r *CheckStepStatus) UnmarshalJSON(data []byte) error {
+func (r CheckStepNotStarted) RawJSON() string { return r.JSON.raw }
+func (r *CheckStepNotStarted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CheckStepObject struct {
-	Completed CheckStepObjectCompleted `json:"completed,required"`
-	// Any of "completed".
-	Status string `json:"status,required"`
+type CheckStepQueued struct {
+	Status constant.Queued `json:"status,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CheckStepQueued) RawJSON() string { return r.JSON.raw }
+func (r *CheckStepQueued) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CheckStepInProgress struct {
+	Status constant.InProgress `json:"status,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CheckStepInProgress) RawJSON() string { return r.JSON.raw }
+func (r *CheckStepInProgress) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CheckStepCompleted struct {
+	Completed CheckStepCompletedCompleted `json:"completed,required"`
+	Status    constant.Completed          `json:"status,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Completed   respjson.Field
@@ -568,12 +637,12 @@ type CheckStepObject struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CheckStepObject) RawJSON() string { return r.JSON.raw }
-func (r *CheckStepObject) UnmarshalJSON(data []byte) error {
+func (r CheckStepCompleted) RawJSON() string { return r.JSON.raw }
+func (r *CheckStepCompleted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CheckStepObjectCompleted struct {
+type CheckStepCompletedCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
 	// "neutral", "timed_out".
 	Conclusion string `json:"conclusion,required"`
@@ -588,8 +657,8 @@ type CheckStepObjectCompleted struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r CheckStepObjectCompleted) RawJSON() string { return r.JSON.raw }
-func (r *CheckStepObjectCompleted) UnmarshalJSON(data []byte) error {
+func (r CheckStepCompletedCompleted) RawJSON() string { return r.JSON.raw }
+func (r *CheckStepCompletedCompleted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
