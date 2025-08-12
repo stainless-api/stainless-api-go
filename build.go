@@ -245,24 +245,24 @@ func (r *BuildObjectTargets) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTarget struct {
-	Commit BuildTargetCommitUnion `json:"commit,required"`
-	Lint   CheckStepUnion         `json:"lint,required"`
+	Commit     BuildTargetCommitUnion `json:"commit,required"`
+	InstallURL string                 `json:"install_url,required"`
+	Lint       CheckStepUnion         `json:"lint,required"`
 	// Any of "build_target".
 	Object BuildTargetObject `json:"object,required"`
 	// Any of "not_started", "codegen", "postgen", "completed".
 	Status BuildTargetStatus `json:"status,required"`
 	Test   CheckStepUnion    `json:"test,required"`
 	Build  CheckStepUnion    `json:"build"`
-	Upload CheckStepUnion    `json:"upload"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Commit      respjson.Field
+		InstallURL  respjson.Field
 		Lint        respjson.Field
 		Object      respjson.Field
 		Status      respjson.Field
 		Test        respjson.Field
 		Build       respjson.Field
-		Upload      respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
