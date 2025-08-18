@@ -129,6 +129,27 @@ func (r *ProjectBranchService) Delete(ctx context.Context, branch string, body P
 	return
 }
 
+// Rebase a project branch
+func (r *ProjectBranchService) Rebase(ctx context.Context, branch string, params ProjectBranchRebaseParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
+	opts = append(r.Options[:], opts...)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
+	if params.Project.Value == "" {
+		err = errors.New("missing required project parameter")
+		return
+	}
+	if branch == "" {
+		err = errors.New("missing required branch parameter")
+		return
+	}
+	path := fmt.Sprintf("v0/projects/%s/branches/%s/rebase", params.Project.Value, branch)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
+	return
+}
+
 type ProjectBranch struct {
 	Branch       string        `json:"branch,required"`
 	ConfigCommit shared.Commit `json:"config_commit,required"`
@@ -246,4 +267,21 @@ type ProjectBranchDeleteParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
 	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
 	paramObj
+}
+
+type ProjectBranchRebaseParams struct {
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	// The branch or commit SHA to rebase onto. Defaults to "main".
+	Base param.Opt[string] `query:"base,omitzero" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [ProjectBranchRebaseParams]'s query parameters as
+// `url.Values`.
+func (r ProjectBranchRebaseParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
