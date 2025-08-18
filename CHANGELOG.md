@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.23.0 (2025-08-18)
+
+Full Changelog: [v0.22.0...v0.23.0](https://github.com/stainless-api/stainless-api-go/compare/v0.22.0...v0.23.0)
+
+### Features
+
+* [WIP] add branch rebasing to the API ([37a14be](https://github.com/stainless-api/stainless-api-go/commit/37a14be651aec1e77b64c6a0f6e85e1cab34fb62))
+* **api:** add install_url to build step; remove upload step ([e0c1b5b](https://github.com/stainless-api/stainless-api-go/commit/e0c1b5bcdd0d69a8af3e3a2596d7420394c47309))
+* **api:** discrim like this ([3e2edff](https://github.com/stainless-api/stainless-api-go/commit/3e2edff0a111126c975feb87cc9c0e932cf37f3b))
+* **api:** don't default to "main" branch ([23512b2](https://github.com/stainless-api/stainless-api-go/commit/23512b24d1181e635ad75d6b3514062e0706477b))
+* **client:** support optional json html escaping ([13e6c91](https://github.com/stainless-api/stainless-api-go/commit/13e6c91ccd305450110fa4d11600798bc833fb66))
+
+
+### Chores
+
+* **internal:** codegen related update ([5e1bca4](https://github.com/stainless-api/stainless-api-go/commit/5e1bca443decd84f89c7b4eaf776f327817bb1a6))
+* **internal:** update comment in script ([ae9273a](https://github.com/stainless-api/stainless-api-go/commit/ae9273a256b4b74a1125f36aa94cda4f7a0bf7de))
+* update @stainless-api/prism-cli to v5.15.0 ([f284bab](https://github.com/stainless-api/stainless-api-go/commit/f284babd0d9102d35b021ef867725ef36301528b))
+
 ## 0.22.0 (2025-07-28)
 
 Full Changelog: [v0.21.0...v0.22.0](https://github.com/stainless-api/stainless-api-go/compare/v0.21.0...v0.22.0)
