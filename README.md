@@ -2,7 +2,7 @@
 
 <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go"><img src="https://pkg.go.dev/badge/github.com/stainless-api/stainless-api-go.svg" alt="Go Reference"></a>
 
-The Stainless Go library provides convenient access to the Stainless REST API
+The Stainless Go library provides convenient access to the [Stainless REST API](https://www.stainless.com/docs/getting-started/quickstart-cli)
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
@@ -24,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/stainless-api/stainless-api-go@v0.23.0'
+go get -u 'github.com/stainless-api/stainless-api-go@v0.24.0'
 ```
 
 <!-- x-release-please-end -->

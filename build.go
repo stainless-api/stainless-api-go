@@ -813,13 +813,13 @@ func (r *BuildCompareParams) UnmarshalJSON(data []byte) error {
 
 // Parameters for the base build
 //
-// The property Revision is required.
+// The properties Branch, Revision are required.
 type BuildCompareParamsBase struct {
+	// Branch to use. When using a branch name as revision, this must match or be
+	// omitted.
+	Branch string `json:"branch,required"`
 	// Specifies what to build: a branch name, a commit SHA, or file contents
 	Revision BuildCompareParamsBaseRevisionUnion `json:"revision,omitzero,required"`
-	// Optional branch to use. If not specified, defaults to "main". When using a
-	// branch name as revision, this must match or be omitted.
-	Branch param.Opt[string] `json:"branch,omitzero"`
 	// Optional commit message to use when creating a new commit.
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
 	paramObj
@@ -860,13 +860,13 @@ func (u *BuildCompareParamsBaseRevisionUnion) asAny() any {
 
 // Parameters for the head build
 //
-// The property Revision is required.
+// The properties Branch, Revision are required.
 type BuildCompareParamsHead struct {
+	// Branch to use. When using a branch name as revision, this must match or be
+	// omitted.
+	Branch string `json:"branch,required"`
 	// Specifies what to build: a branch name, a commit SHA, or file contents
 	Revision BuildCompareParamsHeadRevisionUnion `json:"revision,omitzero,required"`
-	// Optional branch to use. If not specified, defaults to "main". When using a
-	// branch name as revision, this must match or be omitted.
-	Branch param.Opt[string] `json:"branch,omitzero"`
 	// Optional commit message to use when creating a new commit.
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
 	paramObj
