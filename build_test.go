@@ -114,17 +114,17 @@ func TestBuildCompareWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Builds.Compare(context.TODO(), stainless.BuildCompareParams{
 		Base: stainless.BuildCompareParamsBase{
+			Branch: "branch",
 			Revision: stainless.BuildCompareParamsBaseRevisionUnion{
 				OfString: stainless.String("string"),
 			},
-			Branch:        stainless.String("branch"),
 			CommitMessage: stainless.String("commit_message"),
 		},
 		Head: stainless.BuildCompareParamsHead{
+			Branch: "branch",
 			Revision: stainless.BuildCompareParamsHeadRevisionUnion{
 				OfString: stainless.String("string"),
 			},
-			Branch:        stainless.String("branch"),
 			CommitMessage: stainless.String("commit_message"),
 		},
 		Project: stainless.String("project"),
