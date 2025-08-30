@@ -48,7 +48,7 @@ func (r *ProjectConfigService) Get(ctx context.Context, params ProjectConfigGetP
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/configs", params.Project.Value)
+	path := fmt.Sprintf("v0/projects/%s/configs", url.PathEscape(params.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
 }
@@ -65,7 +65,7 @@ func (r *ProjectConfigService) Guess(ctx context.Context, params ProjectConfigGu
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/configs/guess", params.Project.Value)
+	path := fmt.Sprintf("v0/projects/%s/configs/guess", url.PathEscape(params.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }

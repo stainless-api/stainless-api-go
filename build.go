@@ -65,7 +65,7 @@ func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.R
 		err = errors.New("missing required buildId parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/builds/%s", buildID)
+	path := fmt.Sprintf("v0/builds/%s", url.PathEscape(buildID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
