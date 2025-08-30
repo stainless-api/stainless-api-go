@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
@@ -40,7 +41,7 @@ func (r *OrgService) Get(ctx context.Context, org string, opts ...option.Request
 		err = errors.New("missing required org parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/orgs/%s", org)
+	path := fmt.Sprintf("v0/orgs/%s", url.PathEscape(org))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
