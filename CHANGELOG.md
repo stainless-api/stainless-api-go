@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.24.0 (2025-08-30)
+
+Full Changelog: [v0.23.0...v0.24.0](https://github.com/stainless-api/stainless-api-go/compare/v0.23.0...v0.24.0)
+
+### Features
+
+* **api:** encode path params ([dec0d64](https://github.com/stainless-api/stainless-api-go/commit/dec0d644f0ef54fc99ae2840318e036963af9c49))
+* **api:** manual updates ([ed9c57e](https://github.com/stainless-api/stainless-api-go/commit/ed9c57ecf38a35988da38bf831c6e451d4435403))
+
+
+### Bug Fixes
+
+* close body before retrying ([9530408](https://github.com/stainless-api/stainless-api-go/commit/95304081d3b47f61c5ae99895776e5d6132955c7))
+
+
+### Documentation
+
+* add contact email and link to docs ([dabe555](https://github.com/stainless-api/stainless-api-go/commit/dabe5556f51575eef2146273515d8408fc948729))
+
 ## 0.23.0 (2025-08-18)
 
 Full Changelog: [v0.22.0...v0.23.0](https://github.com/stainless-api/stainless-api-go/compare/v0.22.0...v0.23.0)
