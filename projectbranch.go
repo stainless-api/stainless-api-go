@@ -50,7 +50,7 @@ func (r *ProjectBranchService) New(ctx context.Context, params ProjectBranchNewP
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/branches", params.Project.Value)
+	path := fmt.Sprintf("v0/projects/%s/branches", url.PathEscape(params.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
@@ -71,7 +71,7 @@ func (r *ProjectBranchService) Get(ctx context.Context, branch string, query Pro
 		err = errors.New("missing required branch parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/branches/%s", query.Project.Value, branch)
+	path := fmt.Sprintf("v0/projects/%s/branches/%s", url.PathEscape(query.Project.Value), url.PathEscape(branch))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -90,7 +90,7 @@ func (r *ProjectBranchService) List(ctx context.Context, params ProjectBranchLis
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/branches", params.Project.Value)
+	path := fmt.Sprintf("v0/projects/%s/branches", url.PathEscape(params.Project.Value))
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -124,7 +124,7 @@ func (r *ProjectBranchService) Delete(ctx context.Context, branch string, body P
 		err = errors.New("missing required branch parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/branches/%s", body.Project.Value, branch)
+	path := fmt.Sprintf("v0/projects/%s/branches/%s", url.PathEscape(body.Project.Value), url.PathEscape(branch))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
@@ -145,7 +145,7 @@ func (r *ProjectBranchService) Rebase(ctx context.Context, branch string, params
 		err = errors.New("missing required branch parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s/branches/%s/rebase", params.Project.Value, branch)
+	path := fmt.Sprintf("v0/projects/%s/branches/%s/rebase", url.PathEscape(params.Project.Value), url.PathEscape(branch))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
 }

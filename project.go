@@ -62,7 +62,7 @@ func (r *ProjectService) Get(ctx context.Context, query ProjectGetParams, opts .
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s", query.Project.Value)
+	path := fmt.Sprintf("v0/projects/%s", url.PathEscape(query.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -79,7 +79,7 @@ func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams,
 		err = errors.New("missing required project parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/projects/%s", params.Project.Value)
+	path := fmt.Sprintf("v0/projects/%s", url.PathEscape(params.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
 	return
 }
