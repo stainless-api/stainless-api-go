@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.24.1 (2025-09-06)
+
+Full Changelog: [v0.24.0...v0.24.1](https://github.com/stainless-api/stainless-api-go/compare/v0.24.0...v0.24.1)
+
+### Bug Fixes
+
+* **internal:** unmarshal correctly when there are multiple discriminators ([483b23c](https://github.com/stainless-api/stainless-api-go/commit/483b23c5999d093fd7348e42afae589181b7b182))
+
+
+### Chores
+
+* **internal:** codegen related update ([8693156](https://github.com/stainless-api/stainless-api-go/commit/86931566d48420dd214db29b5a1364ef91269f08))
+
 ## 0.24.0 (2025-08-30)
 
 Full Changelog: [v0.23.0...v0.24.0](https://github.com/stainless-api/stainless-api-go/compare/v0.23.0...v0.24.0)
