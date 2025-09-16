@@ -45,8 +45,11 @@ func NewBuildService(opts ...option.RequestOption) (r BuildService) {
 	return
 }
 
-// Create a new build
-func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...option.RequestOption) (res *BuildObject, err error) {
+// Create a build, on top of a project branch, against a given input revision.
+//
+// The project branch will be modified so that its latest set of config files
+// points to the one specified by the input revision.
+func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...option.RequestOption) (res *Build, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
@@ -58,8 +61,8 @@ func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...opt
 	return
 }
 
-// Retrieve a build by ID
-func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.RequestOption) (res *BuildObject, err error) {
+// Retrieve a build by its ID.
+func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.RequestOption) (res *Build, err error) {
 	opts = append(r.Options[:], opts...)
 	if buildID == "" {
 		err = errors.New("missing required buildId parameter")
@@ -70,8 +73,11 @@ func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.R
 	return
 }
 
-// List builds for a project
-func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...option.RequestOption) (res *pagination.Page[BuildObject], err error) {
+// List user-triggered builds for a given project.
+//
+// An optional revision can be specified to filter by config commit SHA, or hashes
+// of file contents.
+func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...option.RequestOption) (res *pagination.Page[Build], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -93,12 +99,23 @@ func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...
 	return res, nil
 }
 
-// List builds for a project
-func (r *BuildService) ListAutoPaging(ctx context.Context, query BuildListParams, opts ...option.RequestOption) *pagination.PageAutoPager[BuildObject] {
+// List user-triggered builds for a given project.
+//
+// An optional revision can be specified to filter by config commit SHA, or hashes
+// of file contents.
+func (r *BuildService) ListAutoPaging(ctx context.Context, query BuildListParams, opts ...option.RequestOption) *pagination.PageAutoPager[Build] {
 	return pagination.NewPageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Creates two builds whose outputs can be compared directly
+// Create two builds whose outputs can be directly compared with each other.
+//
+// Created builds _modify_ their project branches so that their latest sets of
+// config files point to the ones specified by the input revision.
+//
+// This endpoint is useful because a build has more inputs than the set of config
+// files it uses, so comparing two builds directly may return spurious differences.
+// Builds made via this endpoint are guaranteed to have differences arising from
+// the set of config files, and any custom code.
 func (r *BuildService) Compare(ctx context.Context, body BuildCompareParams, opts ...option.RequestOption) (res *BuildCompareResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -111,17 +128,18 @@ func (r *BuildService) Compare(ctx context.Context, body BuildCompareParams, opt
 	return
 }
 
-type BuildObject struct {
-	ID             string                         `json:"id,required"`
-	ConfigCommit   string                         `json:"config_commit,required"`
-	CreatedAt      time.Time                      `json:"created_at,required" format:"date-time"`
-	DocumentedSpec BuildObjectDocumentedSpecUnion `json:"documented_spec,required"`
+type Build struct {
+	// Build ID
+	ID             string                   `json:"id,required"`
+	ConfigCommit   string                   `json:"config_commit,required"`
+	CreatedAt      time.Time                `json:"created_at,required" format:"date-time"`
+	DocumentedSpec BuildDocumentedSpecUnion `json:"documented_spec,required"`
 	// Any of "build".
-	Object    BuildObjectObject  `json:"object,required"`
-	Org       string             `json:"org,required"`
-	Project   string             `json:"project,required"`
-	Targets   BuildObjectTargets `json:"targets,required"`
-	UpdatedAt time.Time          `json:"updated_at,required" format:"date-time"`
+	Object    BuildObject  `json:"object,required"`
+	Org       string       `json:"org,required"`
+	Project   string       `json:"project,required"`
+	Targets   BuildTargets `json:"targets,required"`
+	UpdatedAt time.Time    `json:"updated_at,required" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID             respjson.Field
@@ -139,23 +157,23 @@ type BuildObject struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildObject) RawJSON() string { return r.JSON.raw }
-func (r *BuildObject) UnmarshalJSON(data []byte) error {
+func (r Build) RawJSON() string { return r.JSON.raw }
+func (r *Build) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// BuildObjectDocumentedSpecUnion contains all possible properties and values from
-// [BuildObjectDocumentedSpecObject], [BuildObjectDocumentedSpecObject].
+// BuildDocumentedSpecUnion contains all possible properties and values from
+// [BuildDocumentedSpecObject], [BuildDocumentedSpecObject].
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
-type BuildObjectDocumentedSpecUnion struct {
-	// This field is from variant [BuildObjectDocumentedSpecObject].
+type BuildDocumentedSpecUnion struct {
+	// This field is from variant [BuildDocumentedSpecObject].
 	Content string `json:"content"`
-	// This field is from variant [BuildObjectDocumentedSpecObject].
+	// This field is from variant [BuildDocumentedSpecObject].
 	Type string `json:"type"`
-	// This field is from variant [BuildObjectDocumentedSpecObject].
+	// This field is from variant [BuildDocumentedSpecObject].
 	Expires time.Time `json:"expires"`
-	// This field is from variant [BuildObjectDocumentedSpecObject].
+	// This field is from variant [BuildDocumentedSpecObject].
 	URL  string `json:"url"`
 	JSON struct {
 		Content respjson.Field
@@ -166,24 +184,24 @@ type BuildObjectDocumentedSpecUnion struct {
 	} `json:"-"`
 }
 
-func (u BuildObjectDocumentedSpecUnion) AsBuildObjectDocumentedSpecObject() (v BuildObjectDocumentedSpecObject) {
+func (u BuildDocumentedSpecUnion) AsBuildDocumentedSpecObject() (v BuildDocumentedSpecObject) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
-func (u BuildObjectDocumentedSpecUnion) AsVariant2() (v BuildObjectDocumentedSpecObject) {
+func (u BuildDocumentedSpecUnion) AsVariant2() (v BuildDocumentedSpecObject) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
 // Returns the unmodified JSON received from the API
-func (u BuildObjectDocumentedSpecUnion) RawJSON() string { return u.JSON.raw }
+func (u BuildDocumentedSpecUnion) RawJSON() string { return u.JSON.raw }
 
-func (r *BuildObjectDocumentedSpecUnion) UnmarshalJSON(data []byte) error {
+func (r *BuildDocumentedSpecUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildObjectDocumentedSpecObject struct {
+type BuildDocumentedSpecObject struct {
 	Content string `json:"content,required"`
 	// Any of "content".
 	Type string `json:"type,required"`
@@ -197,18 +215,18 @@ type BuildObjectDocumentedSpecObject struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildObjectDocumentedSpecObject) RawJSON() string { return r.JSON.raw }
-func (r *BuildObjectDocumentedSpecObject) UnmarshalJSON(data []byte) error {
+func (r BuildDocumentedSpecObject) RawJSON() string { return r.JSON.raw }
+func (r *BuildDocumentedSpecObject) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildObjectObject string
+type BuildObject string
 
 const (
-	BuildObjectObjectBuild BuildObjectObject = "build"
+	BuildObjectBuild BuildObject = "build"
 )
 
-type BuildObjectTargets struct {
+type BuildTargets struct {
 	Cli        BuildTarget `json:"cli"`
 	Csharp     BuildTarget `json:"csharp"`
 	Go         BuildTarget `json:"go"`
@@ -239,8 +257,8 @@ type BuildObjectTargets struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildObjectTargets) RawJSON() string { return r.JSON.raw }
-func (r *BuildObjectTargets) UnmarshalJSON(data []byte) error {
+func (r BuildTargets) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargets) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -663,8 +681,8 @@ func (r *CheckStepCompletedCompleted) UnmarshalJSON(data []byte) error {
 }
 
 type BuildCompareResponse struct {
-	Base BuildObject `json:"base,required"`
-	Head BuildObject `json:"head,required"`
+	Base Build `json:"base,required"`
+	Head Build `json:"head,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Base        respjson.Field
@@ -684,11 +702,11 @@ type BuildNewParams struct {
 	// Project name
 	Project param.Opt[string] `json:"project,omitzero,required"`
 	// Specifies what to build: a branch name, commit SHA, merge command
-	// ("base..head"), or file contents
+	// ("base..head"), or file contents.
 	Revision BuildNewParamsRevisionUnion `json:"revision,omitzero,required"`
 	// Whether to allow empty commits (no changes). Defaults to false.
 	AllowEmpty param.Opt[bool] `json:"allow_empty,omitzero"`
-	// The Stainless branch to use for the build. If not specified, the branch is
+	// The project branch to use for the build. If not specified, the branch is
 	// inferred from the `revision`, and will 400 when that is not possible.
 	Branch param.Opt[string] `json:"branch,omitzero"`
 	// Optional commit message to use when creating a new commit.
@@ -739,9 +757,9 @@ type BuildListParams struct {
 	Project param.Opt[string] `query:"project,omitzero,required" json:"-"`
 	// Branch name
 	Branch param.Opt[string] `query:"branch,omitzero" json:"-"`
-	// Pagination cursor from a previous response
+	// Pagination cursor from a previous response.
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
-	// Maximum number of builds to return, defaults to 10 (maximum: 100)
+	// Maximum number of builds to return, defaults to 10 (maximum: 100).
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
 	// A config commit SHA used for the build
 	Revision BuildListParamsRevisionUnion `query:"revision,omitzero" json:"-"`
@@ -818,7 +836,7 @@ type BuildCompareParamsBase struct {
 	// Branch to use. When using a branch name as revision, this must match or be
 	// omitted.
 	Branch string `json:"branch,required"`
-	// Specifies what to build: a branch name, a commit SHA, or file contents
+	// Specifies what to build: a branch name, a commit SHA, or file contents.
 	Revision BuildCompareParamsBaseRevisionUnion `json:"revision,omitzero,required"`
 	// Optional commit message to use when creating a new commit.
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
@@ -865,7 +883,7 @@ type BuildCompareParamsHead struct {
 	// Branch to use. When using a branch name as revision, this must match or be
 	// omitted.
 	Branch string `json:"branch,required"`
-	// Specifies what to build: a branch name, a commit SHA, or file contents
+	// Specifies what to build: a branch name, a commit SHA, or file contents.
 	Revision BuildCompareParamsHeadRevisionUnion `json:"revision,omitzero,required"`
 	// Optional commit message to use when creating a new commit.
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`

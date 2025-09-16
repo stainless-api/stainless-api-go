@@ -24,14 +24,14 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	buildObject, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
-		Project: stainless.String("project"),
+	build, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
+		Project: stainless.String("stainless"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
-			OfString: stainless.String("string"),
+			OfString: stainless.String("main"),
 		},
 	})
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", buildObject.ID)
+	t.Logf("%+v\n", build.ID)
 }
