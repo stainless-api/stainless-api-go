@@ -34,7 +34,7 @@ func NewOrgService(opts ...option.RequestOption) (r OrgService) {
 	return
 }
 
-// Retrieve an organization by name
+// Retrieve an organization by name.
 func (r *OrgService) Get(ctx context.Context, org string, opts ...option.RequestOption) (res *Org, err error) {
 	opts = append(r.Options[:], opts...)
 	if org == "" {
@@ -46,7 +46,7 @@ func (r *OrgService) Get(ctx context.Context, org string, opts ...option.Request
 	return
 }
 
-// List organizations the user has access to
+// List organizations accessible to the current authentication method.
 func (r *OrgService) List(ctx context.Context, opts ...option.RequestOption) (res *OrgListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/orgs"

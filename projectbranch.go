@@ -16,7 +16,6 @@ import (
 	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
-	"github.com/stainless-api/stainless-api-go/shared"
 )
 
 // ProjectBranchService contains methods and other services that help with
@@ -38,7 +37,11 @@ func NewProjectBranchService(opts ...option.RequestOption) (r ProjectBranchServi
 	return
 }
 
-// Create a new branch for a project
+// Create a new branch for a project.
+//
+// The branch inherits the config files from the revision pointed to by the
+// `branch_from` parameter. In addition, if the revision is a branch name, the
+// branch will also inherit custom code changes from that branch.
 func (r *ProjectBranchService) New(ctx context.Context, params ProjectBranchNewParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -55,7 +58,7 @@ func (r *ProjectBranchService) New(ctx context.Context, params ProjectBranchNewP
 	return
 }
 
-// Retrieve a project branch
+// Retrieve a project branch by name.
 func (r *ProjectBranchService) Get(ctx context.Context, branch string, query ProjectBranchGetParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -76,7 +79,7 @@ func (r *ProjectBranchService) Get(ctx context.Context, branch string, query Pro
 	return
 }
 
-// List project branches
+// Retrieve a project branch by name.
 func (r *ProjectBranchService) List(ctx context.Context, params ProjectBranchListParams, opts ...option.RequestOption) (res *pagination.Page[ProjectBranchListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -103,12 +106,12 @@ func (r *ProjectBranchService) List(ctx context.Context, params ProjectBranchLis
 	return res, nil
 }
 
-// List project branches
+// Retrieve a project branch by name.
 func (r *ProjectBranchService) ListAutoPaging(ctx context.Context, params ProjectBranchListParams, opts ...option.RequestOption) *pagination.PageAutoPager[ProjectBranchListResponse] {
 	return pagination.NewPageAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a project branch
+// Delete a project branch by name.
 func (r *ProjectBranchService) Delete(ctx context.Context, branch string, body ProjectBranchDeleteParams, opts ...option.RequestOption) (res *ProjectBranchDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -129,7 +132,10 @@ func (r *ProjectBranchService) Delete(ctx context.Context, branch string, body P
 	return
 }
 
-// Rebase a project branch
+// Rebase a project branch.
+//
+// The branch is rebased onto the `base` branch or commit SHA, inheriting any
+// config and custom code changes.
 func (r *ProjectBranchService) Rebase(ctx context.Context, branch string, params ProjectBranchRebaseParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -150,14 +156,21 @@ func (r *ProjectBranchService) Rebase(ctx context.Context, branch string, params
 	return
 }
 
+// A project branch names a line of development for a project. Like a Git branch,
+// it points to a Git commit with a set of config files. In addition, a project
+// branch also points to a set of custom code changes, corresponding to Git
+// branches in the staging repos.
 type ProjectBranch struct {
-	Branch       string        `json:"branch,required"`
-	ConfigCommit shared.Commit `json:"config_commit,required"`
-	LatestBuild  BuildObject   `json:"latest_build,required"`
+	// Branch name
+	Branch string `json:"branch,required"`
+	// A Git commit that points to the latest set of config files on a given branch.
+	ConfigCommit ProjectBranchConfigCommit `json:"config_commit,required"`
+	LatestBuild  Build                     `json:"latest_build,required"`
 	// Any of "project_branch".
-	Object  ProjectBranchObject `json:"object,required"`
-	Org     string              `json:"org,required"`
-	Project string              `json:"project,required"`
+	Object ProjectBranchObject `json:"object,required"`
+	Org    string              `json:"org,required"`
+	// Project name
+	Project string `json:"project,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch       respjson.Field
@@ -177,20 +190,66 @@ func (r *ProjectBranch) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// A Git commit that points to the latest set of config files on a given branch.
+type ProjectBranchConfigCommit struct {
+	Repo ProjectBranchConfigCommitRepo `json:"repo,required"`
+	Sha  string                        `json:"sha,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Repo        respjson.Field
+		Sha         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectBranchConfigCommit) RawJSON() string { return r.JSON.raw }
+func (r *ProjectBranchConfigCommit) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectBranchConfigCommitRepo struct {
+	Branch string `json:"branch,required"`
+	Name   string `json:"name,required"`
+	Owner  string `json:"owner,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Branch      respjson.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectBranchConfigCommitRepo) RawJSON() string { return r.JSON.raw }
+func (r *ProjectBranchConfigCommitRepo) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type ProjectBranchObject string
 
 const (
 	ProjectBranchObjectProjectBranch ProjectBranchObject = "project_branch"
 )
 
+// A project branch names a line of development for a project. Like a Git branch,
+// it points to a Git commit with a set of config files. In addition, a project
+// branch also points to a set of custom code changes, corresponding to Git
+// branches in the staging repos.
 type ProjectBranchListResponse struct {
-	Branch        string        `json:"branch,required"`
-	ConfigCommit  shared.Commit `json:"config_commit,required"`
-	LatestBuildID string        `json:"latest_build_id,required"`
+	// Branch name
+	Branch string `json:"branch,required"`
+	// A Git commit that points to the latest set of config files on a given branch.
+	ConfigCommit  ProjectBranchListResponseConfigCommit `json:"config_commit,required"`
+	LatestBuildID string                                `json:"latest_build_id,required"`
 	// Any of "project_branch".
-	Object  ProjectBranchListResponseObject `json:"object,required"`
-	Org     string                          `json:"org,required"`
-	Project string                          `json:"project,required"`
+	Object ProjectBranchListResponseObject `json:"object,required"`
+	Org    string                          `json:"org,required"`
+	// Project name
+	Project string `json:"project,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch        respjson.Field
@@ -210,6 +269,45 @@ func (r *ProjectBranchListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// A Git commit that points to the latest set of config files on a given branch.
+type ProjectBranchListResponseConfigCommit struct {
+	Repo ProjectBranchListResponseConfigCommitRepo `json:"repo,required"`
+	Sha  string                                    `json:"sha,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Repo        respjson.Field
+		Sha         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectBranchListResponseConfigCommit) RawJSON() string { return r.JSON.raw }
+func (r *ProjectBranchListResponseConfigCommit) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ProjectBranchListResponseConfigCommitRepo struct {
+	Branch string `json:"branch,required"`
+	Name   string `json:"name,required"`
+	Owner  string `json:"owner,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Branch      respjson.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectBranchListResponseConfigCommitRepo) RawJSON() string { return r.JSON.raw }
+func (r *ProjectBranchListResponseConfigCommitRepo) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type ProjectBranchListResponseObject string
 
 const (
@@ -221,9 +319,9 @@ type ProjectBranchDeleteResponse = any
 type ProjectBranchNewParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
 	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
-	// Name of the new project branch.
+	// Branch name
 	Branch string `json:"branch,required"`
-	// Branch or commit SHA to branch from.
+	// Branch or commit SHA to branch from
 	BranchFrom string `json:"branch_from,required"`
 	// Whether to throw an error if the branch already exists. Defaults to false.
 	Force param.Opt[bool] `json:"force,omitzero"`
@@ -249,7 +347,7 @@ type ProjectBranchListParams struct {
 	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
-	// Maximum number of items to return, defaults to 10 (maximum: 100)
+	// Maximum number of items to return, defaults to 10 (maximum: 100).
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
 	paramObj
 }

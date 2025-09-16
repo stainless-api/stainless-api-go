@@ -42,7 +42,7 @@ func NewProjectService(opts ...option.RequestOption) (r ProjectService) {
 	return
 }
 
-// Create a new project
+// Create a new project.
 func (r *ProjectService) New(ctx context.Context, body ProjectNewParams, opts ...option.RequestOption) (res *Project, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/projects"
@@ -50,7 +50,7 @@ func (r *ProjectService) New(ctx context.Context, body ProjectNewParams, opts ..
 	return
 }
 
-// Retrieve a project by name
+// Retrieve a project by name.
 func (r *ProjectService) Get(ctx context.Context, query ProjectGetParams, opts ...option.RequestOption) (res *Project, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -67,7 +67,7 @@ func (r *ProjectService) Get(ctx context.Context, query ProjectGetParams, opts .
 	return
 }
 
-// Update a project's properties
+// Update a project's properties.
 func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams, opts ...option.RequestOption) (res *Project, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -84,7 +84,7 @@ func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams,
 	return
 }
 
-// List projects in an organization, from oldest to newest
+// List projects in an organization, from oldest to newest.
 func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) (res *pagination.Page[Project], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -102,11 +102,12 @@ func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts
 	return res, nil
 }
 
-// List projects in an organization, from oldest to newest
+// List projects in an organization, from oldest to newest.
 func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListParams, opts ...option.RequestOption) *pagination.PageAutoPager[Project] {
 	return pagination.NewPageAutoPager(r.List(ctx, query, opts...))
 }
 
+// A project is a collection of SDKs generated from the same set of config files.
 type Project struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
@@ -186,7 +187,7 @@ func (r *ProjectUpdateParams) UnmarshalJSON(data []byte) error {
 type ProjectListParams struct {
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
-	// Maximum number of projects to return, defaults to 10 (maximum: 100)
+	// Maximum number of projects to return, defaults to 10 (maximum: 100).
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
 	Org   param.Opt[string]  `query:"org,omitzero" json:"-"`
 	paramObj

@@ -37,7 +37,10 @@ func NewBuildDiagnosticService(opts ...option.RequestOption) (r BuildDiagnosticS
 	return
 }
 
-// Get diagnostics for a build
+// Get the list of diagnostics for a given build.
+//
+// If no language targets are specified, diagnostics for all languages are
+// returned.
 func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) (res *pagination.Page[BuildDiagnosticListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -59,7 +62,10 @@ func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query
 	return res, nil
 }
 
-// Get diagnostics for a build
+// Get the list of diagnostics for a given build.
+//
+// If no language targets are specified, diagnostics for all languages are
+// returned.
 func (r *BuildDiagnosticService) ListAutoPaging(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) *pagination.PageAutoPager[BuildDiagnosticListResponse] {
 	return pagination.NewPageAutoPager(r.List(ctx, buildID, query, opts...))
 }
@@ -81,13 +87,20 @@ const (
 )
 
 type BuildDiagnosticListResponse struct {
-	Code    string `json:"code,required"`
-	Ignored bool   `json:"ignored,required"`
+	// The kind of diagnostic.
+	Code string `json:"code,required"`
+	// Whether the diagnostic is ignored in the Stainless config.
+	Ignored bool `json:"ignored,required"`
+	// The severity of the diagnostic.
+	//
 	// Any of "fatal", "error", "warning", "note".
-	Level     BuildDiagnosticListResponseLevel `json:"level,required"`
-	Message   string                           `json:"message,required"`
-	ConfigRef string                           `json:"config_ref"`
-	OasRef    string                           `json:"oas_ref"`
+	Level BuildDiagnosticListResponseLevel `json:"level,required"`
+	// A description of the diagnostic.
+	Message string `json:"message,required"`
+	// A JSON pointer to a relevant field in the Stainless config.
+	ConfigRef string `json:"config_ref"`
+	// A JSON pointer to a relevant field in the OpenAPI spec.
+	OasRef string `json:"oas_ref"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Code        respjson.Field
@@ -107,6 +120,7 @@ func (r *BuildDiagnosticListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// The severity of the diagnostic.
 type BuildDiagnosticListResponseLevel string
 
 const (

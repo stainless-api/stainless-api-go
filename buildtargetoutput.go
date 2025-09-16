@@ -34,7 +34,16 @@ func NewBuildTargetOutputService(opts ...option.RequestOption) (r BuildTargetOut
 	return
 }
 
-// Download the output of a build target
+// Retrieve a method to download an output for a given build target.
+//
+// If the requested type of output is `source`, and the requested output method is
+// `url`, a download link to a tarball of the source files is returned. If the
+// requested output method is `git`, a Git remote, ref, and access token (if
+// necessary) is returned.
+//
+// Otherwise, the possible types of outputs are specific to the requested target,
+// and the output method _must_ be `url`. See the documentation for `type` for more
+// information.
 func (r *BuildTargetOutputService) Get(ctx context.Context, query BuildTargetOutputGetParams, opts ...option.RequestOption) (res *BuildTargetOutputGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "v0/build_target_outputs"
@@ -140,7 +149,7 @@ type BuildTargetOutputGetParams struct {
 	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero,required" json:"-"`
 	// Any of "source", "dist", "wheel".
 	Type BuildTargetOutputGetParamsType `query:"type,omitzero,required" json:"-"`
-	// Output format: url (download URL) or git (temporary access token)
+	// Output format: url (download URL) or git (temporary access token).
 	//
 	// Any of "url", "git".
 	Output BuildTargetOutputGetParamsOutput `query:"output,omitzero" json:"-"`
@@ -181,7 +190,7 @@ const (
 	BuildTargetOutputGetParamsTypeWheel  BuildTargetOutputGetParamsType = "wheel"
 )
 
-// Output format: url (download URL) or git (temporary access token)
+// Output format: url (download URL) or git (temporary access token).
 type BuildTargetOutputGetParamsOutput string
 
 const (
