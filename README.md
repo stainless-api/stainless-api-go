@@ -57,16 +57,16 @@ func main() {
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("STAINLESS_API_KEY")
 		option.WithEnvironmentStaging(), // defaults to option.WithEnvironmentProduction()
 	)
-	buildObject, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
-		Project: stainless.String("project"),
+	build, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
+		Project: stainless.String("stainless"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
-			OfString: stainless.String("string"),
+			OfString: stainless.String("main"),
 		},
 	})
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", buildObject.ID)
+	fmt.Printf("%+v\n", build.ID)
 }
 
 ```
@@ -292,12 +292,12 @@ You can use `.ListAutoPaging()` methods to iterate through items across all page
 
 ```go
 iter := client.Builds.ListAutoPaging(context.TODO(), stainless.BuildListParams{
-	Project: stainless.String("project"),
+	Project: stainless.String("stainless"),
 })
 // Automatically fetches more pages as needed.
 for iter.Next() {
-	buildObject := iter.Current()
-	fmt.Printf("%+v\n", buildObject)
+	build := iter.Current()
+	fmt.Printf("%+v\n", build)
 }
 if err := iter.Err(); err != nil {
 	panic(err.Error())
@@ -309,7 +309,7 @@ with additional helper methods like `.GetNextPage()`, e.g.:
 
 ```go
 page, err := client.Builds.List(context.TODO(), stainless.BuildListParams{
-	Project: stainless.String("project"),
+	Project: stainless.String("stainless"),
 })
 for page != nil {
 	for _, build := range page.Data {
@@ -333,9 +333,9 @@ To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
 _, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
-	Project: stainless.String("project"),
+	Project: stainless.String("stainless"),
 	Revision: stainless.BuildNewParamsRevisionUnion{
-		OfString: stainless.String("string"),
+		OfString: stainless.String("main"),
 	},
 })
 if err != nil {
@@ -365,9 +365,9 @@ defer cancel()
 client.Builds.New(
 	ctx,
 	stainless.BuildNewParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("stainless"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
-			OfString: stainless.String("string"),
+			OfString: stainless.String("main"),
 		},
 	},
 	// This sets the per-retry timeout
@@ -406,9 +406,9 @@ client := stainless.NewClient(
 client.Builds.New(
 	context.TODO(),
 	stainless.BuildNewParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("stainless"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
-			OfString: stainless.String("string"),
+			OfString: stainless.String("main"),
 		},
 	},
 	option.WithMaxRetries(5),
@@ -423,12 +423,12 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-buildObject, err := client.Builds.New(
+build, err := client.Builds.New(
 	context.TODO(),
 	stainless.BuildNewParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("stainless"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
-			OfString: stainless.String("string"),
+			OfString: stainless.String("main"),
 		},
 	},
 	option.WithResponseInto(&response),
@@ -436,7 +436,7 @@ buildObject, err := client.Builds.New(
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", buildObject)
+fmt.Printf("%+v\n", build)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)

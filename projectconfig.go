@@ -36,7 +36,7 @@ func NewProjectConfigService(opts ...option.RequestOption) (r ProjectConfigServi
 	return
 }
 
-// Retrieve configuration files for a project
+// Retrieve the configuration files for a given project.
 func (r *ProjectConfigService) Get(ctx context.Context, params ProjectConfigGetParams, opts ...option.RequestOption) (res *ProjectConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -53,7 +53,7 @@ func (r *ProjectConfigService) Get(ctx context.Context, params ProjectConfigGetP
 	return
 }
 
-// Generate configuration suggestions based on an OpenAPI spec
+// Generate suggestions for changes to config files based on an OpenAPI spec.
 func (r *ProjectConfigService) Guess(ctx context.Context, params ProjectConfigGuessParams, opts ...option.RequestOption) (res *ProjectConfigGuessResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -111,7 +111,7 @@ func (r *ProjectConfigGuessResponseItem) UnmarshalJSON(data []byte) error {
 type ProjectConfigGetParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
 	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
-	// Branch name, defaults to "main"
+	// Branch name, defaults to "main".
 	Branch  param.Opt[string] `query:"branch,omitzero" json:"-"`
 	Include param.Opt[string] `query:"include,omitzero" json:"-"`
 	paramObj

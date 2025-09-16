@@ -25,7 +25,7 @@ func TestAutoPagination(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	iter := client.Builds.ListAutoPaging(context.TODO(), stainless.BuildListParams{
-		Project: stainless.String("project"),
+		Project: stainless.String("stainless"),
 	})
 	// Prism mock isn't going to give us real pagination
 	for i := 0; i < 3 && iter.Next(); i++ {
