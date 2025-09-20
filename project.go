@@ -112,10 +112,10 @@ type Project struct {
 	ConfigRepo  string `json:"config_repo,required"`
 	DisplayName string `json:"display_name,required"`
 	// Any of "project".
-	Object  ProjectObject `json:"object,required"`
-	Org     string        `json:"org,required"`
-	Slug    string        `json:"slug,required"`
-	Targets []Target      `json:"targets,required"`
+	Object  ProjectObject   `json:"object,required"`
+	Org     string          `json:"org,required"`
+	Slug    string          `json:"slug,required"`
+	Targets []shared.Target `json:"targets,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ConfigRepo  respjson.Field
@@ -151,7 +151,7 @@ type ProjectNewParams struct {
 	// Project name/slug
 	Slug string `json:"slug,required"`
 	// Targets to generate for
-	Targets []Target `json:"targets,omitzero,required"`
+	Targets []shared.Target `json:"targets,omitzero,required"`
 	paramObj
 }
 

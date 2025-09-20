@@ -11,6 +11,7 @@ import (
 	"github.com/stainless-api/stainless-api-go"
 	"github.com/stainless-api/stainless-api-go/internal/testutil"
 	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-api/stainless-api-go/shared"
 )
 
 func TestBuildNewWithOptionalParams(t *testing.T) {
@@ -34,7 +35,7 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 		AllowEmpty:    stainless.Bool(true),
 		Branch:        stainless.String("branch"),
 		CommitMessage: stainless.String("commit_message"),
-		Targets:       []stainless.Target{stainless.TargetNode},
+		Targets:       []shared.Target{shared.TargetNode},
 	})
 	if err != nil {
 		var apierr *stainless.Error
@@ -128,7 +129,7 @@ func TestBuildCompareWithOptionalParams(t *testing.T) {
 			CommitMessage: stainless.String("commit_message"),
 		},
 		Project: stainless.String("project"),
-		Targets: []stainless.Target{stainless.TargetNode},
+		Targets: []shared.Target{shared.TargetNode},
 	})
 	if err != nil {
 		var apierr *stainless.Error
