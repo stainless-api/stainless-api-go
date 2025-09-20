@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
@@ -38,7 +39,7 @@ func NewProjectConfigService(opts ...option.RequestOption) (r ProjectConfigServi
 
 // Retrieve the configuration files for a given project.
 func (r *ProjectConfigService) Get(ctx context.Context, params ProjectConfigGetParams, opts ...option.RequestOption) (res *ProjectConfigGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return
@@ -55,7 +56,7 @@ func (r *ProjectConfigService) Get(ctx context.Context, params ProjectConfigGetP
 
 // Generate suggestions for changes to config files based on an OpenAPI spec.
 func (r *ProjectConfigService) Guess(ctx context.Context, params ProjectConfigGuessParams, opts ...option.RequestOption) (res *ProjectConfigGuessResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return
