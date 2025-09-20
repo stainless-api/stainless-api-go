@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
@@ -50,7 +51,7 @@ func NewBuildService(opts ...option.RequestOption) (r BuildService) {
 // The project branch will be modified so that its latest set of config files
 // points to the one specified by the input revision.
 func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...option.RequestOption) (res *Build, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return
@@ -63,7 +64,7 @@ func (r *BuildService) New(ctx context.Context, body BuildNewParams, opts ...opt
 
 // Retrieve a build by its ID.
 func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.RequestOption) (res *Build, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if buildID == "" {
 		err = errors.New("missing required buildId parameter")
 		return
@@ -79,7 +80,7 @@ func (r *BuildService) Get(ctx context.Context, buildID string, opts ...option.R
 // of file contents.
 func (r *BuildService) List(ctx context.Context, query BuildListParams, opts ...option.RequestOption) (res *pagination.Page[Build], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
@@ -117,7 +118,7 @@ func (r *BuildService) ListAutoPaging(ctx context.Context, query BuildListParams
 // Builds made via this endpoint are guaranteed to have differences arising from
 // the set of config files, and any custom code.
 func (r *BuildService) Compare(ctx context.Context, body BuildCompareParams, opts ...option.RequestOption) (res *BuildCompareResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return

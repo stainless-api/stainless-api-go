@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
@@ -36,7 +37,7 @@ func NewOrgService(opts ...option.RequestOption) (r OrgService) {
 
 // Retrieve an organization by name.
 func (r *OrgService) Get(ctx context.Context, org string, opts ...option.RequestOption) (res *Org, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if org == "" {
 		err = errors.New("missing required org parameter")
 		return
@@ -48,7 +49,7 @@ func (r *OrgService) Get(ctx context.Context, org string, opts ...option.Request
 
 // List organizations accessible to the current authentication method.
 func (r *OrgService) List(ctx context.Context, opts ...option.RequestOption) (res *OrgListResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v0/orgs"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

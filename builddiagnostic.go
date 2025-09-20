@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
@@ -46,7 +47,7 @@ func NewBuildDiagnosticService(opts ...option.RequestOption) (r BuildDiagnosticS
 // returned.
 func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) (res *pagination.Page[BuildDiagnostic], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if buildID == "" {
 		err = errors.New("missing required buildId parameter")
