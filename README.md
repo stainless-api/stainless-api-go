@@ -35,7 +35,7 @@ go get -u 'github.com/stainless-api/stainless-api-go@v0.23.0'
 
 ## Requirements
 
-This library requires Go 1.18+.
+This library requires Go 1.22+.
 
 ## Usage
 
