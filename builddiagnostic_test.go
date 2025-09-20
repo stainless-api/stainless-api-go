@@ -11,6 +11,7 @@ import (
 	"github.com/stainless-api/stainless-api-go"
 	"github.com/stainless-api/stainless-api-go/internal/testutil"
 	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-api/stainless-api-go/shared"
 )
 
 func TestBuildDiagnosticListWithOptionalParams(t *testing.T) {
@@ -33,7 +34,7 @@ func TestBuildDiagnosticListWithOptionalParams(t *testing.T) {
 			Cursor:   stainless.String("cursor"),
 			Limit:    stainless.Float(1),
 			Severity: stainless.BuildDiagnosticListParamsSeverityFatal,
-			Targets:  []stainless.Target{stainless.TargetNode},
+			Targets:  []shared.Target{shared.TargetNode},
 		},
 	)
 	if err != nil {

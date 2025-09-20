@@ -1,10 +1,12 @@
 # Shared Params Types
 
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared">shared</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared#FileInputUnionParam">FileInputUnionParam</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared">shared</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared#Target">Target</a>
 
 # Shared Response Types
 
 - <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared">shared</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared#Commit">Commit</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared">shared</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/shared#Target">Target</a>
 
 # Projects
 
@@ -65,18 +67,14 @@ Methods:
 
 ## Diagnostics
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Target">Target</a>
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#Target">Target</a>
-- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnosticListResponse">BuildDiagnosticListResponse</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnostic">BuildDiagnostic</a>
+- <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnosticMoreUnion">BuildDiagnosticMoreUnion</a>
 
 Methods:
 
-- <code title="get /v0/builds/{buildId}/diagnostics">client.Builds.Diagnostics.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnosticService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, buildID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnosticListParams">BuildDiagnosticListParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination#Page">Page</a>[<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnosticListResponse">BuildDiagnosticListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /v0/builds/{buildId}/diagnostics">client.Builds.Diagnostics.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnosticService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, buildID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnosticListParams">BuildDiagnosticListParams</a>) (<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go/packages/pagination#Page">Page</a>[<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go">stainless</a>.<a href="https://pkg.go.dev/github.com/stainless-api/stainless-api-go#BuildDiagnostic">BuildDiagnostic</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## TargetOutputs
 

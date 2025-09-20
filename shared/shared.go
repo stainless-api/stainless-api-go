@@ -118,3 +118,19 @@ func (r FileInputURLParam) MarshalJSON() (data []byte, err error) {
 func (r *FileInputURLParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type Target string
+
+const (
+	TargetNode       Target = "node"
+	TargetTypescript Target = "typescript"
+	TargetPython     Target = "python"
+	TargetGo         Target = "go"
+	TargetJava       Target = "java"
+	TargetKotlin     Target = "kotlin"
+	TargetRuby       Target = "ruby"
+	TargetTerraform  Target = "terraform"
+	TargetCli        Target = "cli"
+	TargetPhp        Target = "php"
+	TargetCsharp     Target = "csharp"
+)
