@@ -30,3 +30,39 @@ type FileInputContentParam = shared.FileInputContentParam
 
 // This is an alias to an internal type.
 type FileInputURLParam = shared.FileInputURLParam
+
+// This is an alias to an internal type.
+type Target = shared.Target
+
+// Equals "node"
+const TargetNode = shared.TargetNode
+
+// Equals "typescript"
+const TargetTypescript = shared.TargetTypescript
+
+// Equals "python"
+const TargetPython = shared.TargetPython
+
+// Equals "go"
+const TargetGo = shared.TargetGo
+
+// Equals "java"
+const TargetJava = shared.TargetJava
+
+// Equals "kotlin"
+const TargetKotlin = shared.TargetKotlin
+
+// Equals "ruby"
+const TargetRuby = shared.TargetRuby
+
+// Equals "terraform"
+const TargetTerraform = shared.TargetTerraform
+
+// Equals "cli"
+const TargetCli = shared.TargetCli
+
+// Equals "php"
+const TargetPhp = shared.TargetPhp
+
+// Equals "csharp"
+const TargetCsharp = shared.TargetCsharp

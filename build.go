@@ -713,7 +713,7 @@ type BuildNewParams struct {
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
 	// Optional list of SDK targets to build. If not specified, all configured targets
 	// will be built.
-	Targets []Target `json:"targets,omitzero"`
+	Targets []shared.Target `json:"targets,omitzero"`
 	paramObj
 }
 
@@ -817,7 +817,7 @@ type BuildCompareParams struct {
 	Head BuildCompareParamsHead `json:"head,omitzero,required"`
 	// Optional list of SDK targets to build. If not specified, all configured targets
 	// will be built.
-	Targets []Target `json:"targets,omitzero"`
+	Targets []shared.Target `json:"targets,omitzero"`
 	paramObj
 }
 

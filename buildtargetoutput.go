@@ -13,6 +13,8 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
+	"github.com/stainless-api/stainless-api-go/shared"
+	"github.com/stainless-api/stainless-api-go/shared/constant"
 )
 
 // BuildTargetOutputService contains methods and other services that help with
@@ -52,21 +54,22 @@ func (r *BuildTargetOutputService) Get(ctx context.Context, query BuildTargetOut
 }
 
 // BuildTargetOutputGetResponseUnion contains all possible properties and values
-// from [BuildTargetOutputGetResponseObject], [BuildTargetOutputGetResponseObject].
+// from [BuildTargetOutputGetResponseURL], [BuildTargetOutputGetResponseGit].
+//
+// Use the [BuildTargetOutputGetResponseUnion.AsAny] method to switch on the
+// variant.
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
 type BuildTargetOutputGetResponseUnion struct {
-	// This field is from variant [BuildTargetOutputGetResponseObject].
+	// Any of "url", "git".
 	Output string `json:"output"`
-	// This field is from variant [BuildTargetOutputGetResponseObject].
-	Target Target `json:"target"`
-	// This field is from variant [BuildTargetOutputGetResponseObject].
-	Type BuildTargetOutputGetResponseObjectType `json:"type"`
-	// This field is from variant [BuildTargetOutputGetResponseObject].
-	URL string `json:"url"`
-	// This field is from variant [BuildTargetOutputGetResponseObject].
+	// This field is from variant [BuildTargetOutputGetResponseURL].
+	Target shared.Target `json:"target"`
+	Type   string        `json:"type"`
+	URL    string        `json:"url"`
+	// This field is from variant [BuildTargetOutputGetResponseGit].
 	Token string `json:"token"`
-	// This field is from variant [BuildTargetOutputGetResponseObject].
+	// This field is from variant [BuildTargetOutputGetResponseGit].
 	Ref  string `json:"ref"`
 	JSON struct {
 		Output respjson.Field
@@ -79,12 +82,40 @@ type BuildTargetOutputGetResponseUnion struct {
 	} `json:"-"`
 }
 
-func (u BuildTargetOutputGetResponseUnion) AsBuildTargetOutputGetResponseObject() (v BuildTargetOutputGetResponseObject) {
+// anyBuildTargetOutputGetResponse is implemented by each variant of
+// [BuildTargetOutputGetResponseUnion] to add type safety for the return type of
+// [BuildTargetOutputGetResponseUnion.AsAny]
+type anyBuildTargetOutputGetResponse interface {
+	implBuildTargetOutputGetResponseUnion()
+}
+
+func (BuildTargetOutputGetResponseURL) implBuildTargetOutputGetResponseUnion() {}
+func (BuildTargetOutputGetResponseGit) implBuildTargetOutputGetResponseUnion() {}
+
+// Use the following switch statement to find the correct variant
+//
+//	switch variant := BuildTargetOutputGetResponseUnion.AsAny().(type) {
+//	case stainless.BuildTargetOutputGetResponseURL:
+//	case stainless.BuildTargetOutputGetResponseGit:
+//	default:
+//	  fmt.Errorf("no variant present")
+//	}
+func (u BuildTargetOutputGetResponseUnion) AsAny() anyBuildTargetOutputGetResponse {
+	switch u.Output {
+	case "url":
+		return u.AsURL()
+	case "git":
+		return u.AsGit()
+	}
+	return nil
+}
+
+func (u BuildTargetOutputGetResponseUnion) AsURL() (v BuildTargetOutputGetResponseURL) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
 
-func (u BuildTargetOutputGetResponseUnion) AsVariant2() (v BuildTargetOutputGetResponseObject) {
+func (u BuildTargetOutputGetResponseUnion) AsGit() (v BuildTargetOutputGetResponseGit) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
@@ -96,14 +127,13 @@ func (r *BuildTargetOutputGetResponseUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetOutputGetResponseObject struct {
-	// Any of "url".
-	Output string `json:"output,required"`
+type BuildTargetOutputGetResponseURL struct {
+	Output constant.URL `json:"output,required"`
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp".
-	Target Target `json:"target,required"`
+	Target shared.Target `json:"target,required"`
 	// Any of "source", "dist", "wheel".
-	Type BuildTargetOutputGetResponseObjectType `json:"type,required"`
+	Type BuildTargetOutputGetResponseURLType `json:"type,required"`
 	// URL for direct download
 	URL string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -118,17 +148,57 @@ type BuildTargetOutputGetResponseObject struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildTargetOutputGetResponseObject) RawJSON() string { return r.JSON.raw }
-func (r *BuildTargetOutputGetResponseObject) UnmarshalJSON(data []byte) error {
+func (r BuildTargetOutputGetResponseURL) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetOutputGetResponseURL) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BuildTargetOutputGetResponseObjectType string
+type BuildTargetOutputGetResponseURLType string
 
 const (
-	BuildTargetOutputGetResponseObjectTypeSource BuildTargetOutputGetResponseObjectType = "source"
-	BuildTargetOutputGetResponseObjectTypeDist   BuildTargetOutputGetResponseObjectType = "dist"
-	BuildTargetOutputGetResponseObjectTypeWheel  BuildTargetOutputGetResponseObjectType = "wheel"
+	BuildTargetOutputGetResponseURLTypeSource BuildTargetOutputGetResponseURLType = "source"
+	BuildTargetOutputGetResponseURLTypeDist   BuildTargetOutputGetResponseURLType = "dist"
+	BuildTargetOutputGetResponseURLTypeWheel  BuildTargetOutputGetResponseURLType = "wheel"
+)
+
+type BuildTargetOutputGetResponseGit struct {
+	// Temporary GitHub access token
+	Token  string       `json:"token,required"`
+	Output constant.Git `json:"output,required"`
+	// Git reference (commit SHA, branch, or tag)
+	Ref string `json:"ref,required"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp".
+	Target shared.Target `json:"target,required"`
+	// Any of "source", "dist", "wheel".
+	Type BuildTargetOutputGetResponseGitType `json:"type,required"`
+	// URL to git remote
+	URL string `json:"url,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Token       respjson.Field
+		Output      respjson.Field
+		Ref         respjson.Field
+		Target      respjson.Field
+		Type        respjson.Field
+		URL         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildTargetOutputGetResponseGit) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetOutputGetResponseGit) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildTargetOutputGetResponseGitType string
+
+const (
+	BuildTargetOutputGetResponseGitTypeSource BuildTargetOutputGetResponseGitType = "source"
+	BuildTargetOutputGetResponseGitTypeDist   BuildTargetOutputGetResponseGitType = "dist"
+	BuildTargetOutputGetResponseGitTypeWheel  BuildTargetOutputGetResponseGitType = "wheel"
 )
 
 type BuildTargetOutputGetResponseType string

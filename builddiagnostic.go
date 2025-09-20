@@ -4,6 +4,7 @@ package stainless
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -16,6 +17,8 @@ import (
 	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
+	"github.com/stainless-api/stainless-api-go/shared"
+	"github.com/stainless-api/stainless-api-go/shared/constant"
 )
 
 // BuildDiagnosticService contains methods and other services that help with
@@ -41,7 +44,7 @@ func NewBuildDiagnosticService(opts ...option.RequestOption) (r BuildDiagnosticS
 //
 // If no language targets are specified, diagnostics for all languages are
 // returned.
-func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) (res *pagination.Page[BuildDiagnosticListResponse], err error) {
+func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) (res *pagination.Page[BuildDiagnostic], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -66,27 +69,11 @@ func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query
 //
 // If no language targets are specified, diagnostics for all languages are
 // returned.
-func (r *BuildDiagnosticService) ListAutoPaging(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) *pagination.PageAutoPager[BuildDiagnosticListResponse] {
+func (r *BuildDiagnosticService) ListAutoPaging(ctx context.Context, buildID string, query BuildDiagnosticListParams, opts ...option.RequestOption) *pagination.PageAutoPager[BuildDiagnostic] {
 	return pagination.NewPageAutoPager(r.List(ctx, buildID, query, opts...))
 }
 
-type Target string
-
-const (
-	TargetNode       Target = "node"
-	TargetTypescript Target = "typescript"
-	TargetPython     Target = "python"
-	TargetGo         Target = "go"
-	TargetJava       Target = "java"
-	TargetKotlin     Target = "kotlin"
-	TargetRuby       Target = "ruby"
-	TargetTerraform  Target = "terraform"
-	TargetCli        Target = "cli"
-	TargetPhp        Target = "php"
-	TargetCsharp     Target = "csharp"
-)
-
-type BuildDiagnosticListResponse struct {
+type BuildDiagnostic struct {
 	// The kind of diagnostic.
 	Code string `json:"code,required"`
 	// Whether the diagnostic is ignored in the Stainless config.
@@ -94,9 +81,10 @@ type BuildDiagnosticListResponse struct {
 	// The severity of the diagnostic.
 	//
 	// Any of "fatal", "error", "warning", "note".
-	Level BuildDiagnosticListResponseLevel `json:"level,required"`
+	Level BuildDiagnosticLevel `json:"level,required"`
 	// A description of the diagnostic.
-	Message string `json:"message,required"`
+	Message string                   `json:"message,required"`
+	More    BuildDiagnosticMoreUnion `json:"more,required"`
 	// A JSON pointer to a relevant field in the Stainless config.
 	ConfigRef string `json:"config_ref"`
 	// A JSON pointer to a relevant field in the OpenAPI spec.
@@ -107,6 +95,7 @@ type BuildDiagnosticListResponse struct {
 		Ignored     respjson.Field
 		Level       respjson.Field
 		Message     respjson.Field
+		More        respjson.Field
 		ConfigRef   respjson.Field
 		OasRef      respjson.Field
 		ExtraFields map[string]respjson.Field
@@ -115,20 +104,122 @@ type BuildDiagnosticListResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r BuildDiagnosticListResponse) RawJSON() string { return r.JSON.raw }
-func (r *BuildDiagnosticListResponse) UnmarshalJSON(data []byte) error {
+func (r BuildDiagnostic) RawJSON() string { return r.JSON.raw }
+func (r *BuildDiagnostic) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The severity of the diagnostic.
-type BuildDiagnosticListResponseLevel string
+type BuildDiagnosticLevel string
 
 const (
-	BuildDiagnosticListResponseLevelFatal   BuildDiagnosticListResponseLevel = "fatal"
-	BuildDiagnosticListResponseLevelError   BuildDiagnosticListResponseLevel = "error"
-	BuildDiagnosticListResponseLevelWarning BuildDiagnosticListResponseLevel = "warning"
-	BuildDiagnosticListResponseLevelNote    BuildDiagnosticListResponseLevel = "note"
+	BuildDiagnosticLevelFatal   BuildDiagnosticLevel = "fatal"
+	BuildDiagnosticLevelError   BuildDiagnosticLevel = "error"
+	BuildDiagnosticLevelWarning BuildDiagnosticLevel = "warning"
+	BuildDiagnosticLevelNote    BuildDiagnosticLevel = "note"
 )
+
+// BuildDiagnosticMoreUnion contains all possible properties and values from
+// [BuildDiagnosticMoreMarkdown], [BuildDiagnosticMoreRaw].
+//
+// Use the [BuildDiagnosticMoreUnion.AsAny] method to switch on the variant.
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+type BuildDiagnosticMoreUnion struct {
+	// This field is from variant [BuildDiagnosticMoreMarkdown].
+	Markdown string `json:"markdown"`
+	// Any of "markdown", "raw".
+	Type string `json:"type"`
+	// This field is from variant [BuildDiagnosticMoreRaw].
+	Raw  string `json:"raw"`
+	JSON struct {
+		Markdown respjson.Field
+		Type     respjson.Field
+		Raw      respjson.Field
+		raw      string
+	} `json:"-"`
+}
+
+// anyBuildDiagnosticMore is implemented by each variant of
+// [BuildDiagnosticMoreUnion] to add type safety for the return type of
+// [BuildDiagnosticMoreUnion.AsAny]
+type anyBuildDiagnosticMore interface {
+	implBuildDiagnosticMoreUnion()
+}
+
+func (BuildDiagnosticMoreMarkdown) implBuildDiagnosticMoreUnion() {}
+func (BuildDiagnosticMoreRaw) implBuildDiagnosticMoreUnion()      {}
+
+// Use the following switch statement to find the correct variant
+//
+//	switch variant := BuildDiagnosticMoreUnion.AsAny().(type) {
+//	case stainless.BuildDiagnosticMoreMarkdown:
+//	case stainless.BuildDiagnosticMoreRaw:
+//	default:
+//	  fmt.Errorf("no variant present")
+//	}
+func (u BuildDiagnosticMoreUnion) AsAny() anyBuildDiagnosticMore {
+	switch u.Type {
+	case "markdown":
+		return u.AsMarkdown()
+	case "raw":
+		return u.AsRaw()
+	}
+	return nil
+}
+
+func (u BuildDiagnosticMoreUnion) AsMarkdown() (v BuildDiagnosticMoreMarkdown) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u BuildDiagnosticMoreUnion) AsRaw() (v BuildDiagnosticMoreRaw) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u BuildDiagnosticMoreUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *BuildDiagnosticMoreUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildDiagnosticMoreMarkdown struct {
+	Markdown string            `json:"markdown,required"`
+	Type     constant.Markdown `json:"type,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Markdown    respjson.Field
+		Type        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildDiagnosticMoreMarkdown) RawJSON() string { return r.JSON.raw }
+func (r *BuildDiagnosticMoreMarkdown) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildDiagnosticMoreRaw struct {
+	Raw  string       `json:"raw,required"`
+	Type constant.Raw `json:"type,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Raw         respjson.Field
+		Type        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildDiagnosticMoreRaw) RawJSON() string { return r.JSON.raw }
+func (r *BuildDiagnosticMoreRaw) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type BuildDiagnosticListParams struct {
 	// Pagination cursor from a previous response
@@ -140,7 +231,7 @@ type BuildDiagnosticListParams struct {
 	// Any of "fatal", "error", "warning", "note".
 	Severity BuildDiagnosticListParamsSeverity `query:"severity,omitzero" json:"-"`
 	// Optional list of language targets to filter diagnostics by
-	Targets []Target `query:"targets,omitzero" json:"-"`
+	Targets []shared.Target `query:"targets,omitzero" json:"-"`
 	paramObj
 }
 
