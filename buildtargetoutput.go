@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
@@ -47,7 +48,7 @@ func NewBuildTargetOutputService(opts ...option.RequestOption) (r BuildTargetOut
 // and the output method _must_ be `url`. See the documentation for `type` for more
 // information.
 func (r *BuildTargetOutputService) Get(ctx context.Context, query BuildTargetOutputGetParams, opts ...option.RequestOption) (res *BuildTargetOutputGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "v0/build_target_outputs"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return

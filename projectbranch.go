@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/stainless-api/stainless-api-go/internal/apijson"
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
@@ -43,7 +44,7 @@ func NewProjectBranchService(opts ...option.RequestOption) (r ProjectBranchServi
 // `branch_from` parameter. In addition, if the revision is a branch name, the
 // branch will also inherit custom code changes from that branch.
 func (r *ProjectBranchService) New(ctx context.Context, params ProjectBranchNewParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return
@@ -60,7 +61,7 @@ func (r *ProjectBranchService) New(ctx context.Context, params ProjectBranchNewP
 
 // Retrieve a project branch by name.
 func (r *ProjectBranchService) Get(ctx context.Context, branch string, query ProjectBranchGetParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return
@@ -82,7 +83,7 @@ func (r *ProjectBranchService) Get(ctx context.Context, branch string, query Pro
 // Retrieve a project branch by name.
 func (r *ProjectBranchService) List(ctx context.Context, params ProjectBranchListParams, opts ...option.RequestOption) (res *pagination.Page[ProjectBranchListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
@@ -113,7 +114,7 @@ func (r *ProjectBranchService) ListAutoPaging(ctx context.Context, params Projec
 
 // Delete a project branch by name.
 func (r *ProjectBranchService) Delete(ctx context.Context, branch string, body ProjectBranchDeleteParams, opts ...option.RequestOption) (res *ProjectBranchDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return
@@ -137,7 +138,7 @@ func (r *ProjectBranchService) Delete(ctx context.Context, branch string, body P
 // The branch is rebased onto the `base` branch or commit SHA, inheriting any
 // config and custom code changes.
 func (r *ProjectBranchService) Rebase(ctx context.Context, branch string, params ProjectBranchRebaseParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
 		return
