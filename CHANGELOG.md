@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.25.0 (2025-09-20)
+
+Full Changelog: [v0.24.0...v0.25.0](https://github.com/stainless-api/stainless-api-go/compare/v0.24.0...v0.25.0)
+
+### Features
+
+* **api:** docs ([1e2bb41](https://github.com/stainless-api/stainless-api-go/commit/1e2bb41ccad74b245ebbe42473449c5fdc546b0c))
+
+
+### Bug Fixes
+
+* **internal:** unmarshal correctly when there are multiple discriminators ([483b23c](https://github.com/stainless-api/stainless-api-go/commit/483b23c5999d093fd7348e42afae589181b7b182))
+* use slices.Concat instead of sometimes modifying r.Options ([2fe476f](https://github.com/stainless-api/stainless-api-go/commit/2fe476f3aead6384eac77f714d8e64be13b5fe56))
+
+
+### Chores
+
+* add more to diagnostics ([2738bce](https://github.com/stainless-api/stainless-api-go/commit/2738bce37625d08602d18c798451f24c6461d76e))
+* bump minimum go version to 1.22 ([02dcae6](https://github.com/stainless-api/stainless-api-go/commit/02dcae6d255f5721f9567d4760390d07a4411a66))
+* do not install brew dependencies in ./scripts/bootstrap by default ([d86bb13](https://github.com/stainless-api/stainless-api-go/commit/d86bb1368002c0b2f1ba5229428ec73efee2b2ff))
+* **internal:** codegen related update ([8693156](https://github.com/stainless-api/stainless-api-go/commit/86931566d48420dd214db29b5a1364ef91269f08))
+* update more docs for 1.22 ([6ff4f7b](https://github.com/stainless-api/stainless-api-go/commit/6ff4f7b89fed2e2e2deee5a9c81fa090507c356d))
+
 ## 0.24.0 (2025-08-30)
 
 Full Changelog: [v0.23.0...v0.24.0](https://github.com/stainless-api/stainless-api-go/compare/v0.23.0...v0.24.0)
