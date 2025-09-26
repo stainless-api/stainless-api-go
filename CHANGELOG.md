@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.25.1 (2025-09-26)
+
+Full Changelog: [v0.25.0...v0.25.1](https://github.com/stainless-api/stainless-api-go/compare/v0.25.0...v0.25.1)
+
+### Bug Fixes
+
+* bugfix for setting JSON keys with special characters ([7afd30f](https://github.com/stainless-api/stainless-api-go/commit/7afd30fb4a1a4b834979448cdaaa08513d5b6052))
+
 ## 0.25.0 (2025-09-20)
 
 Full Changelog: [v0.24.0...v0.25.0](https://github.com/stainless-api/stainless-api-go/compare/v0.24.0...v0.25.0)
