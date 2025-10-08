@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.26.0 (2025-10-07)
+
+Full Changelog: [v0.25.0...v0.26.0](https://github.com/stainless-api/stainless-api-go/compare/v0.25.0...v0.26.0)
+
+### Features
+
+* Expose connection-specific decorated OAS ([bc69e62](https://github.com/stainless-api/stainless-api-go/commit/bc69e6242ad2367be646e88eb0ecd8c4c7dfec80))
+
+
+### Bug Fixes
+
+* bugfix for setting JSON keys with special characters ([7afd30f](https://github.com/stainless-api/stainless-api-go/commit/7afd30fb4a1a4b834979448cdaaa08513d5b6052))
+
 ## 0.25.0 (2025-09-20)
 
 Full Changelog: [v0.24.0...v0.25.0](https://github.com/stainless-api/stainless-api-go/compare/v0.24.0...v0.25.0)
