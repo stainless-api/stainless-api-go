@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.27.0 (2025-11-13)
+
+Full Changelog: [v0.26.0...v0.27.0](https://github.com/stainless-api/stainless-api-go/compare/v0.26.0...v0.27.0)
+
+### Features
+
+* **api:** add branch reset functionality ([bc2d34b](https://github.com/stainless-api/stainless-api-go/commit/bc2d34b482890531f569f80145098155016c811b))
+
+
+### Chores
+
+* bump gjson version ([e184162](https://github.com/stainless-api/stainless-api-go/commit/e18416285bd4ee3216cd921b6f3cac67f65ffe6b))
+* **internal:** grammar fix (it's -&gt; its) ([f99f299](https://github.com/stainless-api/stainless-api-go/commit/f99f299b11538f0b426e2be90a922486772056f1))
+
 ## 0.26.0 (2025-10-07)
 
 Full Changelog: [v0.25.0...v0.26.0](https://github.com/stainless-api/stainless-api-go/compare/v0.25.0...v0.26.0)
