@@ -157,6 +157,30 @@ func (r *ProjectBranchService) Rebase(ctx context.Context, branch string, params
 	return
 }
 
+// Reset a project branch.
+//
+// If `branch` === `main`, the branch is reset to `target_config_sha`. Otherwise,
+// the branch is reset to `main`.
+func (r *ProjectBranchService) Reset(ctx context.Context, branch string, params ProjectBranchResetParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
+	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
+	if params.Project.Value == "" {
+		err = errors.New("missing required project parameter")
+		return
+	}
+	if branch == "" {
+		err = errors.New("missing required branch parameter")
+		return
+	}
+	path := fmt.Sprintf("v0/projects/%s/branches/%s/reset", url.PathEscape(params.Project.Value), url.PathEscape(branch))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
+	return
+}
+
 // A project branch names a line of development for a project. Like a Git branch,
 // it points to a Git commit with a set of config files. In addition, a project
 // branch also points to a set of custom code changes, corresponding to Git
@@ -379,6 +403,24 @@ type ProjectBranchRebaseParams struct {
 // URLQuery serializes [ProjectBranchRebaseParams]'s query parameters as
 // `url.Values`.
 func (r ProjectBranchRebaseParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type ProjectBranchResetParams struct {
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	// The commit SHA to reset the main branch to. Required if resetting the main
+	// branch; disallowed otherwise.
+	TargetConfigSha param.Opt[string] `query:"target_config_sha,omitzero" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [ProjectBranchResetParams]'s query parameters as
+// `url.Values`.
+func (r ProjectBranchResetParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
