@@ -35,7 +35,20 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 		AllowEmpty:    stainless.Bool(true),
 		Branch:        stainless.String("branch"),
 		CommitMessage: stainless.String("commit_message"),
-		Targets:       []shared.Target{shared.TargetNode},
+		TargetCommitMessages: stainless.BuildNewParamsTargetCommitMessages{
+			Cli:        stainless.String("cli"),
+			Csharp:     stainless.String("csharp"),
+			Go:         stainless.String("go"),
+			Java:       stainless.String("java"),
+			Kotlin:     stainless.String("kotlin"),
+			Node:       stainless.String("node"),
+			Php:        stainless.String("php"),
+			Python:     stainless.String("python"),
+			Ruby:       stainless.String("ruby"),
+			Terraform:  stainless.String("terraform"),
+			Typescript: stainless.String("typescript"),
+		},
+		Targets: []shared.Target{shared.TargetNode},
 	})
 	if err != nil {
 		var apierr *stainless.Error
