@@ -712,6 +712,10 @@ type BuildNewParams struct {
 	Branch param.Opt[string] `json:"branch,omitzero"`
 	// Optional commit message to use when creating a new commit.
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
+	// Optional commit messages to use for each SDK when making a new commit. SDKs not
+	// represented in this object will fallback to the optional `commit_message`
+	// parameter, or will fallback further to the default commit message.
+	TargetCommitMessages BuildNewParamsTargetCommitMessages `json:"target_commit_messages,omitzero"`
 	// Optional list of SDK targets to build. If not specified, all configured targets
 	// will be built.
 	Targets []shared.Target `json:"targets,omitzero"`
@@ -749,6 +753,32 @@ func (u *BuildNewParamsRevisionUnion) asAny() any {
 		return &u.OfFileInputMap
 	}
 	return nil
+}
+
+// Optional commit messages to use for each SDK when making a new commit. SDKs not
+// represented in this object will fallback to the optional `commit_message`
+// parameter, or will fallback further to the default commit message.
+type BuildNewParamsTargetCommitMessages struct {
+	Cli        param.Opt[string] `json:"cli,omitzero"`
+	Csharp     param.Opt[string] `json:"csharp,omitzero"`
+	Go         param.Opt[string] `json:"go,omitzero"`
+	Java       param.Opt[string] `json:"java,omitzero"`
+	Kotlin     param.Opt[string] `json:"kotlin,omitzero"`
+	Node       param.Opt[string] `json:"node,omitzero"`
+	Php        param.Opt[string] `json:"php,omitzero"`
+	Python     param.Opt[string] `json:"python,omitzero"`
+	Ruby       param.Opt[string] `json:"ruby,omitzero"`
+	Terraform  param.Opt[string] `json:"terraform,omitzero"`
+	Typescript param.Opt[string] `json:"typescript,omitzero"`
+	paramObj
+}
+
+func (r BuildNewParamsTargetCommitMessages) MarshalJSON() (data []byte, err error) {
+	type shadow BuildNewParamsTargetCommitMessages
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildNewParamsTargetCommitMessages) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type BuildListParams struct {
