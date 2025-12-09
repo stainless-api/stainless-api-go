@@ -18,7 +18,6 @@ import (
 	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
-	"github.com/stainless-api/stainless-api-go/shared"
 	"github.com/stainless-api/stainless-api-go/shared/constant"
 )
 
@@ -227,12 +226,12 @@ type BuildDiagnosticListParams struct {
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
 	// Maximum number of diagnostics to return, defaults to 100 (maximum: 100)
 	Limit param.Opt[float64] `query:"limit,omitzero" json:"-"`
+	// Optional comma-delimited list of language targets to filter diagnostics by
+	Targets param.Opt[string] `query:"targets,omitzero" json:"-"`
 	// Includes the given severity and above (fatal > error > warning > note).
 	//
 	// Any of "fatal", "error", "warning", "note".
 	Severity BuildDiagnosticListParamsSeverity `query:"severity,omitzero" json:"-"`
-	// Optional list of language targets to filter diagnostics by
-	Targets []shared.Target `query:"targets,omitzero" json:"-"`
 	paramObj
 }
 
