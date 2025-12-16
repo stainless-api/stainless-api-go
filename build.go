@@ -304,11 +304,20 @@ type BuildTargetCommitUnion struct {
 	// Any of "not_started", "queued", "in_progress", "completed".
 	Status string `json:"status"`
 	// This field is from variant [BuildTargetCommitCompleted].
+	Commit shared.Commit `json:"commit"`
+	// This field is from variant [BuildTargetCommitCompleted].
 	Completed BuildTargetCommitCompletedCompleted `json:"completed"`
-	JSON      struct {
-		Status    respjson.Field
-		Completed respjson.Field
-		raw       string
+	// This field is from variant [BuildTargetCommitCompleted].
+	Conclusion shared.CommitConclusion `json:"conclusion"`
+	// This field is from variant [BuildTargetCommitCompleted].
+	MergeConflictPr BuildTargetCommitCompletedMergeConflictPr `json:"merge_conflict_pr"`
+	JSON            struct {
+		Status          respjson.Field
+		Commit          respjson.Field
+		Completed       respjson.Field
+		Conclusion      respjson.Field
+		MergeConflictPr respjson.Field
+		raw             string
 	} `json:"-"`
 }
 
@@ -423,14 +432,24 @@ func (r *BuildTargetCommitInProgress) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetCommitCompleted struct {
+	Commit shared.Commit `json:"commit,required"`
+	// deprecated
 	Completed BuildTargetCommitCompletedCompleted `json:"completed,required"`
-	Status    constant.Completed                  `json:"status,required"`
+	// Any of "error", "warning", "note", "success", "merge_conflict",
+	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
+	// "timed_out", "noop", "version_bump".
+	Conclusion      shared.CommitConclusion                   `json:"conclusion,required"`
+	MergeConflictPr BuildTargetCommitCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
+	Status          constant.Completed                        `json:"status,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Completed   respjson.Field
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		Commit          respjson.Field
+		Completed       respjson.Field
+		Conclusion      respjson.Field
+		MergeConflictPr respjson.Field
+		Status          respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
 	} `json:"-"`
 }
 
@@ -440,12 +459,13 @@ func (r *BuildTargetCommitCompleted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// deprecated
 type BuildTargetCommitCompletedCompleted struct {
 	Commit shared.Commit `json:"commit,required"`
 	// Any of "error", "warning", "note", "success", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
 	// "timed_out", "noop", "version_bump".
-	Conclusion      string                                             `json:"conclusion,required"`
+	Conclusion      shared.CommitConclusion                            `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -499,6 +519,42 @@ func (r *BuildTargetCommitCompletedCompletedMergeConflictPrRepo) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type BuildTargetCommitCompletedMergeConflictPr struct {
+	Number float64                                       `json:"number,required"`
+	Repo   BuildTargetCommitCompletedMergeConflictPrRepo `json:"repo,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Number      respjson.Field
+		Repo        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildTargetCommitCompletedMergeConflictPr) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetCommitCompletedMergeConflictPr) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildTargetCommitCompletedMergeConflictPrRepo struct {
+	Name  string `json:"name,required"`
+	Owner string `json:"owner,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Name        respjson.Field
+		Owner       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildTargetCommitCompletedMergeConflictPrRepo) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetCommitCompletedMergeConflictPrRepo) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type BuildTargetObject string
 
 const (
@@ -526,10 +582,16 @@ type CheckStepUnion struct {
 	Status string `json:"status"`
 	// This field is from variant [CheckStepCompleted].
 	Completed CheckStepCompletedCompleted `json:"completed"`
-	JSON      struct {
-		Status    respjson.Field
-		Completed respjson.Field
-		raw       string
+	// This field is from variant [CheckStepCompleted].
+	Conclusion CheckStepConclusion `json:"conclusion"`
+	// This field is from variant [CheckStepCompleted].
+	URL  string `json:"url"`
+	JSON struct {
+		Status     respjson.Field
+		Completed  respjson.Field
+		Conclusion respjson.Field
+		URL        respjson.Field
+		raw        string
 	} `json:"-"`
 }
 
@@ -644,12 +706,19 @@ func (r *CheckStepInProgress) UnmarshalJSON(data []byte) error {
 }
 
 type CheckStepCompleted struct {
+	// deprecated
 	Completed CheckStepCompletedCompleted `json:"completed,required"`
-	Status    constant.Completed          `json:"status,required"`
+	// Any of "success", "failure", "skipped", "cancelled", "action_required",
+	// "neutral", "timed_out".
+	Conclusion CheckStepConclusion `json:"conclusion,required"`
+	Status     constant.Completed  `json:"status,required"`
+	URL        string              `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Completed   respjson.Field
+		Conclusion  respjson.Field
 		Status      respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -661,11 +730,12 @@ func (r *CheckStepCompleted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// deprecated
 type CheckStepCompletedCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
 	// "neutral", "timed_out".
-	Conclusion string `json:"conclusion,required"`
-	URL        string `json:"url,required"`
+	Conclusion CheckStepConclusion `json:"conclusion,required"`
+	URL        string              `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
@@ -680,6 +750,18 @@ func (r CheckStepCompletedCompleted) RawJSON() string { return r.JSON.raw }
 func (r *CheckStepCompletedCompleted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type CheckStepConclusion string
+
+const (
+	CheckStepConclusionSuccess        CheckStepConclusion = "success"
+	CheckStepConclusionFailure        CheckStepConclusion = "failure"
+	CheckStepConclusionSkipped        CheckStepConclusion = "skipped"
+	CheckStepConclusionCancelled      CheckStepConclusion = "cancelled"
+	CheckStepConclusionActionRequired CheckStepConclusion = "action_required"
+	CheckStepConclusionNeutral        CheckStepConclusion = "neutral"
+	CheckStepConclusionTimedOut       CheckStepConclusion = "timed_out"
+)
 
 type BuildCompareResponse struct {
 	Base Build `json:"base,required"`
