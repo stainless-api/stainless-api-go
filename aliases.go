@@ -23,6 +23,45 @@ type Commit = shared.Commit
 type CommitRepo = shared.CommitRepo
 
 // This is an alias to an internal type.
+type CommitConclusion = shared.CommitConclusion
+
+// Equals "error"
+const CommitConclusionError = shared.CommitConclusionError
+
+// Equals "warning"
+const CommitConclusionWarning = shared.CommitConclusionWarning
+
+// Equals "note"
+const CommitConclusionNote = shared.CommitConclusionNote
+
+// Equals "success"
+const CommitConclusionSuccess = shared.CommitConclusionSuccess
+
+// Equals "merge_conflict"
+const CommitConclusionMergeConflict = shared.CommitConclusionMergeConflict
+
+// Equals "upstream_merge_conflict"
+const CommitConclusionUpstreamMergeConflict = shared.CommitConclusionUpstreamMergeConflict
+
+// Equals "fatal"
+const CommitConclusionFatal = shared.CommitConclusionFatal
+
+// Equals "payment_required"
+const CommitConclusionPaymentRequired = shared.CommitConclusionPaymentRequired
+
+// Equals "cancelled"
+const CommitConclusionCancelled = shared.CommitConclusionCancelled
+
+// Equals "timed_out"
+const CommitConclusionTimedOut = shared.CommitConclusionTimedOut
+
+// Equals "noop"
+const CommitConclusionNoop = shared.CommitConclusionNoop
+
+// Equals "version_bump"
+const CommitConclusionVersionBump = shared.CommitConclusionVersionBump
+
+// This is an alias to an internal type.
 type FileInputUnionParam = shared.FileInputUnionParam
 
 // This is an alias to an internal type.
