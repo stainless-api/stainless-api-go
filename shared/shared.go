@@ -52,6 +52,23 @@ func (r *CommitRepo) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type CommitConclusion string
+
+const (
+	CommitConclusionError                 CommitConclusion = "error"
+	CommitConclusionWarning               CommitConclusion = "warning"
+	CommitConclusionNote                  CommitConclusion = "note"
+	CommitConclusionSuccess               CommitConclusion = "success"
+	CommitConclusionMergeConflict         CommitConclusion = "merge_conflict"
+	CommitConclusionUpstreamMergeConflict CommitConclusion = "upstream_merge_conflict"
+	CommitConclusionFatal                 CommitConclusion = "fatal"
+	CommitConclusionPaymentRequired       CommitConclusion = "payment_required"
+	CommitConclusionCancelled             CommitConclusion = "cancelled"
+	CommitConclusionTimedOut              CommitConclusion = "timed_out"
+	CommitConclusionNoop                  CommitConclusion = "noop"
+	CommitConclusionVersionBump           CommitConclusion = "version_bump"
+)
+
 func FileInputParamOfFileInputContent(content string) FileInputUnionParam {
 	var variant FileInputContentParam
 	variant.Content = content
