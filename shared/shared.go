@@ -150,4 +150,5 @@ const (
 	TargetCli        Target = "cli"
 	TargetPhp        Target = "php"
 	TargetCsharp     Target = "csharp"
+	TargetOpenAPI    Target = "openapi"
 )

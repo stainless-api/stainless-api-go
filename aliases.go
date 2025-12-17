@@ -105,3 +105,6 @@ const TargetPhp = shared.TargetPhp
 
 // Equals "csharp"
 const TargetCsharp = shared.TargetCsharp
+
+// Equals "openapi"
+const TargetOpenAPI = shared.TargetOpenAPI
