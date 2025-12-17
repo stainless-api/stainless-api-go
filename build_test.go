@@ -42,6 +42,7 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 			Java:       stainless.String("java"),
 			Kotlin:     stainless.String("kotlin"),
 			Node:       stainless.String("node"),
+			OpenAPI:    stainless.String("openapi"),
 			Php:        stainless.String("php"),
 			Python:     stainless.String("python"),
 			Ruby:       stainless.String("ruby"),
