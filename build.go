@@ -234,6 +234,7 @@ type BuildTargets struct {
 	Java       BuildTarget `json:"java"`
 	Kotlin     BuildTarget `json:"kotlin"`
 	Node       BuildTarget `json:"node"`
+	OpenAPI    BuildTarget `json:"openapi"`
 	Php        BuildTarget `json:"php"`
 	Python     BuildTarget `json:"python"`
 	Ruby       BuildTarget `json:"ruby"`
@@ -247,6 +248,7 @@ type BuildTargets struct {
 		Java        respjson.Field
 		Kotlin      respjson.Field
 		Node        respjson.Field
+		OpenAPI     respjson.Field
 		Php         respjson.Field
 		Python      respjson.Field
 		Ruby        respjson.Field
@@ -847,6 +849,7 @@ type BuildNewParamsTargetCommitMessages struct {
 	Java       param.Opt[string] `json:"java,omitzero"`
 	Kotlin     param.Opt[string] `json:"kotlin,omitzero"`
 	Node       param.Opt[string] `json:"node,omitzero"`
+	OpenAPI    param.Opt[string] `json:"openapi,omitzero"`
 	Php        param.Opt[string] `json:"php,omitzero"`
 	Python     param.Opt[string] `json:"python,omitzero"`
 	Ruby       param.Opt[string] `json:"ruby,omitzero"`
