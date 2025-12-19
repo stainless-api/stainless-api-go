@@ -56,17 +56,19 @@ func (r *OrgService) List(ctx context.Context, opts ...option.RequestOption) (re
 }
 
 type Org struct {
-	DisplayName string `json:"display_name,required"`
+	DisplayName            string `json:"display_name,required"`
+	EnableAICommitMessages bool   `json:"enable_ai_commit_messages,required"`
 	// Any of "org".
 	Object OrgObject `json:"object,required"`
 	Slug   string    `json:"slug,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		DisplayName respjson.Field
-		Object      respjson.Field
-		Slug        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		DisplayName            respjson.Field
+		EnableAICommitMessages respjson.Field
+		Object                 respjson.Field
+		Slug                   respjson.Field
+		ExtraFields            map[string]respjson.Field
+		raw                    string
 	} `json:"-"`
 }
 
