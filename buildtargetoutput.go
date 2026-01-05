@@ -131,7 +131,7 @@ func (r *BuildTargetOutputGetResponseUnion) UnmarshalJSON(data []byte) error {
 type BuildTargetOutputGetResponseURL struct {
 	Output constant.URL `json:"output,required"`
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli", "php", "csharp", "openapi".
+	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target shared.Target `json:"target,required"`
 	// Any of "source", "dist", "wheel".
 	Type BuildTargetOutputGetResponseURLType `json:"type,required"`
@@ -169,7 +169,7 @@ type BuildTargetOutputGetResponseGit struct {
 	// Git reference (commit SHA, branch, or tag)
 	Ref string `json:"ref,required"`
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli", "php", "csharp", "openapi".
+	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target shared.Target `json:"target,required"`
 	// Any of "source", "dist", "wheel".
 	Type BuildTargetOutputGetResponseGitType `json:"type,required"`
@@ -216,7 +216,7 @@ type BuildTargetOutputGetParams struct {
 	// SDK language target name
 	//
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
-	// "terraform", "cli", "php", "csharp", "openapi".
+	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero,required" json:"-"`
 	// Any of "source", "dist", "wheel".
 	Type BuildTargetOutputGetParamsType `query:"type,omitzero,required" json:"-"`
@@ -251,6 +251,7 @@ const (
 	BuildTargetOutputGetParamsTargetCli        BuildTargetOutputGetParamsTarget = "cli"
 	BuildTargetOutputGetParamsTargetPhp        BuildTargetOutputGetParamsTarget = "php"
 	BuildTargetOutputGetParamsTargetCsharp     BuildTargetOutputGetParamsTarget = "csharp"
+	BuildTargetOutputGetParamsTargetSql        BuildTargetOutputGetParamsTarget = "sql"
 	BuildTargetOutputGetParamsTargetOpenAPI    BuildTargetOutputGetParamsTarget = "openapi"
 )
 
