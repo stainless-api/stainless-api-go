@@ -238,6 +238,7 @@ type BuildTargets struct {
 	Php        BuildTarget `json:"php"`
 	Python     BuildTarget `json:"python"`
 	Ruby       BuildTarget `json:"ruby"`
+	Sql        BuildTarget `json:"sql"`
 	Terraform  BuildTarget `json:"terraform"`
 	Typescript BuildTarget `json:"typescript"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -252,6 +253,7 @@ type BuildTargets struct {
 		Php         respjson.Field
 		Python      respjson.Field
 		Ruby        respjson.Field
+		Sql         respjson.Field
 		Terraform   respjson.Field
 		Typescript  respjson.Field
 		ExtraFields map[string]respjson.Field
@@ -310,7 +312,7 @@ type BuildTargetCommitUnion struct {
 	// This field is from variant [BuildTargetCommitCompleted].
 	Completed BuildTargetCommitCompletedCompleted `json:"completed"`
 	// This field is from variant [BuildTargetCommitCompleted].
-	Conclusion shared.CommitConclusion `json:"conclusion"`
+	Conclusion string `json:"conclusion"`
 	// This field is from variant [BuildTargetCommitCompleted].
 	MergeConflictPr BuildTargetCommitCompletedMergeConflictPr `json:"merge_conflict_pr"`
 	JSON            struct {
@@ -440,7 +442,7 @@ type BuildTargetCommitCompleted struct {
 	// Any of "error", "warning", "note", "success", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
 	// "timed_out", "noop", "version_bump".
-	Conclusion      shared.CommitConclusion                   `json:"conclusion,required"`
+	Conclusion      string                                    `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
 	Status          constant.Completed                        `json:"status,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -467,7 +469,7 @@ type BuildTargetCommitCompletedCompleted struct {
 	// Any of "error", "warning", "note", "success", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
 	// "timed_out", "noop", "version_bump".
-	Conclusion      shared.CommitConclusion                            `json:"conclusion,required"`
+	Conclusion      string                                             `json:"conclusion,required"`
 	MergeConflictPr BuildTargetCommitCompletedCompletedMergeConflictPr `json:"merge_conflict_pr,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -585,7 +587,7 @@ type CheckStepUnion struct {
 	// This field is from variant [CheckStepCompleted].
 	Completed CheckStepCompletedCompleted `json:"completed"`
 	// This field is from variant [CheckStepCompleted].
-	Conclusion CheckStepConclusion `json:"conclusion"`
+	Conclusion string `json:"conclusion"`
 	// This field is from variant [CheckStepCompleted].
 	URL  string `json:"url"`
 	JSON struct {
@@ -712,9 +714,9 @@ type CheckStepCompleted struct {
 	Completed CheckStepCompletedCompleted `json:"completed,required"`
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
 	// "neutral", "timed_out".
-	Conclusion CheckStepConclusion `json:"conclusion,required"`
-	Status     constant.Completed  `json:"status,required"`
-	URL        string              `json:"url,required"`
+	Conclusion string             `json:"conclusion,required"`
+	Status     constant.Completed `json:"status,required"`
+	URL        string             `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Completed   respjson.Field
@@ -736,8 +738,8 @@ func (r *CheckStepCompleted) UnmarshalJSON(data []byte) error {
 type CheckStepCompletedCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
 	// "neutral", "timed_out".
-	Conclusion CheckStepConclusion `json:"conclusion,required"`
-	URL        string              `json:"url,required"`
+	Conclusion string `json:"conclusion,required"`
+	URL        string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Conclusion  respjson.Field
@@ -752,18 +754,6 @@ func (r CheckStepCompletedCompleted) RawJSON() string { return r.JSON.raw }
 func (r *CheckStepCompletedCompleted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type CheckStepConclusion string
-
-const (
-	CheckStepConclusionSuccess        CheckStepConclusion = "success"
-	CheckStepConclusionFailure        CheckStepConclusion = "failure"
-	CheckStepConclusionSkipped        CheckStepConclusion = "skipped"
-	CheckStepConclusionCancelled      CheckStepConclusion = "cancelled"
-	CheckStepConclusionActionRequired CheckStepConclusion = "action_required"
-	CheckStepConclusionNeutral        CheckStepConclusion = "neutral"
-	CheckStepConclusionTimedOut       CheckStepConclusion = "timed_out"
-)
 
 type BuildCompareResponse struct {
 	Base Build `json:"base,required"`
@@ -853,6 +843,7 @@ type BuildNewParamsTargetCommitMessages struct {
 	Php        param.Opt[string] `json:"php,omitzero"`
 	Python     param.Opt[string] `json:"python,omitzero"`
 	Ruby       param.Opt[string] `json:"ruby,omitzero"`
+	Sql        param.Opt[string] `json:"sql,omitzero"`
 	Terraform  param.Opt[string] `json:"terraform,omitzero"`
 	Typescript param.Opt[string] `json:"typescript,omitzero"`
 	paramObj

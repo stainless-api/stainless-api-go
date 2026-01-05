@@ -46,6 +46,7 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 			Php:        stainless.String("php"),
 			Python:     stainless.String("python"),
 			Ruby:       stainless.String("ruby"),
+			Sql:        stainless.String("sql"),
 			Terraform:  stainless.String("terraform"),
 			Typescript: stainless.String("typescript"),
 		},
