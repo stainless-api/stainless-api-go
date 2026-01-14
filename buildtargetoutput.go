@@ -133,7 +133,8 @@ type BuildTargetOutputGetResponseURL struct {
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target shared.Target `json:"target,required"`
-	// Any of "source", "dist", "wheel".
+	// Any of "source", "dist", "wheel", "openapi-with-transforms",
+	// "openapi-with-code-samples", "openapi-sdk-spec".
 	Type BuildTargetOutputGetResponseURLType `json:"type,required"`
 	// URL for direct download
 	URL string `json:"url,required"`
@@ -157,9 +158,12 @@ func (r *BuildTargetOutputGetResponseURL) UnmarshalJSON(data []byte) error {
 type BuildTargetOutputGetResponseURLType string
 
 const (
-	BuildTargetOutputGetResponseURLTypeSource BuildTargetOutputGetResponseURLType = "source"
-	BuildTargetOutputGetResponseURLTypeDist   BuildTargetOutputGetResponseURLType = "dist"
-	BuildTargetOutputGetResponseURLTypeWheel  BuildTargetOutputGetResponseURLType = "wheel"
+	BuildTargetOutputGetResponseURLTypeSource                 BuildTargetOutputGetResponseURLType = "source"
+	BuildTargetOutputGetResponseURLTypeDist                   BuildTargetOutputGetResponseURLType = "dist"
+	BuildTargetOutputGetResponseURLTypeWheel                  BuildTargetOutputGetResponseURLType = "wheel"
+	BuildTargetOutputGetResponseURLTypeOpenAPIWithTransforms  BuildTargetOutputGetResponseURLType = "openapi-with-transforms"
+	BuildTargetOutputGetResponseURLTypeOpenAPIWithCodeSamples BuildTargetOutputGetResponseURLType = "openapi-with-code-samples"
+	BuildTargetOutputGetResponseURLTypeOpenAPISDKSpec         BuildTargetOutputGetResponseURLType = "openapi-sdk-spec"
 )
 
 type BuildTargetOutputGetResponseGit struct {
@@ -171,7 +175,8 @@ type BuildTargetOutputGetResponseGit struct {
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target shared.Target `json:"target,required"`
-	// Any of "source", "dist", "wheel".
+	// Any of "source", "dist", "wheel", "openapi-with-transforms",
+	// "openapi-with-code-samples", "openapi-sdk-spec".
 	Type BuildTargetOutputGetResponseGitType `json:"type,required"`
 	// URL to git remote
 	URL string `json:"url,required"`
@@ -197,17 +202,23 @@ func (r *BuildTargetOutputGetResponseGit) UnmarshalJSON(data []byte) error {
 type BuildTargetOutputGetResponseGitType string
 
 const (
-	BuildTargetOutputGetResponseGitTypeSource BuildTargetOutputGetResponseGitType = "source"
-	BuildTargetOutputGetResponseGitTypeDist   BuildTargetOutputGetResponseGitType = "dist"
-	BuildTargetOutputGetResponseGitTypeWheel  BuildTargetOutputGetResponseGitType = "wheel"
+	BuildTargetOutputGetResponseGitTypeSource                 BuildTargetOutputGetResponseGitType = "source"
+	BuildTargetOutputGetResponseGitTypeDist                   BuildTargetOutputGetResponseGitType = "dist"
+	BuildTargetOutputGetResponseGitTypeWheel                  BuildTargetOutputGetResponseGitType = "wheel"
+	BuildTargetOutputGetResponseGitTypeOpenAPIWithTransforms  BuildTargetOutputGetResponseGitType = "openapi-with-transforms"
+	BuildTargetOutputGetResponseGitTypeOpenAPIWithCodeSamples BuildTargetOutputGetResponseGitType = "openapi-with-code-samples"
+	BuildTargetOutputGetResponseGitTypeOpenAPISDKSpec         BuildTargetOutputGetResponseGitType = "openapi-sdk-spec"
 )
 
 type BuildTargetOutputGetResponseType string
 
 const (
-	BuildTargetOutputGetResponseTypeSource BuildTargetOutputGetResponseType = "source"
-	BuildTargetOutputGetResponseTypeDist   BuildTargetOutputGetResponseType = "dist"
-	BuildTargetOutputGetResponseTypeWheel  BuildTargetOutputGetResponseType = "wheel"
+	BuildTargetOutputGetResponseTypeSource                 BuildTargetOutputGetResponseType = "source"
+	BuildTargetOutputGetResponseTypeDist                   BuildTargetOutputGetResponseType = "dist"
+	BuildTargetOutputGetResponseTypeWheel                  BuildTargetOutputGetResponseType = "wheel"
+	BuildTargetOutputGetResponseTypeOpenAPIWithTransforms  BuildTargetOutputGetResponseType = "openapi-with-transforms"
+	BuildTargetOutputGetResponseTypeOpenAPIWithCodeSamples BuildTargetOutputGetResponseType = "openapi-with-code-samples"
+	BuildTargetOutputGetResponseTypeOpenAPISDKSpec         BuildTargetOutputGetResponseType = "openapi-sdk-spec"
 )
 
 type BuildTargetOutputGetParams struct {
@@ -218,7 +229,8 @@ type BuildTargetOutputGetParams struct {
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero,required" json:"-"`
-	// Any of "source", "dist", "wheel".
+	// Any of "source", "dist", "wheel", "openapi-with-transforms",
+	// "openapi-with-code-samples", "openapi-sdk-spec".
 	Type BuildTargetOutputGetParamsType `query:"type,omitzero,required" json:"-"`
 	// Output format: url (download URL) or git (temporary access token).
 	//
@@ -258,9 +270,12 @@ const (
 type BuildTargetOutputGetParamsType string
 
 const (
-	BuildTargetOutputGetParamsTypeSource BuildTargetOutputGetParamsType = "source"
-	BuildTargetOutputGetParamsTypeDist   BuildTargetOutputGetParamsType = "dist"
-	BuildTargetOutputGetParamsTypeWheel  BuildTargetOutputGetParamsType = "wheel"
+	BuildTargetOutputGetParamsTypeSource                 BuildTargetOutputGetParamsType = "source"
+	BuildTargetOutputGetParamsTypeDist                   BuildTargetOutputGetParamsType = "dist"
+	BuildTargetOutputGetParamsTypeWheel                  BuildTargetOutputGetParamsType = "wheel"
+	BuildTargetOutputGetParamsTypeOpenAPIWithTransforms  BuildTargetOutputGetParamsType = "openapi-with-transforms"
+	BuildTargetOutputGetParamsTypeOpenAPIWithCodeSamples BuildTargetOutputGetParamsType = "openapi-with-code-samples"
+	BuildTargetOutputGetParamsTypeOpenAPISDKSpec         BuildTargetOutputGetParamsType = "openapi-sdk-spec"
 )
 
 // Output format: url (download URL) or git (temporary access token).
