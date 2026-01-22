@@ -786,6 +786,9 @@ type BuildNewParams struct {
 	Branch param.Opt[string] `json:"branch,omitzero"`
 	// Optional commit message to use when creating a new commit.
 	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
+	// Whether to generate AI-powered commit messages for the build. Cannot be combined
+	// with `commit_message` or `target_commit_messages`.
+	EnableAICommitMessage param.Opt[bool] `json:"enable_ai_commit_message,omitzero"`
 	// Optional commit messages to use for each SDK when making a new commit. SDKs not
 	// represented in this object will fallback to the optional `commit_message`
 	// parameter, or will fallback further to the default commit message.

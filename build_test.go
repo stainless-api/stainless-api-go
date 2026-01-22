@@ -32,9 +32,10 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 		Revision: stainless.BuildNewParamsRevisionUnion{
 			OfString: stainless.String("string"),
 		},
-		AllowEmpty:    stainless.Bool(true),
-		Branch:        stainless.String("branch"),
-		CommitMessage: stainless.String("commit_message"),
+		AllowEmpty:            stainless.Bool(true),
+		Branch:                stainless.String("branch"),
+		CommitMessage:         stainless.String("commit_message"),
+		EnableAICommitMessage: stainless.Bool(true),
 		TargetCommitMessages: stainless.BuildNewParamsTargetCommitMessages{
 			Cli:        stainless.String("cli"),
 			Csharp:     stainless.String("csharp"),
