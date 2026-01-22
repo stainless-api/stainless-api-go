@@ -108,6 +108,23 @@ func (r *ProjectService) ListAutoPaging(ctx context.Context, query ProjectListPa
 	return pagination.NewPageAutoPager(r.List(ctx, query, opts...))
 }
 
+// Generates an AI commit message by comparing two git refs in the SDK repository.
+func (r *ProjectService) GenerateCommitMessage(ctx context.Context, params ProjectGenerateCommitMessageParams, opts ...option.RequestOption) (res *ProjectGenerateCommitMessageResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	precfg, err := requestconfig.PreRequestOptions(opts...)
+	if err != nil {
+		return
+	}
+	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
+	if params.Project.Value == "" {
+		err = errors.New("missing required project parameter")
+		return
+	}
+	path := fmt.Sprintf("v0/projects/%s/generate_commit_message", url.PathEscape(params.Project.Value))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return
+}
+
 // A project is a collection of SDKs generated from the same set of config files.
 type Project struct {
 	ConfigRepo  string `json:"config_repo,required"`
@@ -141,6 +158,22 @@ type ProjectObject string
 const (
 	ProjectObjectProject ProjectObject = "project"
 )
+
+type ProjectGenerateCommitMessageResponse struct {
+	AICommitMessage string `json:"ai_commit_message,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		AICommitMessage respjson.Field
+		ExtraFields     map[string]respjson.Field
+		raw             string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ProjectGenerateCommitMessageResponse) RawJSON() string { return r.JSON.raw }
+func (r *ProjectGenerateCommitMessageResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type ProjectNewParams struct {
 	// Human-readable project name
@@ -201,3 +234,54 @@ func (r ProjectListParams) URLQuery() (v url.Values, err error) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+type ProjectGenerateCommitMessageParams struct {
+	// Use [option.WithProject] on the client to set a global default for this field.
+	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	// Language target
+	//
+	// Any of "python", "node", "typescript", "java", "kotlin", "go", "ruby",
+	// "terraform", "cli", "csharp", "php", "openapi", "sql".
+	Target ProjectGenerateCommitMessageParamsTarget `query:"target,omitzero,required" json:"-"`
+	// Base ref for comparison
+	BaseRef string `json:"base_ref,required"`
+	// Head ref for comparison
+	HeadRef string `json:"head_ref,required"`
+	paramObj
+}
+
+func (r ProjectGenerateCommitMessageParams) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectGenerateCommitMessageParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectGenerateCommitMessageParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// URLQuery serializes [ProjectGenerateCommitMessageParams]'s query parameters as
+// `url.Values`.
+func (r ProjectGenerateCommitMessageParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Language target
+type ProjectGenerateCommitMessageParamsTarget string
+
+const (
+	ProjectGenerateCommitMessageParamsTargetPython     ProjectGenerateCommitMessageParamsTarget = "python"
+	ProjectGenerateCommitMessageParamsTargetNode       ProjectGenerateCommitMessageParamsTarget = "node"
+	ProjectGenerateCommitMessageParamsTargetTypescript ProjectGenerateCommitMessageParamsTarget = "typescript"
+	ProjectGenerateCommitMessageParamsTargetJava       ProjectGenerateCommitMessageParamsTarget = "java"
+	ProjectGenerateCommitMessageParamsTargetKotlin     ProjectGenerateCommitMessageParamsTarget = "kotlin"
+	ProjectGenerateCommitMessageParamsTargetGo         ProjectGenerateCommitMessageParamsTarget = "go"
+	ProjectGenerateCommitMessageParamsTargetRuby       ProjectGenerateCommitMessageParamsTarget = "ruby"
+	ProjectGenerateCommitMessageParamsTargetTerraform  ProjectGenerateCommitMessageParamsTarget = "terraform"
+	ProjectGenerateCommitMessageParamsTargetCli        ProjectGenerateCommitMessageParamsTarget = "cli"
+	ProjectGenerateCommitMessageParamsTargetCsharp     ProjectGenerateCommitMessageParamsTarget = "csharp"
+	ProjectGenerateCommitMessageParamsTargetPhp        ProjectGenerateCommitMessageParamsTarget = "php"
+	ProjectGenerateCommitMessageParamsTargetOpenAPI    ProjectGenerateCommitMessageParamsTarget = "openapi"
+	ProjectGenerateCommitMessageParamsTargetSql        ProjectGenerateCommitMessageParamsTarget = "sql"
+)
