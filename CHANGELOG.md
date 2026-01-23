@@ -1,5 +1,43 @@
 # Changelog
 
+## 0.27.0 (2026-01-23)
+
+Full Changelog: [v0.26.0...v0.27.0](https://github.com/stainless-api/stainless-api-go/compare/v0.26.0...v0.27.0)
+
+### Features
+
+* add openapi target ([a719849](https://github.com/stainless-api/stainless-api-go/commit/a719849ef449baf3d3bd7221a4690616497dff71))
+* **ai:** build APIs take SDK level commit messages & new gate for AI commit messages ([fb0ed1a](https://github.com/stainless-api/stainless-api-go/commit/fb0ed1a4da086b80f8c1bb4e97739219b162dd1a))
+* **api:** ai commit message features are available as public feature ([e76ae0e](https://github.com/stainless-api/stainless-api-go/commit/e76ae0ec079277281e173428e65e1b3d58dcc3bb))
+* **api:** support openapi target from builds:target_outputs ([58a81ea](https://github.com/stainless-api/stainless-api-go/commit/58a81eae3f937df5c5def47cb08850cf3a6d9f9a))
+* **ci:** Add organization-level setting for AI commit messages ([67e03b0](https://github.com/stainless-api/stainless-api-go/commit/67e03b001cffda756655365b83a2920936c56077))
+* **encoder:** support bracket encoding form-data object members ([c3f1375](https://github.com/stainless-api/stainless-api-go/commit/c3f1375c083823e3b2aa9557fbba3eb22a19cf6b))
+* **sql:** initial commit ([f3048c9](https://github.com/stainless-api/stainless-api-go/commit/f3048c9ac7d14693c1200070f7e7e980ca8c69d3))
+
+
+### Bug Fixes
+
+* **api:** switch 'targets' query param to comma-delimited string in diagnostics endpoint ([b52d859](https://github.com/stainless-api/stainless-api-go/commit/b52d85983a5202251b2b723aea6c58c480d05a11))
+* **mcp:** correct code tool API endpoint ([7a85c85](https://github.com/stainless-api/stainless-api-go/commit/7a85c85fbd0843406990934a7802d4250a672580))
+* rename param to avoid collision ([1482028](https://github.com/stainless-api/stainless-api-go/commit/1482028282622b3c408d8727fa2d714cb404393f))
+* skip usage tests that don't work with Prism ([abef89d](https://github.com/stainless-api/stainless-api-go/commit/abef89de7ec2fc76c856eeab7f723206b5a4aa13))
+
+
+### Chores
+
+* add float64 to valid types for RegisterFieldValidator ([6cc2e2e](https://github.com/stainless-api/stainless-api-go/commit/6cc2e2eefcd4fc53bb3a9f547495666b4823b97b))
+* elide duplicate aliases ([1e70d7c](https://github.com/stainless-api/stainless-api-go/commit/1e70d7ce6cece52b2b876092e324755f39e69450))
+* **internal:** codegen related update ([ad793c4](https://github.com/stainless-api/stainless-api-go/commit/ad793c4bc34ae0cd87b991c6b55ca3dd63f69292))
+* **internal:** codegen related update ([02a35b2](https://github.com/stainless-api/stainless-api-go/commit/02a35b20c3407266921fc7e872d7fd70666abfb3))
+* **internal:** codegen related update ([00c415b](https://github.com/stainless-api/stainless-api-go/commit/00c415b5a4741ccb223de3e0baecc5a991cdfb0d))
+* remove custom code ([b8ba748](https://github.com/stainless-api/stainless-api-go/commit/b8ba74882fd404d3fe1d854977f7cb4e5e3ab55c))
+* skip spec resource ([5bd2cac](https://github.com/stainless-api/stainless-api-go/commit/5bd2cac6be65c38a83e5f69ba8cb736145af3435))
+
+
+### Refactors
+
+* **api:** change completed shape ([62bc9e2](https://github.com/stainless-api/stainless-api-go/commit/62bc9e21b9a7ceafd3533b75f06705443f8b9dd9))
+
 ## 0.27.0 (2025-11-13)
 
 Full Changelog: [v0.26.0...v0.27.0](https://github.com/stainless-api/stainless-api-go/compare/v0.26.0...v0.27.0)
