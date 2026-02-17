@@ -15,12 +15,14 @@ type paramUnion = param.APIUnion
 type paramObj = param.APIObject
 
 type Commit struct {
-	Repo CommitRepo `json:"repo,required"`
-	Sha  string     `json:"sha,required"`
+	Repo    CommitRepo `json:"repo,required"`
+	Sha     string     `json:"sha,required"`
+	TreeOid string     `json:"tree_oid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Repo        respjson.Field
 		Sha         respjson.Field
+		TreeOid     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`

@@ -217,12 +217,14 @@ func (r *ProjectBranch) UnmarshalJSON(data []byte) error {
 
 // A Git commit that points to the latest set of config files on a given branch.
 type ProjectBranchConfigCommit struct {
-	Repo ProjectBranchConfigCommitRepo `json:"repo,required"`
-	Sha  string                        `json:"sha,required"`
+	Repo    ProjectBranchConfigCommitRepo `json:"repo,required"`
+	Sha     string                        `json:"sha,required"`
+	TreeOid string                        `json:"tree_oid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Repo        respjson.Field
 		Sha         respjson.Field
+		TreeOid     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -296,12 +298,14 @@ func (r *ProjectBranchListResponse) UnmarshalJSON(data []byte) error {
 
 // A Git commit that points to the latest set of config files on a given branch.
 type ProjectBranchListResponseConfigCommit struct {
-	Repo ProjectBranchListResponseConfigCommitRepo `json:"repo,required"`
-	Sha  string                                    `json:"sha,required"`
+	Repo    ProjectBranchListResponseConfigCommitRepo `json:"repo,required"`
+	Sha     string                                    `json:"sha,required"`
+	TreeOid string                                    `json:"tree_oid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Repo        respjson.Field
 		Sha         respjson.Field
+		TreeOid     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
