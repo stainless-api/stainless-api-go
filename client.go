@@ -20,6 +20,7 @@ type Client struct {
 	Projects ProjectService
 	Builds   BuildService
 	Orgs     OrgService
+	User     UserService
 }
 
 // DefaultClientOptions read from the environment (STAINLESS_API_KEY,
@@ -47,6 +48,7 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.Projects = NewProjectService(opts...)
 	r.Builds = NewBuildService(opts...)
 	r.Orgs = NewOrgService(opts...)
+	r.User = NewUserService(opts...)
 
 	return
 }
