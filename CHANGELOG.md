@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.28.0 (2026-02-19)
+
+Full Changelog: [v0.27.1...v0.28.0](https://github.com/stainless-api/stainless-api-go/compare/v0.27.1...v0.28.0)
+
+### Features
+
+* **api:** add a super basic GET /v0/user endpoint ([032e88f](https://github.com/stainless-api/stainless-api-go/commit/032e88fe12446986c9f15b79ea541ee8579cd28a))
+* **api:** update support email address ([29028df](https://github.com/stainless-api/stainless-api-go/commit/29028df47d8f665e0b4f947b194abdeeb53d1d4a))
+* better notion of which ci workflows are supported in build api ([7705cd0](https://github.com/stainless-api/stainless-api-go/commit/7705cd0aaeb1c55c950934c3a619d919ea0841da))
+* **client:** add a convenient param.SetJSON helper ([4a16e58](https://github.com/stainless-api/stainless-api-go/commit/4a16e58aec5257229a9652f029a48bc6c22b5ab5))
+* record tree oid and return it in the builds api ([d664a89](https://github.com/stainless-api/stainless-api-go/commit/d664a897696aa249b89acb02ebe3f0217a5e6acc))
+
+
+### Bug Fixes
+
+* **docs:** fix mcp installation instructions for remote servers ([64624c2](https://github.com/stainless-api/stainless-api-go/commit/64624c2051e80415ef9f52e9167a54c886966a96))
+* **encoder:** correctly serialize NullStruct ([641a4bd](https://github.com/stainless-api/stainless-api-go/commit/641a4bd1904507137095929fb8791d9c13aa6e80))
+
+
+### Chores
+
+* **mcp:** fix mcp package name ([2fd546d](https://github.com/stainless-api/stainless-api-go/commit/2fd546d154bd8dba183e29a5d4860e4ebe908ff4))
+
 ## 0.27.1 (2026-01-23)
 
 Full Changelog: [v0.27.0...v0.27.1](https://github.com/stainless-api/stainless-api-go/compare/v0.27.0...v0.27.1)
