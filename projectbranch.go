@@ -217,15 +217,13 @@ func (r *ProjectBranch) UnmarshalJSON(data []byte) error {
 
 // A Git commit that points to the latest set of config files on a given branch.
 type ProjectBranchConfigCommit struct {
-	Repo    ProjectBranchConfigCommitRepo  `json:"repo,required"`
-	Sha     string                         `json:"sha,required"`
-	Stats   ProjectBranchConfigCommitStats `json:"stats,required"`
-	TreeOid string                         `json:"tree_oid,required"`
+	Repo    ProjectBranchConfigCommitRepo `json:"repo,required"`
+	Sha     string                        `json:"sha,required"`
+	TreeOid string                        `json:"tree_oid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Repo        respjson.Field
 		Sha         respjson.Field
-		Stats       respjson.Field
 		TreeOid     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
@@ -255,26 +253,6 @@ type ProjectBranchConfigCommitRepo struct {
 // Returns the unmodified JSON received from the API
 func (r ProjectBranchConfigCommitRepo) RawJSON() string { return r.JSON.raw }
 func (r *ProjectBranchConfigCommitRepo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProjectBranchConfigCommitStats struct {
-	Additions int64 `json:"additions,required"`
-	Deletions int64 `json:"deletions,required"`
-	Total     int64 `json:"total,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Additions   respjson.Field
-		Deletions   respjson.Field
-		Total       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ProjectBranchConfigCommitStats) RawJSON() string { return r.JSON.raw }
-func (r *ProjectBranchConfigCommitStats) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -320,15 +298,13 @@ func (r *ProjectBranchListResponse) UnmarshalJSON(data []byte) error {
 
 // A Git commit that points to the latest set of config files on a given branch.
 type ProjectBranchListResponseConfigCommit struct {
-	Repo    ProjectBranchListResponseConfigCommitRepo  `json:"repo,required"`
-	Sha     string                                     `json:"sha,required"`
-	Stats   ProjectBranchListResponseConfigCommitStats `json:"stats,required"`
-	TreeOid string                                     `json:"tree_oid,required"`
+	Repo    ProjectBranchListResponseConfigCommitRepo `json:"repo,required"`
+	Sha     string                                    `json:"sha,required"`
+	TreeOid string                                    `json:"tree_oid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Repo        respjson.Field
 		Sha         respjson.Field
-		Stats       respjson.Field
 		TreeOid     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
@@ -358,26 +334,6 @@ type ProjectBranchListResponseConfigCommitRepo struct {
 // Returns the unmodified JSON received from the API
 func (r ProjectBranchListResponseConfigCommitRepo) RawJSON() string { return r.JSON.raw }
 func (r *ProjectBranchListResponseConfigCommitRepo) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ProjectBranchListResponseConfigCommitStats struct {
-	Additions int64 `json:"additions,required"`
-	Deletions int64 `json:"deletions,required"`
-	Total     int64 `json:"total,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Additions   respjson.Field
-		Deletions   respjson.Field
-		Total       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ProjectBranchListResponseConfigCommitStats) RawJSON() string { return r.JSON.raw }
-func (r *ProjectBranchListResponseConfigCommitStats) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

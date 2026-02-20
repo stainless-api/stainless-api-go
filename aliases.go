@@ -23,9 +23,6 @@ type Commit = shared.Commit
 type CommitRepo = shared.CommitRepo
 
 // This is an alias to an internal type.
-type CommitStats = shared.CommitStats
-
-// This is an alias to an internal type.
 type FileInputUnionParam = shared.FileInputUnionParam
 
 // This is an alias to an internal type.
