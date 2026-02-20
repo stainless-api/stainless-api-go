@@ -24,7 +24,6 @@ func TestUsage(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	t.Skip("Mock server tests are disabled")
 	build, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
 		Project: stainless.String("stainless"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
