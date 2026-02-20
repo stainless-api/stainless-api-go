@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.29.0 (2026-02-20)
+
+Full Changelog: [v0.28.0...v0.29.0](https://github.com/stainless-api/stainless-api-go/compare/v0.28.0...v0.29.0)
+
+### Features
+
+* **api:** populate integrated_stats ([4de23d2](https://github.com/stainless-api/stainless-api-go/commit/4de23d26e3e2d66225e3caad904d9e61d7d7c3a3))
+
+
+### Bug Fixes
+
+* allow canceling a request while it is waiting to retry ([310f52e](https://github.com/stainless-api/stainless-api-go/commit/310f52ee5e7e7f1c5e875c26e72692ce384cfec7))
+
+
+### Chores
+
+* **internal:** remove mock server code ([5fcb7c4](https://github.com/stainless-api/stainless-api-go/commit/5fcb7c4861be97cde54f1aa46b7bdde6eab4cfb2))
+* update mock server docs ([d58d1af](https://github.com/stainless-api/stainless-api-go/commit/d58d1af54babd9ef3b9db2d6bfc9754cfdb96584))
+
 ## 0.28.0 (2026-02-19)
 
 Full Changelog: [v0.27.1...v0.28.0](https://github.com/stainless-api/stainless-api-go/compare/v0.27.1...v0.28.0)
