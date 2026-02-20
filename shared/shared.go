@@ -15,13 +15,15 @@ type paramUnion = param.APIUnion
 type paramObj = param.APIObject
 
 type Commit struct {
-	Repo    CommitRepo `json:"repo,required"`
-	Sha     string     `json:"sha,required"`
-	TreeOid string     `json:"tree_oid"`
+	Repo    CommitRepo  `json:"repo,required"`
+	Sha     string      `json:"sha,required"`
+	Stats   CommitStats `json:"stats,required"`
+	TreeOid string      `json:"tree_oid,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Repo        respjson.Field
 		Sha         respjson.Field
+		Stats       respjson.Field
 		TreeOid     respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
@@ -51,6 +53,26 @@ type CommitRepo struct {
 // Returns the unmodified JSON received from the API
 func (r CommitRepo) RawJSON() string { return r.JSON.raw }
 func (r *CommitRepo) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CommitStats struct {
+	Additions int64 `json:"additions,required"`
+	Deletions int64 `json:"deletions,required"`
+	Total     int64 `json:"total,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Additions   respjson.Field
+		Deletions   respjson.Field
+		Total       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CommitStats) RawJSON() string { return r.JSON.raw }
+func (r *CommitStats) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
