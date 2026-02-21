@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.30.0 (2026-02-21)
+
+Full Changelog: [v0.29.0...v0.30.0](https://github.com/stainless-api/stainless-api-go/compare/v0.29.0...v0.30.0)
+
+### Features
+
+* **api:** manual updates ([12cfe3d](https://github.com/stainless-api/stainless-api-go/commit/12cfe3d29c97952230e5dfe764152406e4d90d75))
+* Revert "feat(api): populate integrated_stats ([#16032](https://github.com/stainless-api/stainless-api-go/issues/16032))" ([02d5032](https://github.com/stainless-api/stainless-api-go/commit/02d503266b1e131117869158a2661e309b29695b))
+
+
+### Bug Fixes
+
+* **api:** mark integrated data on all commits with the same generated SHA ([1803be2](https://github.com/stainless-api/stainless-api-go/commit/1803be28ecf61f5adced07ad9505544b3b280d89))
+
 ## 0.29.0 (2026-02-20)
 
 Full Changelog: [v0.28.0...v0.29.0](https://github.com/stainless-api/stainless-api-go/compare/v0.28.0...v0.29.0)
