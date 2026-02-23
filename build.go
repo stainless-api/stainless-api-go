@@ -312,6 +312,8 @@ type BuildTargetCommitUnion struct {
 	// This field is from variant [BuildTargetCommitCompleted].
 	Completed BuildTargetCommitCompletedCompleted `json:"completed"`
 	// This field is from variant [BuildTargetCommitCompleted].
+	CompletedAt time.Time `json:"completed_at"`
+	// This field is from variant [BuildTargetCommitCompleted].
 	Conclusion string `json:"conclusion"`
 	// This field is from variant [BuildTargetCommitCompleted].
 	MergeConflictPr BuildTargetCommitCompletedMergeConflictPr `json:"merge_conflict_pr"`
@@ -319,6 +321,7 @@ type BuildTargetCommitUnion struct {
 		Status          respjson.Field
 		Commit          respjson.Field
 		Completed       respjson.Field
+		CompletedAt     respjson.Field
 		Conclusion      respjson.Field
 		MergeConflictPr respjson.Field
 		raw             string
@@ -438,7 +441,8 @@ func (r *BuildTargetCommitInProgress) UnmarshalJSON(data []byte) error {
 type BuildTargetCommitCompleted struct {
 	Commit shared.Commit `json:"commit,required"`
 	// deprecated
-	Completed BuildTargetCommitCompletedCompleted `json:"completed,required"`
+	Completed   BuildTargetCommitCompletedCompleted `json:"completed,required"`
+	CompletedAt time.Time                           `json:"completed_at,required" format:"date-time"`
 	// Any of "error", "warning", "note", "success", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
 	// "timed_out", "noop", "version_bump".
@@ -449,6 +453,7 @@ type BuildTargetCommitCompleted struct {
 	JSON struct {
 		Commit          respjson.Field
 		Completed       respjson.Field
+		CompletedAt     respjson.Field
 		Conclusion      respjson.Field
 		MergeConflictPr respjson.Field
 		Status          respjson.Field
@@ -465,7 +470,8 @@ func (r *BuildTargetCommitCompleted) UnmarshalJSON(data []byte) error {
 
 // deprecated
 type BuildTargetCommitCompletedCompleted struct {
-	Commit shared.Commit `json:"commit,required"`
+	Commit      shared.Commit `json:"commit,required"`
+	CompletedAt time.Time     `json:"completed_at,required" format:"date-time"`
 	// Any of "error", "warning", "note", "success", "merge_conflict",
 	// "upstream_merge_conflict", "fatal", "payment_required", "cancelled",
 	// "timed_out", "noop", "version_bump".
@@ -474,6 +480,7 @@ type BuildTargetCommitCompletedCompleted struct {
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Commit          respjson.Field
+		CompletedAt     respjson.Field
 		Conclusion      respjson.Field
 		MergeConflictPr respjson.Field
 		ExtraFields     map[string]respjson.Field
