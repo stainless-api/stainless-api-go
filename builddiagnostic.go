@@ -75,16 +75,16 @@ func (r *BuildDiagnosticService) ListAutoPaging(ctx context.Context, buildID str
 
 type BuildDiagnostic struct {
 	// The kind of diagnostic.
-	Code string `json:"code,required"`
+	Code string `json:"code" api:"required"`
 	// Whether the diagnostic is ignored in the Stainless config.
-	Ignored bool `json:"ignored,required"`
+	Ignored bool `json:"ignored" api:"required"`
 	// The severity of the diagnostic.
 	//
 	// Any of "fatal", "error", "warning", "note".
-	Level BuildDiagnosticLevel `json:"level,required"`
+	Level BuildDiagnosticLevel `json:"level" api:"required"`
 	// A description of the diagnostic.
-	Message string                   `json:"message,required"`
-	More    BuildDiagnosticMoreUnion `json:"more,required"`
+	Message string                   `json:"message" api:"required"`
+	More    BuildDiagnosticMoreUnion `json:"more" api:"required"`
 	// A JSON pointer to a relevant field in the Stainless config.
 	ConfigRef string `json:"config_ref"`
 	// A JSON pointer to a relevant field in the OpenAPI spec.
@@ -186,8 +186,8 @@ func (r *BuildDiagnosticMoreUnion) UnmarshalJSON(data []byte) error {
 }
 
 type BuildDiagnosticMoreMarkdown struct {
-	Markdown string            `json:"markdown,required"`
-	Type     constant.Markdown `json:"type,required"`
+	Markdown string            `json:"markdown" api:"required"`
+	Type     constant.Markdown `json:"type" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Markdown    respjson.Field
@@ -204,8 +204,8 @@ func (r *BuildDiagnosticMoreMarkdown) UnmarshalJSON(data []byte) error {
 }
 
 type BuildDiagnosticMoreRaw struct {
-	Raw  string       `json:"raw,required"`
-	Type constant.Raw `json:"type,required"`
+	Raw  string       `json:"raw" api:"required"`
+	Type constant.Raw `json:"type" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Raw         respjson.Field
