@@ -15,10 +15,10 @@ type paramUnion = param.APIUnion
 type paramObj = param.APIObject
 
 type Commit struct {
-	Repo    CommitRepo  `json:"repo,required"`
-	Sha     string      `json:"sha,required"`
-	Stats   CommitStats `json:"stats,required"`
-	TreeOid string      `json:"tree_oid,required"`
+	Repo    CommitRepo  `json:"repo" api:"required"`
+	Sha     string      `json:"sha" api:"required"`
+	Stats   CommitStats `json:"stats" api:"required"`
+	TreeOid string      `json:"tree_oid" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Repo        respjson.Field
@@ -37,9 +37,9 @@ func (r *Commit) UnmarshalJSON(data []byte) error {
 }
 
 type CommitRepo struct {
-	Branch string `json:"branch,required"`
-	Name   string `json:"name,required"`
-	Owner  string `json:"owner,required"`
+	Branch string `json:"branch" api:"required"`
+	Name   string `json:"name" api:"required"`
+	Owner  string `json:"owner" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch      respjson.Field
@@ -57,9 +57,9 @@ func (r *CommitRepo) UnmarshalJSON(data []byte) error {
 }
 
 type CommitStats struct {
-	Additions int64 `json:"additions,required"`
-	Deletions int64 `json:"deletions,required"`
-	Total     int64 `json:"total,required"`
+	Additions int64 `json:"additions" api:"required"`
+	Deletions int64 `json:"deletions" api:"required"`
+	Total     int64 `json:"total" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Additions   respjson.Field
@@ -116,7 +116,7 @@ func (u *FileInputUnionParam) asAny() any {
 // The property Content is required.
 type FileInputContentParam struct {
 	// File content
-	Content string `json:"content,required"`
+	Content string `json:"content" api:"required"`
 	paramObj
 }
 
@@ -131,7 +131,7 @@ func (r *FileInputContentParam) UnmarshalJSON(data []byte) error {
 // The property URL is required.
 type FileInputURLParam struct {
 	// URL to fetch file content from
-	URL string `json:"url,required"`
+	URL string `json:"url" api:"required"`
 	paramObj
 }
 

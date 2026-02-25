@@ -187,15 +187,15 @@ func (r *ProjectBranchService) Reset(ctx context.Context, branch string, params 
 // branches in the staging repos.
 type ProjectBranch struct {
 	// Branch name
-	Branch string `json:"branch,required"`
+	Branch string `json:"branch" api:"required"`
 	// A Git commit that points to the latest set of config files on a given branch.
-	ConfigCommit ProjectBranchConfigCommit `json:"config_commit,required"`
-	LatestBuild  Build                     `json:"latest_build,required"`
+	ConfigCommit ProjectBranchConfigCommit `json:"config_commit" api:"required"`
+	LatestBuild  Build                     `json:"latest_build" api:"required"`
 	// Any of "project_branch".
-	Object ProjectBranchObject `json:"object,required"`
-	Org    string              `json:"org,required"`
+	Object ProjectBranchObject `json:"object" api:"required"`
+	Org    string              `json:"org" api:"required"`
 	// Project name
-	Project string `json:"project,required"`
+	Project string `json:"project" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch       respjson.Field
@@ -217,10 +217,10 @@ func (r *ProjectBranch) UnmarshalJSON(data []byte) error {
 
 // A Git commit that points to the latest set of config files on a given branch.
 type ProjectBranchConfigCommit struct {
-	Repo    ProjectBranchConfigCommitRepo  `json:"repo,required"`
-	Sha     string                         `json:"sha,required"`
-	Stats   ProjectBranchConfigCommitStats `json:"stats,required"`
-	TreeOid string                         `json:"tree_oid,required"`
+	Repo    ProjectBranchConfigCommitRepo  `json:"repo" api:"required"`
+	Sha     string                         `json:"sha" api:"required"`
+	Stats   ProjectBranchConfigCommitStats `json:"stats" api:"required"`
+	TreeOid string                         `json:"tree_oid" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Repo        respjson.Field
@@ -239,9 +239,9 @@ func (r *ProjectBranchConfigCommit) UnmarshalJSON(data []byte) error {
 }
 
 type ProjectBranchConfigCommitRepo struct {
-	Branch string `json:"branch,required"`
-	Name   string `json:"name,required"`
-	Owner  string `json:"owner,required"`
+	Branch string `json:"branch" api:"required"`
+	Name   string `json:"name" api:"required"`
+	Owner  string `json:"owner" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch      respjson.Field
@@ -259,9 +259,9 @@ func (r *ProjectBranchConfigCommitRepo) UnmarshalJSON(data []byte) error {
 }
 
 type ProjectBranchConfigCommitStats struct {
-	Additions int64 `json:"additions,required"`
-	Deletions int64 `json:"deletions,required"`
-	Total     int64 `json:"total,required"`
+	Additions int64 `json:"additions" api:"required"`
+	Deletions int64 `json:"deletions" api:"required"`
+	Total     int64 `json:"total" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Additions   respjson.Field
@@ -290,15 +290,15 @@ const (
 // branches in the staging repos.
 type ProjectBranchListResponse struct {
 	// Branch name
-	Branch string `json:"branch,required"`
+	Branch string `json:"branch" api:"required"`
 	// A Git commit that points to the latest set of config files on a given branch.
-	ConfigCommit  ProjectBranchListResponseConfigCommit `json:"config_commit,required"`
-	LatestBuildID string                                `json:"latest_build_id,required"`
+	ConfigCommit  ProjectBranchListResponseConfigCommit `json:"config_commit" api:"required"`
+	LatestBuildID string                                `json:"latest_build_id" api:"required"`
 	// Any of "project_branch".
-	Object ProjectBranchListResponseObject `json:"object,required"`
-	Org    string                          `json:"org,required"`
+	Object ProjectBranchListResponseObject `json:"object" api:"required"`
+	Org    string                          `json:"org" api:"required"`
 	// Project name
-	Project string `json:"project,required"`
+	Project string `json:"project" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch        respjson.Field
@@ -320,10 +320,10 @@ func (r *ProjectBranchListResponse) UnmarshalJSON(data []byte) error {
 
 // A Git commit that points to the latest set of config files on a given branch.
 type ProjectBranchListResponseConfigCommit struct {
-	Repo    ProjectBranchListResponseConfigCommitRepo  `json:"repo,required"`
-	Sha     string                                     `json:"sha,required"`
-	Stats   ProjectBranchListResponseConfigCommitStats `json:"stats,required"`
-	TreeOid string                                     `json:"tree_oid,required"`
+	Repo    ProjectBranchListResponseConfigCommitRepo  `json:"repo" api:"required"`
+	Sha     string                                     `json:"sha" api:"required"`
+	Stats   ProjectBranchListResponseConfigCommitStats `json:"stats" api:"required"`
+	TreeOid string                                     `json:"tree_oid" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Repo        respjson.Field
@@ -342,9 +342,9 @@ func (r *ProjectBranchListResponseConfigCommit) UnmarshalJSON(data []byte) error
 }
 
 type ProjectBranchListResponseConfigCommitRepo struct {
-	Branch string `json:"branch,required"`
-	Name   string `json:"name,required"`
-	Owner  string `json:"owner,required"`
+	Branch string `json:"branch" api:"required"`
+	Name   string `json:"name" api:"required"`
+	Owner  string `json:"owner" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch      respjson.Field
@@ -362,9 +362,9 @@ func (r *ProjectBranchListResponseConfigCommitRepo) UnmarshalJSON(data []byte) e
 }
 
 type ProjectBranchListResponseConfigCommitStats struct {
-	Additions int64 `json:"additions,required"`
-	Deletions int64 `json:"deletions,required"`
-	Total     int64 `json:"total,required"`
+	Additions int64 `json:"additions" api:"required"`
+	Deletions int64 `json:"deletions" api:"required"`
+	Total     int64 `json:"total" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Additions   respjson.Field
@@ -391,11 +391,11 @@ type ProjectBranchDeleteResponse = any
 
 type ProjectBranchNewParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	// Branch name
-	Branch string `json:"branch,required"`
+	Branch string `json:"branch" api:"required"`
 	// Branch or commit SHA to branch from
-	BranchFrom string `json:"branch_from,required"`
+	BranchFrom string `json:"branch_from" api:"required"`
 	// Whether to throw an error if the branch already exists. Defaults to false.
 	Force param.Opt[bool] `json:"force,omitzero"`
 	paramObj
@@ -411,13 +411,13 @@ func (r *ProjectBranchNewParams) UnmarshalJSON(data []byte) error {
 
 type ProjectBranchGetParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	paramObj
 }
 
 type ProjectBranchListParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	// Pagination cursor from a previous response
 	Cursor param.Opt[string] `query:"cursor,omitzero" json:"-"`
 	// Maximum number of items to return, defaults to 10 (maximum: 100).
@@ -436,13 +436,13 @@ func (r ProjectBranchListParams) URLQuery() (v url.Values, err error) {
 
 type ProjectBranchDeleteParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	paramObj
 }
 
 type ProjectBranchRebaseParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	// The branch or commit SHA to rebase onto. Defaults to "main".
 	Base param.Opt[string] `query:"base,omitzero" json:"-"`
 	paramObj
@@ -459,7 +459,7 @@ func (r ProjectBranchRebaseParams) URLQuery() (v url.Values, err error) {
 
 type ProjectBranchResetParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	// The commit SHA to reset the main branch to. Required if resetting the main
 	// branch; disallowed otherwise.
 	TargetConfigSha param.Opt[string] `query:"target_config_sha,omitzero" json:"-"`

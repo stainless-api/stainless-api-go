@@ -129,15 +129,15 @@ func (r *BuildTargetOutputGetResponseUnion) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetOutputGetResponseURL struct {
-	Output constant.URL `json:"output,required"`
+	Output constant.URL `json:"output" api:"required"`
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
-	Target shared.Target `json:"target,required"`
+	Target shared.Target `json:"target" api:"required"`
 	// Any of "source", "dist", "wheel", "openapi-with-transforms",
 	// "openapi-with-code-samples", "openapi-sdk-spec".
-	Type BuildTargetOutputGetResponseURLType `json:"type,required"`
+	Type BuildTargetOutputGetResponseURLType `json:"type" api:"required"`
 	// URL for direct download
-	URL string `json:"url,required"`
+	URL string `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Output      respjson.Field
@@ -168,18 +168,18 @@ const (
 
 type BuildTargetOutputGetResponseGit struct {
 	// Temporary GitHub access token
-	Token  string       `json:"token,required"`
-	Output constant.Git `json:"output,required"`
+	Token  string       `json:"token" api:"required"`
+	Output constant.Git `json:"output" api:"required"`
 	// Git reference (commit SHA, branch, or tag)
-	Ref string `json:"ref,required"`
+	Ref string `json:"ref" api:"required"`
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
-	Target shared.Target `json:"target,required"`
+	Target shared.Target `json:"target" api:"required"`
 	// Any of "source", "dist", "wheel", "openapi-with-transforms",
 	// "openapi-with-code-samples", "openapi-sdk-spec".
-	Type BuildTargetOutputGetResponseGitType `json:"type,required"`
+	Type BuildTargetOutputGetResponseGitType `json:"type" api:"required"`
 	// URL to git remote
-	URL string `json:"url,required"`
+	URL string `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Token       respjson.Field
@@ -223,15 +223,15 @@ const (
 
 type BuildTargetOutputGetParams struct {
 	// Build ID
-	BuildID string `query:"build_id,required" json:"-"`
+	BuildID string `query:"build_id" api:"required" json:"-"`
 	// SDK language target name
 	//
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
-	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero,required" json:"-"`
+	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero" api:"required" json:"-"`
 	// Any of "source", "dist", "wheel", "openapi-with-transforms",
 	// "openapi-with-code-samples", "openapi-sdk-spec".
-	Type BuildTargetOutputGetParamsType `query:"type,omitzero,required" json:"-"`
+	Type BuildTargetOutputGetParamsType `query:"type,omitzero" api:"required" json:"-"`
 	// Output format: url (download URL) or git (temporary access token).
 	//
 	// Any of "url", "git".
