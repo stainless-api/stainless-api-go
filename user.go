@@ -41,12 +41,12 @@ func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (re
 }
 
 type UserGetResponse struct {
-	ID     string                `json:"id,required"`
-	Email  string                `json:"email,required"`
-	GitHub UserGetResponseGitHub `json:"github,required"`
-	Name   string                `json:"name,required"`
+	ID     string                `json:"id" api:"required"`
+	Email  string                `json:"email" api:"required"`
+	GitHub UserGetResponseGitHub `json:"github" api:"required"`
+	Name   string                `json:"name" api:"required"`
 	// Any of "user".
-	Object UserGetResponseObject `json:"object,required"`
+	Object UserGetResponseObject `json:"object" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID          respjson.Field
@@ -66,7 +66,7 @@ func (r *UserGetResponse) UnmarshalJSON(data []byte) error {
 }
 
 type UserGetResponseGitHub struct {
-	Username string `json:"username,required"`
+	Username string `json:"username" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Username    respjson.Field

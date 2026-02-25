@@ -75,7 +75,7 @@ type ProjectConfigGetResponse map[string]ProjectConfigGetResponseItem
 
 type ProjectConfigGetResponseItem struct {
 	// The file content
-	Content string `json:"content,required"`
+	Content string `json:"content" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Content     respjson.Field
@@ -94,7 +94,7 @@ type ProjectConfigGuessResponse map[string]ProjectConfigGuessResponseItem
 
 type ProjectConfigGuessResponseItem struct {
 	// The file content
-	Content string `json:"content,required"`
+	Content string `json:"content" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Content     respjson.Field
@@ -111,7 +111,7 @@ func (r *ProjectConfigGuessResponseItem) UnmarshalJSON(data []byte) error {
 
 type ProjectConfigGetParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	// Branch name, defaults to "main".
 	Branch  param.Opt[string] `query:"branch,omitzero" json:"-"`
 	Include param.Opt[string] `query:"include,omitzero" json:"-"`
@@ -128,9 +128,9 @@ func (r ProjectConfigGetParams) URLQuery() (v url.Values, err error) {
 
 type ProjectConfigGuessParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	// OpenAPI spec
-	Spec string `json:"spec,required"`
+	Spec string `json:"spec" api:"required"`
 	// Branch name
 	Branch param.Opt[string] `json:"branch,omitzero"`
 	paramObj

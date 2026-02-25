@@ -127,13 +127,13 @@ func (r *ProjectService) GenerateCommitMessage(ctx context.Context, params Proje
 
 // A project is a collection of SDKs generated from the same set of config files.
 type Project struct {
-	ConfigRepo  string `json:"config_repo,required"`
-	DisplayName string `json:"display_name,required"`
+	ConfigRepo  string `json:"config_repo" api:"required"`
+	DisplayName string `json:"display_name" api:"required"`
 	// Any of "project".
-	Object  ProjectObject   `json:"object,required"`
-	Org     string          `json:"org,required"`
-	Slug    string          `json:"slug,required"`
-	Targets []shared.Target `json:"targets,required"`
+	Object  ProjectObject   `json:"object" api:"required"`
+	Org     string          `json:"org" api:"required"`
+	Slug    string          `json:"slug" api:"required"`
+	Targets []shared.Target `json:"targets" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ConfigRepo  respjson.Field
@@ -160,7 +160,7 @@ const (
 )
 
 type ProjectGenerateCommitMessageResponse struct {
-	AICommitMessage string `json:"ai_commit_message,required"`
+	AICommitMessage string `json:"ai_commit_message" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AICommitMessage respjson.Field
@@ -177,15 +177,15 @@ func (r *ProjectGenerateCommitMessageResponse) UnmarshalJSON(data []byte) error 
 
 type ProjectNewParams struct {
 	// Human-readable project name
-	DisplayName string `json:"display_name,required"`
+	DisplayName string `json:"display_name" api:"required"`
 	// Organization name
-	Org string `json:"org,required"`
+	Org string `json:"org" api:"required"`
 	// File contents to commit
-	Revision map[string]shared.FileInputUnionParam `json:"revision,omitzero,required"`
+	Revision map[string]shared.FileInputUnionParam `json:"revision,omitzero" api:"required"`
 	// Project name/slug
-	Slug string `json:"slug,required"`
+	Slug string `json:"slug" api:"required"`
 	// Targets to generate for
-	Targets []shared.Target `json:"targets,omitzero,required"`
+	Targets []shared.Target `json:"targets,omitzero" api:"required"`
 	paramObj
 }
 
@@ -199,13 +199,13 @@ func (r *ProjectNewParams) UnmarshalJSON(data []byte) error {
 
 type ProjectGetParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	paramObj
 }
 
 type ProjectUpdateParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project     param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project     param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	DisplayName param.Opt[string] `json:"display_name,omitzero"`
 	paramObj
 }
@@ -237,16 +237,16 @@ func (r ProjectListParams) URLQuery() (v url.Values, err error) {
 
 type ProjectGenerateCommitMessageParams struct {
 	// Use [option.WithProject] on the client to set a global default for this field.
-	Project param.Opt[string] `path:"project,omitzero,required" json:"-"`
+	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	// Language target
 	//
 	// Any of "python", "node", "typescript", "java", "kotlin", "go", "ruby",
 	// "terraform", "cli", "csharp", "php", "openapi", "sql".
-	Target ProjectGenerateCommitMessageParamsTarget `query:"target,omitzero,required" json:"-"`
+	Target ProjectGenerateCommitMessageParamsTarget `query:"target,omitzero" api:"required" json:"-"`
 	// Base ref for comparison
-	BaseRef string `json:"base_ref,required"`
+	BaseRef string `json:"base_ref" api:"required"`
 	// Head ref for comparison
-	HeadRef string `json:"head_ref,required"`
+	HeadRef string `json:"head_ref" api:"required"`
 	paramObj
 }
 
