@@ -591,17 +591,16 @@ const (
 type CheckStepUnion struct {
 	// Any of "not_started", "queued", "in_progress", "completed".
 	Status string `json:"status"`
+	URL    string `json:"url"`
 	// This field is from variant [CheckStepCompleted].
 	Completed CheckStepCompletedCompleted `json:"completed"`
 	// This field is from variant [CheckStepCompleted].
 	Conclusion string `json:"conclusion"`
-	// This field is from variant [CheckStepCompleted].
-	URL  string `json:"url"`
-	JSON struct {
+	JSON       struct {
 		Status     respjson.Field
+		URL        respjson.Field
 		Completed  respjson.Field
 		Conclusion respjson.Field
-		URL        respjson.Field
 		raw        string
 	} `json:"-"`
 }
@@ -686,9 +685,11 @@ func (r *CheckStepNotStarted) UnmarshalJSON(data []byte) error {
 
 type CheckStepQueued struct {
 	Status constant.Queued `json:"status" api:"required"`
+	URL    string          `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -702,9 +703,11 @@ func (r *CheckStepQueued) UnmarshalJSON(data []byte) error {
 
 type CheckStepInProgress struct {
 	Status constant.InProgress `json:"status" api:"required"`
+	URL    string              `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
+		URL         respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
