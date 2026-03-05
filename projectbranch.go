@@ -240,11 +240,13 @@ func (r *ProjectBranchConfigCommit) UnmarshalJSON(data []byte) error {
 
 type ProjectBranchConfigCommitRepo struct {
 	Branch string `json:"branch" api:"required"`
+	Host   string `json:"host" api:"required"`
 	Name   string `json:"name" api:"required"`
 	Owner  string `json:"owner" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch      respjson.Field
+		Host        respjson.Field
 		Name        respjson.Field
 		Owner       respjson.Field
 		ExtraFields map[string]respjson.Field
@@ -343,11 +345,13 @@ func (r *ProjectBranchListResponseConfigCommit) UnmarshalJSON(data []byte) error
 
 type ProjectBranchListResponseConfigCommitRepo struct {
 	Branch string `json:"branch" api:"required"`
+	Host   string `json:"host" api:"required"`
 	Name   string `json:"name" api:"required"`
 	Owner  string `json:"owner" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch      respjson.Field
+		Host        respjson.Field
 		Name        respjson.Field
 		Owner       respjson.Field
 		ExtraFields map[string]respjson.Field
