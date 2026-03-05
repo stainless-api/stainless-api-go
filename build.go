@@ -513,10 +513,12 @@ func (r *BuildTargetCommitCompletedCompletedMergeConflictPr) UnmarshalJSON(data 
 }
 
 type BuildTargetCommitCompletedCompletedMergeConflictPrRepo struct {
+	Host  string `json:"host" api:"required"`
 	Name  string `json:"name" api:"required"`
 	Owner string `json:"owner" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
+		Host        respjson.Field
 		Name        respjson.Field
 		Owner       respjson.Field
 		ExtraFields map[string]respjson.Field
@@ -549,10 +551,12 @@ func (r *BuildTargetCommitCompletedMergeConflictPr) UnmarshalJSON(data []byte) e
 }
 
 type BuildTargetCommitCompletedMergeConflictPrRepo struct {
+	Host  string `json:"host" api:"required"`
 	Name  string `json:"name" api:"required"`
 	Owner string `json:"owner" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
+		Host        respjson.Field
 		Name        respjson.Field
 		Owner       respjson.Field
 		ExtraFields map[string]respjson.Field
