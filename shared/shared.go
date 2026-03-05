@@ -38,11 +38,13 @@ func (r *Commit) UnmarshalJSON(data []byte) error {
 
 type CommitRepo struct {
 	Branch string `json:"branch" api:"required"`
+	Host   string `json:"host" api:"required"`
 	Name   string `json:"name" api:"required"`
 	Owner  string `json:"owner" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Branch      respjson.Field
+		Host        respjson.Field
 		Name        respjson.Field
 		Owner       respjson.Field
 		ExtraFields map[string]respjson.Field
