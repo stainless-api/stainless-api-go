@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.30.0 (2026-03-11)
+
+Full Changelog: [v0.29.0...v0.30.0](https://github.com/stainless-api/stainless-api-go/compare/v0.29.0...v0.30.0)
+
+### Features
+
+* add completed_at to build api object ([00cc61b](https://github.com/stainless-api/stainless-api-go/commit/00cc61b40e405c4f8a204c90cf666bd249db957f))
+* **api:** add a way to fetch specific files via /v0/build_target_outputs ([83c5c21](https://github.com/stainless-api/stainless-api-go/commit/83c5c219006a6562811a4f78202e2a5e882d7d0f))
+* **api:** api update ([06f9c7c](https://github.com/stainless-api/stainless-api-go/commit/06f9c7c8e507b5ce63d5bfd60acbe5fe7c6e5172))
+* **api:** manual updates ([12cfe3d](https://github.com/stainless-api/stainless-api-go/commit/12cfe3d29c97952230e5dfe764152406e4d90d75))
+* build api: include url in queued/in_progress checks ([5f33f09](https://github.com/stainless-api/stainless-api-go/commit/5f33f09759a123b3a5c2d4b6af57731d31fb10e9))
+* Revert "feat(api): populate integrated_stats ([#16032](https://github.com/stainless-api/stainless-api-go/issues/16032))" ([02d5032](https://github.com/stainless-api/stainless-api-go/commit/02d503266b1e131117869158a2661e309b29695b))
+
+
+### Bug Fixes
+
+* **api:** mark integrated data on all commits with the same generated SHA ([1803be2](https://github.com/stainless-api/stainless-api-go/commit/1803be28ecf61f5adced07ad9505544b3b280d89))
+
+
+### Chores
+
+* **internal:** codegen related update ([edbdeef](https://github.com/stainless-api/stainless-api-go/commit/edbdeef9dd1da8fb89bbcfb1faae4c6ce6d20795))
+* **internal:** codegen related update ([3c02993](https://github.com/stainless-api/stainless-api-go/commit/3c02993bf269f93bec7c946f1ac95211dca724d6))
+* **internal:** minor cleanup ([c34a435](https://github.com/stainless-api/stainless-api-go/commit/c34a435c29aca30bdf23fb3058438734f1326e47))
+* **internal:** move custom custom `json` tags to `api` ([88f15c3](https://github.com/stainless-api/stainless-api-go/commit/88f15c31af8a08b7526d8089ad0e4b99b6c10c1c))
+* **internal:** use explicit returns ([d5dc75e](https://github.com/stainless-api/stainless-api-go/commit/d5dc75ea77df65a1a8448ff8f5508b9e105ad13e))
+* **internal:** use explicit returns in more places ([6c4a923](https://github.com/stainless-api/stainless-api-go/commit/6c4a9235f27049b02fb4ed4206da94ab6866ab49))
+
 ## 0.29.0 (2026-02-20)
 
 Full Changelog: [v0.28.0...v0.29.0](https://github.com/stainless-api/stainless-api-go/compare/v0.28.0...v0.29.0)
