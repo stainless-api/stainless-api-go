@@ -30,6 +30,7 @@ func TestBuildTargetOutputGetWithOptionalParams(t *testing.T) {
 		Target:  stainless.BuildTargetOutputGetParamsTargetNode,
 		Type:    stainless.BuildTargetOutputGetParamsTypeSource,
 		Output:  stainless.BuildTargetOutputGetParamsOutputURL,
+		Path:    stainless.String("path"),
 	})
 	if err != nil {
 		var apierr *stainless.Error
