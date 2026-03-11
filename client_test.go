@@ -38,7 +38,7 @@ func TestUserAgentHeader(t *testing.T) {
 			},
 		}),
 	)
-	client.Builds.New(context.Background(), stainless.BuildNewParams{
+	_, _ = client.Builds.New(context.Background(), stainless.BuildNewParams{
 		Project: stainless.String("stainless"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
 			OfString: stainless.String("main"),
