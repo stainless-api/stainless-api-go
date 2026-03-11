@@ -13,6 +13,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/internal/apiquery"
 	"github.com/stainless-api/stainless-api-go/internal/requestconfig"
 	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
 	"github.com/stainless-api/stainless-api-go/shared"
 	"github.com/stainless-api/stainless-api-go/shared/constant"
@@ -68,6 +69,8 @@ type BuildTargetOutputGetResponseUnion struct {
 	Target shared.Target `json:"target"`
 	Type   string        `json:"type"`
 	URL    string        `json:"url"`
+	// This field is from variant [BuildTargetOutputGetResponseURL].
+	Path string `json:"path"`
 	// This field is from variant [BuildTargetOutputGetResponseGit].
 	Token string `json:"token"`
 	// This field is from variant [BuildTargetOutputGetResponseGit].
@@ -77,6 +80,7 @@ type BuildTargetOutputGetResponseUnion struct {
 		Target respjson.Field
 		Type   respjson.Field
 		URL    respjson.Field
+		Path   respjson.Field
 		Token  respjson.Field
 		Ref    respjson.Field
 		raw    string
@@ -134,16 +138,20 @@ type BuildTargetOutputGetResponseURL struct {
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target shared.Target `json:"target" api:"required"`
 	// Any of "source", "dist", "wheel", "openapi-with-transforms",
-	// "openapi-with-code-samples", "openapi-sdk-spec".
+	// "openapi-with-code-samples", "openapi-sdk-spec", "file".
 	Type BuildTargetOutputGetResponseURLType `json:"type" api:"required"`
 	// URL for direct download
 	URL string `json:"url" api:"required"`
+	// The path of the file, which is only present when using with the type "file"
+	// option.
+	Path string `json:"path"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Output      respjson.Field
 		Target      respjson.Field
 		Type        respjson.Field
 		URL         respjson.Field
+		Path        respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -164,6 +172,7 @@ const (
 	BuildTargetOutputGetResponseURLTypeOpenAPIWithTransforms  BuildTargetOutputGetResponseURLType = "openapi-with-transforms"
 	BuildTargetOutputGetResponseURLTypeOpenAPIWithCodeSamples BuildTargetOutputGetResponseURLType = "openapi-with-code-samples"
 	BuildTargetOutputGetResponseURLTypeOpenAPISDKSpec         BuildTargetOutputGetResponseURLType = "openapi-sdk-spec"
+	BuildTargetOutputGetResponseURLTypeFile                   BuildTargetOutputGetResponseURLType = "file"
 )
 
 type BuildTargetOutputGetResponseGit struct {
@@ -176,7 +185,7 @@ type BuildTargetOutputGetResponseGit struct {
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target shared.Target `json:"target" api:"required"`
 	// Any of "source", "dist", "wheel", "openapi-with-transforms",
-	// "openapi-with-code-samples", "openapi-sdk-spec".
+	// "openapi-with-code-samples", "openapi-sdk-spec", "file".
 	Type BuildTargetOutputGetResponseGitType `json:"type" api:"required"`
 	// URL to git remote
 	URL string `json:"url" api:"required"`
@@ -208,6 +217,7 @@ const (
 	BuildTargetOutputGetResponseGitTypeOpenAPIWithTransforms  BuildTargetOutputGetResponseGitType = "openapi-with-transforms"
 	BuildTargetOutputGetResponseGitTypeOpenAPIWithCodeSamples BuildTargetOutputGetResponseGitType = "openapi-with-code-samples"
 	BuildTargetOutputGetResponseGitTypeOpenAPISDKSpec         BuildTargetOutputGetResponseGitType = "openapi-sdk-spec"
+	BuildTargetOutputGetResponseGitTypeFile                   BuildTargetOutputGetResponseGitType = "file"
 )
 
 type BuildTargetOutputGetResponseType string
@@ -219,6 +229,7 @@ const (
 	BuildTargetOutputGetResponseTypeOpenAPIWithTransforms  BuildTargetOutputGetResponseType = "openapi-with-transforms"
 	BuildTargetOutputGetResponseTypeOpenAPIWithCodeSamples BuildTargetOutputGetResponseType = "openapi-with-code-samples"
 	BuildTargetOutputGetResponseTypeOpenAPISDKSpec         BuildTargetOutputGetResponseType = "openapi-sdk-spec"
+	BuildTargetOutputGetResponseTypeFile                   BuildTargetOutputGetResponseType = "file"
 )
 
 type BuildTargetOutputGetParams struct {
@@ -230,8 +241,10 @@ type BuildTargetOutputGetParams struct {
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target BuildTargetOutputGetParamsTarget `query:"target,omitzero" api:"required" json:"-"`
 	// Any of "source", "dist", "wheel", "openapi-with-transforms",
-	// "openapi-with-code-samples", "openapi-sdk-spec".
+	// "openapi-with-code-samples", "openapi-sdk-spec", "file".
 	Type BuildTargetOutputGetParamsType `query:"type,omitzero" api:"required" json:"-"`
+	// The path of the file to get when used with "type": "file".
+	Path param.Opt[string] `query:"path,omitzero" json:"-"`
 	// Output format: url (download URL) or git (temporary access token).
 	//
 	// Any of "url", "git".
@@ -276,6 +289,7 @@ const (
 	BuildTargetOutputGetParamsTypeOpenAPIWithTransforms  BuildTargetOutputGetParamsType = "openapi-with-transforms"
 	BuildTargetOutputGetParamsTypeOpenAPIWithCodeSamples BuildTargetOutputGetParamsType = "openapi-with-code-samples"
 	BuildTargetOutputGetParamsTypeOpenAPISDKSpec         BuildTargetOutputGetParamsType = "openapi-sdk-spec"
+	BuildTargetOutputGetParamsTypeFile                   BuildTargetOutputGetParamsType = "file"
 )
 
 // Output format: url (download URL) or git (temporary access token).
