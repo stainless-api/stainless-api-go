@@ -51,7 +51,7 @@ func (r *BuildTargetOutputService) Get(ctx context.Context, query BuildTargetOut
 	opts = slices.Concat(r.Options, opts)
 	path := "v0/build_target_outputs"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // BuildTargetOutputGetResponseUnion contains all possible properties and values
