@@ -50,7 +50,7 @@ func (r *BuildDiagnosticService) List(ctx context.Context, buildID string, query
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if buildID == "" {
 		err = errors.New("missing required buildId parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/builds/%s/diagnostics", url.PathEscape(buildID))
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)

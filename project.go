@@ -48,7 +48,7 @@ func (r *ProjectService) New(ctx context.Context, body ProjectNewParams, opts ..
 	opts = slices.Concat(r.Options, opts)
 	path := "v0/projects"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Retrieve a project by name.
@@ -56,16 +56,16 @@ func (r *ProjectService) Get(ctx context.Context, query ProjectGetParams, opts .
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&query.Project, precfg.Project)
 	if query.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s", url.PathEscape(query.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Update a project's properties.
@@ -73,16 +73,16 @@ func (r *ProjectService) Update(ctx context.Context, params ProjectUpdateParams,
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
 	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s", url.PathEscape(params.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // List projects in an organization, from oldest to newest.
@@ -113,16 +113,16 @@ func (r *ProjectService) GenerateCommitMessage(ctx context.Context, params Proje
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
 	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s/generate_commit_message", url.PathEscape(params.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // A project is a collection of SDKs generated from the same set of config files.

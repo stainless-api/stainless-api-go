@@ -42,16 +42,16 @@ func (r *ProjectConfigService) Get(ctx context.Context, params ProjectConfigGetP
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
 	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s/configs", url.PathEscape(params.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Generate suggestions for changes to config files based on an OpenAPI spec.
@@ -59,16 +59,16 @@ func (r *ProjectConfigService) Guess(ctx context.Context, params ProjectConfigGu
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
 	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s/configs/guess", url.PathEscape(params.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type ProjectConfigGetResponse map[string]ProjectConfigGetResponseItem

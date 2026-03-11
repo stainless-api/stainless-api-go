@@ -40,11 +40,11 @@ func (r *OrgService) Get(ctx context.Context, org string, opts ...option.Request
 	opts = slices.Concat(r.Options, opts)
 	if org == "" {
 		err = errors.New("missing required org parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/orgs/%s", url.PathEscape(org))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List organizations accessible to the current authentication method.
@@ -52,7 +52,7 @@ func (r *OrgService) List(ctx context.Context, opts ...option.RequestOption) (re
 	opts = slices.Concat(r.Options, opts)
 	path := "v0/orgs"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type Org struct {
