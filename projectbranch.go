@@ -47,16 +47,16 @@ func (r *ProjectBranchService) New(ctx context.Context, params ProjectBranchNewP
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
 	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s/branches", url.PathEscape(params.Project.Value))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Retrieve a project branch by name.
@@ -64,20 +64,20 @@ func (r *ProjectBranchService) Get(ctx context.Context, branch string, query Pro
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&query.Project, precfg.Project)
 	if query.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	if branch == "" {
 		err = errors.New("missing required branch parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s/branches/%s", url.PathEscape(query.Project.Value), url.PathEscape(branch))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Retrieve a project branch by name.
@@ -87,12 +87,12 @@ func (r *ProjectBranchService) List(ctx context.Context, params ProjectBranchLis
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
 	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s/branches", url.PathEscape(params.Project.Value))
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
@@ -117,20 +117,20 @@ func (r *ProjectBranchService) Delete(ctx context.Context, branch string, body P
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&body.Project, precfg.Project)
 	if body.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	if branch == "" {
 		err = errors.New("missing required branch parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s/branches/%s", url.PathEscape(body.Project.Value), url.PathEscape(branch))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Rebase a project branch.
@@ -141,20 +141,20 @@ func (r *ProjectBranchService) Rebase(ctx context.Context, branch string, params
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
 	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	if branch == "" {
 		err = errors.New("missing required branch parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s/branches/%s/rebase", url.PathEscape(params.Project.Value), url.PathEscape(branch))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // Reset a project branch.
@@ -165,20 +165,20 @@ func (r *ProjectBranchService) Reset(ctx context.Context, branch string, params 
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
 	requestconfig.UseDefaultParam(&params.Project, precfg.Project)
 	if params.Project.Value == "" {
 		err = errors.New("missing required project parameter")
-		return
+		return nil, err
 	}
 	if branch == "" {
 		err = errors.New("missing required branch parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/projects/%s/branches/%s/reset", url.PathEscape(params.Project.Value), url.PathEscape(branch))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // A project branch names a line of development for a project. Like a Git branch,
