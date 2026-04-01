@@ -391,7 +391,7 @@ func (r *BuildTargetCommitUnion) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetCommitNotStarted struct {
-	Status constant.NotStarted `json:"status" api:"required"`
+	Status constant.NotStarted `json:"status" default:"not_started"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -407,7 +407,7 @@ func (r *BuildTargetCommitNotStarted) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetCommitQueued struct {
-	Status constant.Queued `json:"status" api:"required"`
+	Status constant.Queued `json:"status" default:"queued"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -423,7 +423,7 @@ func (r *BuildTargetCommitQueued) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetCommitInProgress struct {
-	Status constant.InProgress `json:"status" api:"required"`
+	Status constant.InProgress `json:"status" default:"in_progress"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -448,7 +448,7 @@ type BuildTargetCommitCompleted struct {
 	// "timed_out", "noop", "version_bump".
 	Conclusion      string                                    `json:"conclusion" api:"required"`
 	MergeConflictPr BuildTargetCommitCompletedMergeConflictPr `json:"merge_conflict_pr" api:"required"`
-	Status          constant.Completed                        `json:"status" api:"required"`
+	Status          constant.Completed                        `json:"status" default:"completed"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Commit          respjson.Field
@@ -672,7 +672,7 @@ func (r *CheckStepUnion) UnmarshalJSON(data []byte) error {
 }
 
 type CheckStepNotStarted struct {
-	Status constant.NotStarted `json:"status" api:"required"`
+	Status constant.NotStarted `json:"status" default:"not_started"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -688,7 +688,7 @@ func (r *CheckStepNotStarted) UnmarshalJSON(data []byte) error {
 }
 
 type CheckStepQueued struct {
-	Status constant.Queued `json:"status" api:"required"`
+	Status constant.Queued `json:"status" default:"queued"`
 	URL    string          `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -706,7 +706,7 @@ func (r *CheckStepQueued) UnmarshalJSON(data []byte) error {
 }
 
 type CheckStepInProgress struct {
-	Status constant.InProgress `json:"status" api:"required"`
+	Status constant.InProgress `json:"status" default:"in_progress"`
 	URL    string              `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -729,7 +729,7 @@ type CheckStepCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
 	// "neutral", "timed_out".
 	Conclusion string             `json:"conclusion" api:"required"`
-	Status     constant.Completed `json:"status" api:"required"`
+	Status     constant.Completed `json:"status" default:"completed"`
 	URL        string             `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
