@@ -164,17 +164,16 @@ func (r *Build) UnmarshalJSON(data []byte) error {
 }
 
 // BuildDocumentedSpecUnion contains all possible properties and values from
-// [BuildDocumentedSpecObject], [BuildDocumentedSpecObject].
+// [BuildDocumentedSpecObject], [BuildDocumentedSpecObject2].
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
 type BuildDocumentedSpecUnion struct {
 	// This field is from variant [BuildDocumentedSpecObject].
 	Content string `json:"content"`
-	// This field is from variant [BuildDocumentedSpecObject].
-	Type string `json:"type"`
-	// This field is from variant [BuildDocumentedSpecObject].
+	Type    string `json:"type"`
+	// This field is from variant [BuildDocumentedSpecObject2].
 	Expires time.Time `json:"expires"`
-	// This field is from variant [BuildDocumentedSpecObject].
+	// This field is from variant [BuildDocumentedSpecObject2].
 	URL  string `json:"url"`
 	JSON struct {
 		Content respjson.Field
@@ -190,7 +189,7 @@ func (u BuildDocumentedSpecUnion) AsBuildDocumentedSpecObject() (v BuildDocument
 	return
 }
 
-func (u BuildDocumentedSpecUnion) AsVariant2() (v BuildDocumentedSpecObject) {
+func (u BuildDocumentedSpecUnion) AsBuildDocumentedSpecObject2() (v BuildDocumentedSpecObject2) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
@@ -218,6 +217,27 @@ type BuildDocumentedSpecObject struct {
 // Returns the unmodified JSON received from the API
 func (r BuildDocumentedSpecObject) RawJSON() string { return r.JSON.raw }
 func (r *BuildDocumentedSpecObject) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildDocumentedSpecObject2 struct {
+	Expires time.Time `json:"expires" api:"required" format:"date-time"`
+	// Any of "url".
+	Type string `json:"type" api:"required"`
+	URL  string `json:"url" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Expires     respjson.Field
+		Type        respjson.Field
+		URL         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildDocumentedSpecObject2) RawJSON() string { return r.JSON.raw }
+func (r *BuildDocumentedSpecObject2) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
