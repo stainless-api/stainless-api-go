@@ -26,6 +26,7 @@ type NotStarted string // Always "not_started"
 type Queued string     // Always "queued"
 type Raw string        // Always "raw"
 type URL string        // Always "url"
+type Waiting string    // Always "waiting"
 
 func (c Completed) Default() Completed   { return "completed" }
 func (c Git) Default() Git               { return "git" }
@@ -35,6 +36,7 @@ func (c NotStarted) Default() NotStarted { return "not_started" }
 func (c Queued) Default() Queued         { return "queued" }
 func (c Raw) Default() Raw               { return "raw" }
 func (c URL) Default() URL               { return "url" }
+func (c Waiting) Default() Waiting       { return "waiting" }
 
 func (c Completed) MarshalJSON() ([]byte, error)  { return marshalString(c) }
 func (c Git) MarshalJSON() ([]byte, error)        { return marshalString(c) }
@@ -44,6 +46,7 @@ func (c NotStarted) MarshalJSON() ([]byte, error) { return marshalString(c) }
 func (c Queued) MarshalJSON() ([]byte, error)     { return marshalString(c) }
 func (c Raw) MarshalJSON() ([]byte, error)        { return marshalString(c) }
 func (c URL) MarshalJSON() ([]byte, error)        { return marshalString(c) }
+func (c Waiting) MarshalJSON() ([]byte, error)    { return marshalString(c) }
 
 type constant[T any] interface {
 	Constant[T]
