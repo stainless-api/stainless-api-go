@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.31.0 (2026-04-11)
+
+Full Changelog: [v0.30.0...v0.31.0](https://github.com/stainless-api/stainless-api-go/compare/v0.30.0...v0.31.0)
+
+### Features
+
+* **internal:** support comma format in multipart form encoding ([fe14b5a](https://github.com/stainless-api/stainless-api-go/commit/fe14b5a12cc6921f134e3cd58f1ddbadbef687d8))
+
+
+### Bug Fixes
+
+* fix for union type names ([199c263](https://github.com/stainless-api/stainless-api-go/commit/199c263e6b0ad82369d0a957ea3b06856f9cd8b3))
+* prevent duplicate ? in query params ([75d6c76](https://github.com/stainless-api/stainless-api-go/commit/75d6c762a9ff3a61bd85ca3c6849beba49071487))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([9ff15a2](https://github.com/stainless-api/stainless-api-go/commit/9ff15a28b3fa87a039afbc0530fd1596a2c3628b))
+* **ci:** support opting out of skipping builds on metadata-only commits ([fc8ba99](https://github.com/stainless-api/stainless-api-go/commit/fc8ba99ac8e0b5911fb116128c95f3b834b6e0eb))
+* **client:** fix multipart serialisation of Default() fields ([3440645](https://github.com/stainless-api/stainless-api-go/commit/3440645718d76c103cc8bbc0581f6b6f0701a5da))
+* configure new SDK language ([e3cdd77](https://github.com/stainless-api/stainless-api-go/commit/e3cdd774fec0ca4730b49a29b9449e6486689538))
+* **internal:** support default value struct tag ([51c93c2](https://github.com/stainless-api/stainless-api-go/commit/51c93c2ae106ad64285dea87f94f6240f7f56e8a))
+* **internal:** tweak CI branches ([be313f6](https://github.com/stainless-api/stainless-api-go/commit/be313f62c0c1ac7bf5351180152ba28b97bead3a))
+* **internal:** update gitignore ([7b22047](https://github.com/stainless-api/stainless-api-go/commit/7b2204784376dd5ce909c461dbc7a56e35671415))
+* remove unnecessary error check for url parsing ([459c159](https://github.com/stainless-api/stainless-api-go/commit/459c159f2481411fb1295c14570d02a44eeacc66))
+* **tests:** bump steady to v0.19.4 ([d07d7c1](https://github.com/stainless-api/stainless-api-go/commit/d07d7c193749d6405dbb22b4e8aea5993efd07d0))
+* **tests:** bump steady to v0.19.5 ([1abf6bb](https://github.com/stainless-api/stainless-api-go/commit/1abf6bb3dd5a72b18337c2d7ad557c9dbc5b6240))
+* **tests:** bump steady to v0.19.6 ([c3b044e](https://github.com/stainless-api/stainless-api-go/commit/c3b044efa0112dee1aaddb23bae87622eff99ec8))
+* **tests:** bump steady to v0.19.7 ([9fbed10](https://github.com/stainless-api/stainless-api-go/commit/9fbed10600a9bf9655c8289b6f0eb18de8a982b6))
+* **tests:** bump steady to v0.20.1 ([34fa796](https://github.com/stainless-api/stainless-api-go/commit/34fa7961079423a9653316c1d2e68023fdf2b76e))
+* **tests:** bump steady to v0.20.2 ([5b8d8a7](https://github.com/stainless-api/stainless-api-go/commit/5b8d8a7f2074c8cbba1e057cba98c78553a16b48))
+* update docs for api:"required" ([dff036b](https://github.com/stainless-api/stainless-api-go/commit/dff036b0396ec75667e1880662a6d7d43cade57d))
+* update probot ([940e928](https://github.com/stainless-api/stainless-api-go/commit/940e9283bcbf16347fd8cb8f9c6d83cfb08fb227))
+
+
+### Refactors
+
+* **tests:** switch from prism to steady ([ac75b85](https://github.com/stainless-api/stainless-api-go/commit/ac75b85a15fdf1969bc92c55698cfb4793316b84))
+
 ## 0.30.0 (2026-03-11)
 
 Full Changelog: [v0.29.0...v0.30.0](https://github.com/stainless-api/stainless-api-go/compare/v0.29.0...v0.30.0)
