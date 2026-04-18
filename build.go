@@ -164,17 +164,16 @@ func (r *Build) UnmarshalJSON(data []byte) error {
 }
 
 // BuildDocumentedSpecUnion contains all possible properties and values from
-// [BuildDocumentedSpecObject], [BuildDocumentedSpecObject].
+// [BuildDocumentedSpecObject], [BuildDocumentedSpecObject2].
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
 type BuildDocumentedSpecUnion struct {
 	// This field is from variant [BuildDocumentedSpecObject].
 	Content string `json:"content"`
-	// This field is from variant [BuildDocumentedSpecObject].
-	Type string `json:"type"`
-	// This field is from variant [BuildDocumentedSpecObject].
+	Type    string `json:"type"`
+	// This field is from variant [BuildDocumentedSpecObject2].
 	Expires time.Time `json:"expires"`
-	// This field is from variant [BuildDocumentedSpecObject].
+	// This field is from variant [BuildDocumentedSpecObject2].
 	URL  string `json:"url"`
 	JSON struct {
 		Content respjson.Field
@@ -190,7 +189,7 @@ func (u BuildDocumentedSpecUnion) AsBuildDocumentedSpecObject() (v BuildDocument
 	return
 }
 
-func (u BuildDocumentedSpecUnion) AsVariant2() (v BuildDocumentedSpecObject) {
+func (u BuildDocumentedSpecUnion) AsBuildDocumentedSpecObject2() (v BuildDocumentedSpecObject2) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
@@ -218,6 +217,27 @@ type BuildDocumentedSpecObject struct {
 // Returns the unmodified JSON received from the API
 func (r BuildDocumentedSpecObject) RawJSON() string { return r.JSON.raw }
 func (r *BuildDocumentedSpecObject) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildDocumentedSpecObject2 struct {
+	Expires time.Time `json:"expires" api:"required" format:"date-time"`
+	// Any of "url".
+	Type string `json:"type" api:"required"`
+	URL  string `json:"url" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Expires     respjson.Field
+		Type        respjson.Field
+		URL         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildDocumentedSpecObject2) RawJSON() string { return r.JSON.raw }
+func (r *BuildDocumentedSpecObject2) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -298,14 +318,15 @@ func (r *BuildTarget) UnmarshalJSON(data []byte) error {
 }
 
 // BuildTargetCommitUnion contains all possible properties and values from
-// [BuildTargetCommitNotStarted], [BuildTargetCommitQueued],
-// [BuildTargetCommitInProgress], [BuildTargetCommitCompleted].
+// [BuildTargetCommitNotStarted], [BuildTargetCommitWaiting],
+// [BuildTargetCommitQueued], [BuildTargetCommitInProgress],
+// [BuildTargetCommitCompleted].
 //
 // Use the [BuildTargetCommitUnion.AsAny] method to switch on the variant.
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
 type BuildTargetCommitUnion struct {
-	// Any of "not_started", "queued", "in_progress", "completed".
+	// Any of "not_started", "waiting", "queued", "in_progress", "completed".
 	Status string `json:"status"`
 	// This field is from variant [BuildTargetCommitCompleted].
 	Commit shared.Commit `json:"commit"`
@@ -335,6 +356,7 @@ type anyBuildTargetCommit interface {
 }
 
 func (BuildTargetCommitNotStarted) implBuildTargetCommitUnion() {}
+func (BuildTargetCommitWaiting) implBuildTargetCommitUnion()    {}
 func (BuildTargetCommitQueued) implBuildTargetCommitUnion()     {}
 func (BuildTargetCommitInProgress) implBuildTargetCommitUnion() {}
 func (BuildTargetCommitCompleted) implBuildTargetCommitUnion()  {}
@@ -343,6 +365,7 @@ func (BuildTargetCommitCompleted) implBuildTargetCommitUnion()  {}
 //
 //	switch variant := BuildTargetCommitUnion.AsAny().(type) {
 //	case stainless.BuildTargetCommitNotStarted:
+//	case stainless.BuildTargetCommitWaiting:
 //	case stainless.BuildTargetCommitQueued:
 //	case stainless.BuildTargetCommitInProgress:
 //	case stainless.BuildTargetCommitCompleted:
@@ -353,6 +376,8 @@ func (u BuildTargetCommitUnion) AsAny() anyBuildTargetCommit {
 	switch u.Status {
 	case "not_started":
 		return u.AsNotStarted()
+	case "waiting":
+		return u.AsWaiting()
 	case "queued":
 		return u.AsQueued()
 	case "in_progress":
@@ -364,6 +389,11 @@ func (u BuildTargetCommitUnion) AsAny() anyBuildTargetCommit {
 }
 
 func (u BuildTargetCommitUnion) AsNotStarted() (v BuildTargetCommitNotStarted) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u BuildTargetCommitUnion) AsWaiting() (v BuildTargetCommitWaiting) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
@@ -391,7 +421,7 @@ func (r *BuildTargetCommitUnion) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetCommitNotStarted struct {
-	Status constant.NotStarted `json:"status" api:"required"`
+	Status constant.NotStarted `json:"status" default:"not_started"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -406,8 +436,24 @@ func (r *BuildTargetCommitNotStarted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type BuildTargetCommitWaiting struct {
+	Status constant.Waiting `json:"status" default:"waiting"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildTargetCommitWaiting) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetCommitWaiting) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type BuildTargetCommitQueued struct {
-	Status constant.Queued `json:"status" api:"required"`
+	Status constant.Queued `json:"status" default:"queued"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -423,7 +469,7 @@ func (r *BuildTargetCommitQueued) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetCommitInProgress struct {
-	Status constant.InProgress `json:"status" api:"required"`
+	Status constant.InProgress `json:"status" default:"in_progress"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -448,7 +494,7 @@ type BuildTargetCommitCompleted struct {
 	// "timed_out", "noop", "version_bump".
 	Conclusion      string                                    `json:"conclusion" api:"required"`
 	MergeConflictPr BuildTargetCommitCompletedMergeConflictPr `json:"merge_conflict_pr" api:"required"`
-	Status          constant.Completed                        `json:"status" api:"required"`
+	Status          constant.Completed                        `json:"status" default:"completed"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Commit          respjson.Field
@@ -586,14 +632,14 @@ const (
 )
 
 // CheckStepUnion contains all possible properties and values from
-// [CheckStepNotStarted], [CheckStepQueued], [CheckStepInProgress],
-// [CheckStepCompleted].
+// [CheckStepNotStarted], [CheckStepWaiting], [CheckStepQueued],
+// [CheckStepInProgress], [CheckStepCompleted].
 //
 // Use the [CheckStepUnion.AsAny] method to switch on the variant.
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
 type CheckStepUnion struct {
-	// Any of "not_started", "queued", "in_progress", "completed".
+	// Any of "not_started", "waiting", "queued", "in_progress", "completed".
 	Status string `json:"status"`
 	URL    string `json:"url"`
 	// This field is from variant [CheckStepCompleted].
@@ -616,6 +662,7 @@ type anyCheckStep interface {
 }
 
 func (CheckStepNotStarted) implCheckStepUnion() {}
+func (CheckStepWaiting) implCheckStepUnion()    {}
 func (CheckStepQueued) implCheckStepUnion()     {}
 func (CheckStepInProgress) implCheckStepUnion() {}
 func (CheckStepCompleted) implCheckStepUnion()  {}
@@ -624,6 +671,7 @@ func (CheckStepCompleted) implCheckStepUnion()  {}
 //
 //	switch variant := CheckStepUnion.AsAny().(type) {
 //	case stainless.CheckStepNotStarted:
+//	case stainless.CheckStepWaiting:
 //	case stainless.CheckStepQueued:
 //	case stainless.CheckStepInProgress:
 //	case stainless.CheckStepCompleted:
@@ -634,6 +682,8 @@ func (u CheckStepUnion) AsAny() anyCheckStep {
 	switch u.Status {
 	case "not_started":
 		return u.AsNotStarted()
+	case "waiting":
+		return u.AsWaiting()
 	case "queued":
 		return u.AsQueued()
 	case "in_progress":
@@ -645,6 +695,11 @@ func (u CheckStepUnion) AsAny() anyCheckStep {
 }
 
 func (u CheckStepUnion) AsNotStarted() (v CheckStepNotStarted) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u CheckStepUnion) AsWaiting() (v CheckStepWaiting) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
@@ -672,7 +727,7 @@ func (r *CheckStepUnion) UnmarshalJSON(data []byte) error {
 }
 
 type CheckStepNotStarted struct {
-	Status constant.NotStarted `json:"status" api:"required"`
+	Status constant.NotStarted `json:"status" default:"not_started"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Status      respjson.Field
@@ -687,8 +742,26 @@ func (r *CheckStepNotStarted) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type CheckStepWaiting struct {
+	Status constant.Waiting `json:"status" default:"waiting"`
+	URL    string           `json:"url" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Status      respjson.Field
+		URL         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r CheckStepWaiting) RawJSON() string { return r.JSON.raw }
+func (r *CheckStepWaiting) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type CheckStepQueued struct {
-	Status constant.Queued `json:"status" api:"required"`
+	Status constant.Queued `json:"status" default:"queued"`
 	URL    string          `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -706,7 +779,7 @@ func (r *CheckStepQueued) UnmarshalJSON(data []byte) error {
 }
 
 type CheckStepInProgress struct {
-	Status constant.InProgress `json:"status" api:"required"`
+	Status constant.InProgress `json:"status" default:"in_progress"`
 	URL    string              `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -729,7 +802,7 @@ type CheckStepCompleted struct {
 	// Any of "success", "failure", "skipped", "cancelled", "action_required",
 	// "neutral", "timed_out".
 	Conclusion string             `json:"conclusion" api:"required"`
-	Status     constant.Completed `json:"status" api:"required"`
+	Status     constant.Completed `json:"status" default:"completed"`
 	URL        string             `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
