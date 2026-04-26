@@ -26,7 +26,7 @@ type Client struct {
 // DefaultClientOptions read from the environment (STAINLESS_API_KEY,
 // STAINLESS_BASE_URL). This should be used to initialize new clients.
 func DefaultClientOptions() []option.RequestOption {
-	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
+	defaults := []option.RequestOption{option.WithHTTPClient(defaultHTTPClient()), option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("STAINLESS_BASE_URL"); ok {
 		defaults = append(defaults, option.WithBaseURL(o))
 	}
