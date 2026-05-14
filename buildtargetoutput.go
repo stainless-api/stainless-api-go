@@ -133,7 +133,7 @@ func (r *BuildTargetOutputGetResponseUnion) UnmarshalJSON(data []byte) error {
 }
 
 type BuildTargetOutputGetResponseURL struct {
-	Output constant.URL `json:"output" api:"required"`
+	Output constant.URL `json:"output" default:"url"`
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
 	// "terraform", "cli", "php", "csharp", "sql", "openapi".
 	Target shared.Target `json:"target" api:"required"`
@@ -178,7 +178,7 @@ const (
 type BuildTargetOutputGetResponseGit struct {
 	// Temporary GitHub access token
 	Token  string       `json:"token" api:"required"`
-	Output constant.Git `json:"output" api:"required"`
+	Output constant.Git `json:"output" default:"git"`
 	// Git reference (commit SHA, branch, or tag)
 	Ref string `json:"ref" api:"required"`
 	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
