@@ -898,25 +898,48 @@ func (r *BuildNewParams) UnmarshalJSON(data []byte) error {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildNewParamsRevisionUnion struct {
-	OfString       param.Opt[string]                     `json:",omitzero,inline"`
-	OfFileInputMap map[string]shared.FileInputUnionParam `json:",omitzero,inline"`
+	OfBuildNewsRevisionObject *BuildNewParamsRevisionObject         `json:",omitzero,inline"`
+	OfString                  param.Opt[string]                     `json:",omitzero,inline"`
+	OfFileInputMap            map[string]shared.FileInputUnionParam `json:",omitzero,inline"`
 	paramUnion
 }
 
 func (u BuildNewParamsRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfString, u.OfFileInputMap)
+	return param.MarshalUnion(u, u.OfBuildNewsRevisionObject, u.OfString, u.OfFileInputMap)
 }
 func (u *BuildNewParamsRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
 
 func (u *BuildNewParamsRevisionUnion) asAny() any {
-	if !param.IsOmitted(u.OfString) {
+	if !param.IsOmitted(u.OfBuildNewsRevisionObject) {
+		return u.OfBuildNewsRevisionObject
+	} else if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
 	} else if !param.IsOmitted(u.OfFileInputMap) {
 		return &u.OfFileInputMap
 	}
 	return nil
+}
+
+// A merge command combined with explicit file contents. The files are committed to
+// the merge target (`base`) without performing an auto-merge.
+//
+// The properties Files, Merge are required.
+type BuildNewParamsRevisionObject struct {
+	// File contents to commit directly
+	Files map[string]shared.FileInputUnionParam `json:"files,omitzero" api:"required"`
+	// A merge command in the format "base..head"
+	Merge string `json:"merge" api:"required"`
+	paramObj
+}
+
+func (r BuildNewParamsRevisionObject) MarshalJSON() (data []byte, err error) {
+	type shadow BuildNewParamsRevisionObject
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildNewParamsRevisionObject) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Optional commit messages to use for each SDK when making a new commit. SDKs not
@@ -1052,25 +1075,48 @@ func (r *BuildCompareParamsBase) UnmarshalJSON(data []byte) error {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildCompareParamsBaseRevisionUnion struct {
-	OfString       param.Opt[string]                     `json:",omitzero,inline"`
-	OfFileInputMap map[string]shared.FileInputUnionParam `json:",omitzero,inline"`
+	OfBuildComparesBaseRevisionObject *BuildCompareParamsBaseRevisionObject `json:",omitzero,inline"`
+	OfString                          param.Opt[string]                     `json:",omitzero,inline"`
+	OfFileInputMap                    map[string]shared.FileInputUnionParam `json:",omitzero,inline"`
 	paramUnion
 }
 
 func (u BuildCompareParamsBaseRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfString, u.OfFileInputMap)
+	return param.MarshalUnion(u, u.OfBuildComparesBaseRevisionObject, u.OfString, u.OfFileInputMap)
 }
 func (u *BuildCompareParamsBaseRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
 
 func (u *BuildCompareParamsBaseRevisionUnion) asAny() any {
-	if !param.IsOmitted(u.OfString) {
+	if !param.IsOmitted(u.OfBuildComparesBaseRevisionObject) {
+		return u.OfBuildComparesBaseRevisionObject
+	} else if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
 	} else if !param.IsOmitted(u.OfFileInputMap) {
 		return &u.OfFileInputMap
 	}
 	return nil
+}
+
+// A merge command combined with explicit file contents. The files are committed to
+// the merge target (`base`) without performing an auto-merge.
+//
+// The properties Files, Merge are required.
+type BuildCompareParamsBaseRevisionObject struct {
+	// File contents to commit directly
+	Files map[string]shared.FileInputUnionParam `json:"files,omitzero" api:"required"`
+	// A merge command in the format "base..head"
+	Merge string `json:"merge" api:"required"`
+	paramObj
+}
+
+func (r BuildCompareParamsBaseRevisionObject) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsBaseRevisionObject
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsBaseRevisionObject) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Parameters for the head build
@@ -1099,23 +1145,46 @@ func (r *BuildCompareParamsHead) UnmarshalJSON(data []byte) error {
 //
 // Use [param.IsOmitted] to confirm if a field is set.
 type BuildCompareParamsHeadRevisionUnion struct {
-	OfString       param.Opt[string]                     `json:",omitzero,inline"`
-	OfFileInputMap map[string]shared.FileInputUnionParam `json:",omitzero,inline"`
+	OfBuildComparesHeadRevisionObject *BuildCompareParamsHeadRevisionObject `json:",omitzero,inline"`
+	OfString                          param.Opt[string]                     `json:",omitzero,inline"`
+	OfFileInputMap                    map[string]shared.FileInputUnionParam `json:",omitzero,inline"`
 	paramUnion
 }
 
 func (u BuildCompareParamsHeadRevisionUnion) MarshalJSON() ([]byte, error) {
-	return param.MarshalUnion(u, u.OfString, u.OfFileInputMap)
+	return param.MarshalUnion(u, u.OfBuildComparesHeadRevisionObject, u.OfString, u.OfFileInputMap)
 }
 func (u *BuildCompareParamsHeadRevisionUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, u)
 }
 
 func (u *BuildCompareParamsHeadRevisionUnion) asAny() any {
-	if !param.IsOmitted(u.OfString) {
+	if !param.IsOmitted(u.OfBuildComparesHeadRevisionObject) {
+		return u.OfBuildComparesHeadRevisionObject
+	} else if !param.IsOmitted(u.OfString) {
 		return &u.OfString.Value
 	} else if !param.IsOmitted(u.OfFileInputMap) {
 		return &u.OfFileInputMap
 	}
 	return nil
+}
+
+// A merge command combined with explicit file contents. The files are committed to
+// the merge target (`base`) without performing an auto-merge.
+//
+// The properties Files, Merge are required.
+type BuildCompareParamsHeadRevisionObject struct {
+	// File contents to commit directly
+	Files map[string]shared.FileInputUnionParam `json:"files,omitzero" api:"required"`
+	// A merge command in the format "base..head"
+	Merge string `json:"merge" api:"required"`
+	paramObj
+}
+
+func (r BuildCompareParamsHeadRevisionObject) MarshalJSON() (data []byte, err error) {
+	type shadow BuildCompareParamsHeadRevisionObject
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *BuildCompareParamsHeadRevisionObject) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }

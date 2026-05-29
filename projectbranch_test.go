@@ -11,6 +11,7 @@ import (
 	"github.com/stainless-api/stainless-api-go"
 	"github.com/stainless-api/stainless-api-go/internal/testutil"
 	"github.com/stainless-api/stainless-api-go/option"
+	"github.com/stainless-api/stainless-api-go/shared"
 )
 
 func TestProjectBranchNewWithOptionalParams(t *testing.T) {
@@ -138,8 +139,16 @@ func TestProjectBranchRebaseWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"branch",
 		stainless.ProjectBranchRebaseParams{
-			Project: stainless.String("project"),
-			Base:    stainless.String("base"),
+			Project:       stainless.String("project"),
+			Base:          stainless.String("base"),
+			CommitMessage: stainless.String("commit_message"),
+			Files: map[string]shared.FileInputUnionParam{
+				"foo": {
+					OfFileInputContent: &shared.FileInputContentParam{
+						Content: "content",
+					},
+				},
+			},
 		},
 	)
 	if err != nil {
