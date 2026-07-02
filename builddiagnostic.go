@@ -187,7 +187,7 @@ func (r *BuildDiagnosticMoreUnion) UnmarshalJSON(data []byte) error {
 
 type BuildDiagnosticMoreMarkdown struct {
 	Markdown string            `json:"markdown" api:"required"`
-	Type     constant.Markdown `json:"type" api:"required"`
+	Type     constant.Markdown `json:"type" default:"markdown"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Markdown    respjson.Field
@@ -205,7 +205,7 @@ func (r *BuildDiagnosticMoreMarkdown) UnmarshalJSON(data []byte) error {
 
 type BuildDiagnosticMoreRaw struct {
 	Raw  string       `json:"raw" api:"required"`
-	Type constant.Raw `json:"type" api:"required"`
+	Type constant.Raw `json:"type" default:"raw"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Raw         respjson.Field

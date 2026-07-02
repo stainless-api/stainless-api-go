@@ -29,7 +29,16 @@ func TestBuildNewWithOptionalParams(t *testing.T) {
 	_, err := client.Builds.New(context.TODO(), stainless.BuildNewParams{
 		Project: stainless.String("project"),
 		Revision: stainless.BuildNewParamsRevisionUnion{
-			OfString: stainless.String("string"),
+			OfBuildNewsRevisionObject: &stainless.BuildNewParamsRevisionObject{
+				Files: map[string]shared.FileInputUnionParam{
+					"foo": {
+						OfFileInputContent: &shared.FileInputContentParam{
+							Content: "content",
+						},
+					},
+				},
+				Merge: "merge",
+			},
 		},
 		AllowEmpty:            stainless.Bool(true),
 		Branch:                stainless.String("branch"),
@@ -129,14 +138,32 @@ func TestBuildCompareWithOptionalParams(t *testing.T) {
 		Base: stainless.BuildCompareParamsBase{
 			Branch: "branch",
 			Revision: stainless.BuildCompareParamsBaseRevisionUnion{
-				OfString: stainless.String("string"),
+				OfBuildComparesBaseRevisionObject: &stainless.BuildCompareParamsBaseRevisionObject{
+					Files: map[string]shared.FileInputUnionParam{
+						"foo": {
+							OfFileInputContent: &shared.FileInputContentParam{
+								Content: "content",
+							},
+						},
+					},
+					Merge: "merge",
+				},
 			},
 			CommitMessage: stainless.String("commit_message"),
 		},
 		Head: stainless.BuildCompareParamsHead{
 			Branch: "branch",
 			Revision: stainless.BuildCompareParamsHeadRevisionUnion{
-				OfString: stainless.String("string"),
+				OfBuildComparesHeadRevisionObject: &stainless.BuildCompareParamsHeadRevisionObject{
+					Files: map[string]shared.FileInputUnionParam{
+						"foo": {
+							OfFileInputContent: &shared.FileInputContentParam{
+								Content: "content",
+							},
+						},
+					},
+					Merge: "merge",
+				},
 			},
 			CommitMessage: stainless.String("commit_message"),
 		},

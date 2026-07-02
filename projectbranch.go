@@ -17,6 +17,7 @@ import (
 	"github.com/stainless-api/stainless-api-go/packages/pagination"
 	"github.com/stainless-api/stainless-api-go/packages/param"
 	"github.com/stainless-api/stainless-api-go/packages/respjson"
+	"github.com/stainless-api/stainless-api-go/shared"
 )
 
 // ProjectBranchService contains methods and other services that help with
@@ -137,6 +138,9 @@ func (r *ProjectBranchService) Delete(ctx context.Context, branch string, body P
 //
 // The branch is rebased onto the `base` branch or commit SHA, inheriting any
 // config and custom code changes.
+//
+// If `files` is provided, the auto-rebase is skipped: the branch is hard-reset to
+// `base` and the provided files are committed on top.
 func (r *ProjectBranchService) Rebase(ctx context.Context, branch string, params ProjectBranchRebaseParams, opts ...option.RequestOption) (res *ProjectBranch, err error) {
 	opts = slices.Concat(r.Options, opts)
 	precfg, err := requestconfig.PreRequestOptions(opts...)
@@ -449,7 +453,21 @@ type ProjectBranchRebaseParams struct {
 	Project param.Opt[string] `path:"project,omitzero" api:"required" json:"-"`
 	// The branch or commit SHA to rebase onto. Defaults to "main".
 	Base param.Opt[string] `query:"base,omitzero" json:"-"`
+	// Optional commit message to use when `files` is provided.
+	CommitMessage param.Opt[string] `json:"commit_message,omitzero"`
+	// File contents to commit directly on top of `base`. When provided, the
+	// auto-rebase is skipped and the branch is hard-reset to `base` before the files
+	// are committed.
+	Files map[string]shared.FileInputUnionParam `json:"files,omitzero"`
 	paramObj
+}
+
+func (r ProjectBranchRebaseParams) MarshalJSON() (data []byte, err error) {
+	type shadow ProjectBranchRebaseParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *ProjectBranchRebaseParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // URLQuery serializes [ProjectBranchRebaseParams]'s query parameters as
