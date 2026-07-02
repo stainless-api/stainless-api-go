@@ -46,8 +46,12 @@ func NewBuildTargetOutputService(opts ...option.RequestOption) (r BuildTargetOut
 // necessary) is returned.
 //
 // Otherwise, the possible types of outputs are specific to the requested target,
-// and the output method _must_ be `url`. See the documentation for `type` for more
-// information.
+// and the output method _must_ be `url` or `content`. See the documentation for
+// `type` for more information.
+//
+// The `content` output method returns the raw content of the output inline,
+// instead of a download URL, and is only supported for the `openapi-*` and `file`
+// types.
 func (r *BuildTargetOutputService) Get(ctx context.Context, query BuildTargetOutputGetParams, opts ...option.RequestOption) (res *BuildTargetOutputGetResponseUnion, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "v0/build_target_outputs"
@@ -56,34 +60,37 @@ func (r *BuildTargetOutputService) Get(ctx context.Context, query BuildTargetOut
 }
 
 // BuildTargetOutputGetResponseUnion contains all possible properties and values
-// from [BuildTargetOutputGetResponseURL], [BuildTargetOutputGetResponseGit].
+// from [BuildTargetOutputGetResponseURL], [BuildTargetOutputGetResponseGit],
+// [BuildTargetOutputGetResponseContent].
 //
 // Use the [BuildTargetOutputGetResponseUnion.AsAny] method to switch on the
 // variant.
 //
 // Use the methods beginning with 'As' to cast the union to one of its variants.
 type BuildTargetOutputGetResponseUnion struct {
-	// Any of "url", "git".
+	// Any of "url", "git", "content".
 	Output string `json:"output"`
 	// This field is from variant [BuildTargetOutputGetResponseURL].
 	Target shared.Target `json:"target"`
 	Type   string        `json:"type"`
 	URL    string        `json:"url"`
-	// This field is from variant [BuildTargetOutputGetResponseURL].
-	Path string `json:"path"`
+	Path   string        `json:"path"`
 	// This field is from variant [BuildTargetOutputGetResponseGit].
 	Token string `json:"token"`
 	// This field is from variant [BuildTargetOutputGetResponseGit].
-	Ref  string `json:"ref"`
-	JSON struct {
-		Output respjson.Field
-		Target respjson.Field
-		Type   respjson.Field
-		URL    respjson.Field
-		Path   respjson.Field
-		Token  respjson.Field
-		Ref    respjson.Field
-		raw    string
+	Ref string `json:"ref"`
+	// This field is from variant [BuildTargetOutputGetResponseContent].
+	Content string `json:"content"`
+	JSON    struct {
+		Output  respjson.Field
+		Target  respjson.Field
+		Type    respjson.Field
+		URL     respjson.Field
+		Path    respjson.Field
+		Token   respjson.Field
+		Ref     respjson.Field
+		Content respjson.Field
+		raw     string
 	} `json:"-"`
 }
 
@@ -94,14 +101,16 @@ type anyBuildTargetOutputGetResponse interface {
 	implBuildTargetOutputGetResponseUnion()
 }
 
-func (BuildTargetOutputGetResponseURL) implBuildTargetOutputGetResponseUnion() {}
-func (BuildTargetOutputGetResponseGit) implBuildTargetOutputGetResponseUnion() {}
+func (BuildTargetOutputGetResponseURL) implBuildTargetOutputGetResponseUnion()     {}
+func (BuildTargetOutputGetResponseGit) implBuildTargetOutputGetResponseUnion()     {}
+func (BuildTargetOutputGetResponseContent) implBuildTargetOutputGetResponseUnion() {}
 
 // Use the following switch statement to find the correct variant
 //
 //	switch variant := BuildTargetOutputGetResponseUnion.AsAny().(type) {
 //	case stainless.BuildTargetOutputGetResponseURL:
 //	case stainless.BuildTargetOutputGetResponseGit:
+//	case stainless.BuildTargetOutputGetResponseContent:
 //	default:
 //	  fmt.Errorf("no variant present")
 //	}
@@ -111,6 +120,8 @@ func (u BuildTargetOutputGetResponseUnion) AsAny() anyBuildTargetOutputGetRespon
 		return u.AsURL()
 	case "git":
 		return u.AsGit()
+	case "content":
+		return u.AsContent()
 	}
 	return nil
 }
@@ -121,6 +132,11 @@ func (u BuildTargetOutputGetResponseUnion) AsURL() (v BuildTargetOutputGetRespon
 }
 
 func (u BuildTargetOutputGetResponseUnion) AsGit() (v BuildTargetOutputGetResponseGit) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u BuildTargetOutputGetResponseUnion) AsContent() (v BuildTargetOutputGetResponseContent) {
 	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
 	return
 }
@@ -220,6 +236,49 @@ const (
 	BuildTargetOutputGetResponseGitTypeFile                   BuildTargetOutputGetResponseGitType = "file"
 )
 
+type BuildTargetOutputGetResponseContent struct {
+	// The raw content of the output
+	Content string           `json:"content" api:"required"`
+	Output  constant.Content `json:"output" default:"content"`
+	// Any of "node", "typescript", "python", "go", "java", "kotlin", "ruby",
+	// "terraform", "cli", "php", "csharp", "sql", "openapi".
+	Target shared.Target `json:"target" api:"required"`
+	// Any of "source", "dist", "wheel", "openapi-with-transforms",
+	// "openapi-with-code-samples", "openapi-sdk-spec", "file".
+	Type BuildTargetOutputGetResponseContentType `json:"type" api:"required"`
+	// The path of the file, which is only present when using with the type "file"
+	// option.
+	Path string `json:"path"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Content     respjson.Field
+		Output      respjson.Field
+		Target      respjson.Field
+		Type        respjson.Field
+		Path        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r BuildTargetOutputGetResponseContent) RawJSON() string { return r.JSON.raw }
+func (r *BuildTargetOutputGetResponseContent) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type BuildTargetOutputGetResponseContentType string
+
+const (
+	BuildTargetOutputGetResponseContentTypeSource                 BuildTargetOutputGetResponseContentType = "source"
+	BuildTargetOutputGetResponseContentTypeDist                   BuildTargetOutputGetResponseContentType = "dist"
+	BuildTargetOutputGetResponseContentTypeWheel                  BuildTargetOutputGetResponseContentType = "wheel"
+	BuildTargetOutputGetResponseContentTypeOpenAPIWithTransforms  BuildTargetOutputGetResponseContentType = "openapi-with-transforms"
+	BuildTargetOutputGetResponseContentTypeOpenAPIWithCodeSamples BuildTargetOutputGetResponseContentType = "openapi-with-code-samples"
+	BuildTargetOutputGetResponseContentTypeOpenAPISDKSpec         BuildTargetOutputGetResponseContentType = "openapi-sdk-spec"
+	BuildTargetOutputGetResponseContentTypeFile                   BuildTargetOutputGetResponseContentType = "file"
+)
+
 type BuildTargetOutputGetResponseType string
 
 const (
@@ -245,9 +304,10 @@ type BuildTargetOutputGetParams struct {
 	Type BuildTargetOutputGetParamsType `query:"type,omitzero" api:"required" json:"-"`
 	// The path of the file to get when used with "type": "file".
 	Path param.Opt[string] `query:"path,omitzero" json:"-"`
-	// Output format: url (download URL) or git (temporary access token).
+	// Output format: url (download URL), git (temporary access token), or content (raw
+	// content returned inline, only supported for the "openapi-\*" and "file" types).
 	//
-	// Any of "url", "git".
+	// Any of "url", "git", "content".
 	Output BuildTargetOutputGetParamsOutput `query:"output,omitzero" json:"-"`
 	paramObj
 }
@@ -292,10 +352,12 @@ const (
 	BuildTargetOutputGetParamsTypeFile                   BuildTargetOutputGetParamsType = "file"
 )
 
-// Output format: url (download URL) or git (temporary access token).
+// Output format: url (download URL), git (temporary access token), or content (raw
+// content returned inline, only supported for the "openapi-\*" and "file" types).
 type BuildTargetOutputGetParamsOutput string
 
 const (
-	BuildTargetOutputGetParamsOutputURL BuildTargetOutputGetParamsOutput = "url"
-	BuildTargetOutputGetParamsOutputGit BuildTargetOutputGetParamsOutput = "git"
+	BuildTargetOutputGetParamsOutputURL     BuildTargetOutputGetParamsOutput = "url"
+	BuildTargetOutputGetParamsOutputGit     BuildTargetOutputGetParamsOutput = "git"
+	BuildTargetOutputGetParamsOutputContent BuildTargetOutputGetParamsOutput = "content"
 )
