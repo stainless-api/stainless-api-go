@@ -19,6 +19,7 @@ func ValueOf[T Constant[T]]() T {
 }
 
 type Completed string  // Always "completed"
+type Content string    // Always "content"
 type Git string        // Always "git"
 type InProgress string // Always "in_progress"
 type Markdown string   // Always "markdown"
@@ -29,6 +30,7 @@ type URL string        // Always "url"
 type Waiting string    // Always "waiting"
 
 func (c Completed) Default() Completed   { return "completed" }
+func (c Content) Default() Content       { return "content" }
 func (c Git) Default() Git               { return "git" }
 func (c InProgress) Default() InProgress { return "in_progress" }
 func (c Markdown) Default() Markdown     { return "markdown" }
@@ -39,6 +41,7 @@ func (c URL) Default() URL               { return "url" }
 func (c Waiting) Default() Waiting       { return "waiting" }
 
 func (c Completed) MarshalJSON() ([]byte, error)  { return marshalString(c) }
+func (c Content) MarshalJSON() ([]byte, error)    { return marshalString(c) }
 func (c Git) MarshalJSON() ([]byte, error)        { return marshalString(c) }
 func (c InProgress) MarshalJSON() ([]byte, error) { return marshalString(c) }
 func (c Markdown) MarshalJSON() ([]byte, error)   { return marshalString(c) }
